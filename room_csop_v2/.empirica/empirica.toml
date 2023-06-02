@@ -1,0 +1,9 @@
+name = "room_csop_v2"
+
+[tajriba.auth]
+srtoken = "yRQGAlQFvTtnxTqA"
+
+[[tajriba.auth.users]]
+name = "Admin"
+username = "admin"
+password = "mocIfYgQ"
