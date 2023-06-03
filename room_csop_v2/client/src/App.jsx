@@ -5,6 +5,8 @@ import React from "react";
 import { Game } from "./Game";
 import { ExitSurvey } from "./intro-exit/ExitSurvey";
 import { Introduction } from "./intro-exit/Introduction";
+import { MyConsent } from "./intro-exit/Consent"
+import { Overview } from "./intro-exit/Overview"
 
 export default function App() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -12,11 +14,27 @@ export default function App() {
 
   const { protocol, host } = window.location;
   const url = `${protocol}//${host}/query`;
-
+  console.log(Game)
   function introSteps({ game, player }) {
-    return [Introduction];
+    return [Overview,Introduction];
   }
-
+  /*
+  Empirica.introSteps((game, treatment) => {
+    const steps = [Overview, TaskDetails, ConstraintsDetails, RoomArrangements];
+    if (game.treatment.playerCount > 1) {
+      steps.push(TeamDetails, SocialInteractionDetails);
+    }
+    steps.push(MoreAboutBonus, UIOverview);
+  
+    if (game.treatment.playerCount > 1) {
+      steps.push(GroupQuiz);
+    } else {
+      steps.push(IndividualQuiz);
+    }
+  
+    return steps;
+  });
+  */
   function exitSteps({ game, player }) {
     return [ExitSurvey];
   }
@@ -26,7 +44,7 @@ export default function App() {
       <div className="h-screen relative">
         <EmpiricaMenu position="bottom-left" />
         <div className="h-full overflow-auto">
-          <EmpiricaContext introSteps={introSteps} exitSteps={exitSteps}>
+          <EmpiricaContext consent ={MyConsent} introSteps={introSteps} exitSteps={exitSteps}>
             <Game />
           </EmpiricaContext>
         </div>
