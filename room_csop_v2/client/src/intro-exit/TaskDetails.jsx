@@ -1,7 +1,15 @@
 import React from "react";
+import _ from 'lodash'
 
-import { Centered } from "meteor/empirica:core";
+//mport { Centered } from "meteor/empirica:core";
 import { Button, HTMLTable } from "@blueprintjs/core";
+import {
+  usePlayer,
+  usePlayers,
+  useStage,
+  useGame,
+  useRound
+}from "@empirica/core/player/classic/react";
 // student names
 const studentNames = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
@@ -45,12 +53,17 @@ export const exampleTaskData = {
   }
 };
 
-export default class TaskDetails extends React.Component {
-  render() {
-    const { hasPrev, hasNext, onNext, onPrev } = this.props;
+export function TaskDetails({ next }) {
+    const player = usePlayer();
+    const players = usePlayers();
+    const stage = useStage();
+    const game = useGame();
+    const round =useRound();;
     this.updateScore();
+    
+    
+    
     return (
-      <Centered>
         <div className="instructions">
           <h1 className={"bp3-heading"}> Room Assignment Tasks </h1>
           <p>
@@ -149,9 +162,10 @@ export default class TaskDetails extends React.Component {
             <span className="bp3-icon-standard bp3-icon-double-chevron-right bp3-align-right"/>
           </button>
         </div>
-      </Centered>
     );
-  }
+  };
+
+  /*
 
   constructor(props) {
     super(props);
@@ -250,7 +264,10 @@ export default class TaskDetails extends React.Component {
         className="student"
         style={cursorStyle}
       >
-        {/* <span className="icon bp3-icon-standard bp3-icon-person" /> */}
+        {/* <span className="icon bp3-icon-standard bp3-icon-person" /> *///}
+        
+        
+        /*
         <span className="icon">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512">
             <path
@@ -262,5 +279,5 @@ export default class TaskDetails extends React.Component {
         <span className="letter">{student}</span>
       </div>
     );
-  }
-}
+  } */
+

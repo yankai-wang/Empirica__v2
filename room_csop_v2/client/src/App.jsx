@@ -7,6 +7,9 @@ import { ExitSurvey } from "./intro-exit/ExitSurvey";
 import { Introduction } from "./intro-exit/Introduction";
 import { MyConsent } from "./intro-exit/Consent"
 import { Overview } from "./intro-exit/Overview"
+import {TaskDetails} from "./intro-exit/TaskDetails"
+import { Chat, useGame } from "@empirica/core/player/classic/react";
+
 
 export default function App() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -14,9 +17,13 @@ export default function App() {
 
   const { protocol, host } = window.location;
   const url = `${protocol}//${host}/query`;
-  console.log(Game)
+  
+
+
+
+
   function introSteps({ game, player }) {
-    return [Overview,Introduction];
+    return [Overview,TaskDetails,Introduction];
   }
   /*
   Empirica.introSteps((game, treatment) => {
@@ -38,7 +45,7 @@ export default function App() {
   function exitSteps({ game, player }) {
     return [ExitSurvey];
   }
-
+// The my consent form shows up if you have cleared to localhistory in the player console
   return (
     <EmpiricaParticipant url={url} ns={playerKey} modeFunc={EmpiricaClassic}>
       <div className="h-screen relative">

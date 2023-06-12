@@ -1,20 +1,23 @@
 import React from "react";
+import { Button } from "../components/Button"
 
 //import { Centered, ConsentButton } from "meteor/empirica:core";
 //import BrowserDetection from "react-browser-detection";
-
+//INLINE CLASSES built from the windy framework
 export function MyConsent({onConsent}){
  // static renderConsent() {
   //  console.log("this is not firefox");
     return (
   //    <Centered>
-        <div className="consent bp3-ui-text justify-center" >
-          <h2 className="bp3-heading"> Microsoft Research Project Participation Consent Form </h2>
+        <div className="consent" >
+          <h2 className="bp3-heading" align = "center"> Microsoft Research Project Participation Consent Form </h2>
+          <br></br>
           <p>
             This research project has been reviewed and approved by the
             Microsoft Research Ethics Advisory Board.
           </p>
-          <h5 className="bp3-heading">INTRODUCTION</h5>
+          <h5 className="bp3-heading" align = "center"><b>INTRODUCTION</b></h5>
+          <br></br>
           <p>
             Thank you for deciding to volunteer in a Microsoft Corporation
             research project. The purpose of this project is to understand how
@@ -27,10 +30,13 @@ export function MyConsent({onConsent}){
             agree to participate, click "I agree" to indicate that you have read
             and understood the information provided on this consent form.
           </p>
-          <h5 className="bp3-heading">TITLE OF RESEARCH PROJECT</h5>
+          <br></br>
+          <h5 className="bp3-heading" align = "center"><b>TITLE OF RESEARCH PROJECT</b></h5>
+          <br></br>
           <p>Solving Problems of Dorm Room Assignment</p>
 
-          <h5 className="bp3-heading">PROCEDURES</h5>
+          <h5 className="bp3-heading" align = "center"><b>PROCEDURES</b></h5>
+          <br></br>
           <p>
             During this project, you will be presented with a series of problems
             to solve, either on your own or in a team of three. Microsoft will
@@ -39,14 +45,16 @@ export function MyConsent({onConsent}){
             you issue.
           </p>
 
-          <h5 className="bp3-heading">PERSONAL INFORMATION</h5>
+          <h5 className="bp3-heading" align = "center"><b>PERSONAL INFORMATION</b></h5>
+          <br></br>
           <p>
-            <strong>Personal information we collect.</strong> During the project
+            <strong>Personal information we collect:</strong> During the project
             we may collect personal information about you such as your age and
             gender.
           </p>
+          <br></br>
           <p>
-            <strong>How we use personal information.</strong> The personal
+            <strong>How we use personal information:</strong> The personal
             information and other data collected during this project will be
             used primarily to perform research for purposes described in the
             introduction above. Such information and data, or the results of the
@@ -56,8 +64,9 @@ export function MyConsent({onConsent}){
             publications about this research: any information so used will not
             be able to be deleted.
           </p>
+          <br></br>
           <p>
-            <strong>How we store and share your personal information.</strong>{" "}
+            <strong>How we store and share your personal information:</strong>{" "}
             Your name and other personal information will be kept separate from
             the other information you give, and these two things will be stored
             in different places. Your personal data will stored for a period of
@@ -67,6 +76,7 @@ export function MyConsent({onConsent}){
             without your permission. De-identified research results may be
             shared with other investigators without additional consent.{" "}
           </p>
+          <br></br>
           <p>
             How you can access and control your personal information. If you
             wish to review or copy any personal information you provided during
@@ -86,8 +96,9 @@ export function MyConsent({onConsent}){
             </a>
             .
           </p>
-
-          <h5 className="bp3-heading">RESEARCH RESULTS & FEEDBACK</h5>
+          <br></br>
+          <h5 className="bp3-heading" align = "center"><b>RESEARCH RESULTS & FEEDBACK</b></h5>
+          <br></br>
           <p>
             Microsoft will own all of the research data and analysis and other
             results (collectively “Research Results”) generated from the
@@ -98,9 +109,10 @@ export function MyConsent({onConsent}){
             to use, disclose, reproduce, license, or otherwise distribute, and
             leverage the Feedback and Research Results.
           </p>
-
-          <h5 className="bp3-heading">CONFIDENTIALITY</h5>
-          <p>
+          <br></br>
+          <h5 className="bp3-heading" align = "center"><b>CONFIDENTIALITY</b></h5>
+         
+          <br></br>         <p>
             The research project and information you learn by participating in
             the project is confidential to Microsoft. Accordingly, you agree to
             keep it secret as you would your own confidential information and
@@ -114,8 +126,9 @@ export function MyConsent({onConsent}){
             information, whether yours or a third party’s without notifying
             Microsoft in advance.
           </p>
-
-          <h5 className="bp3-heading">Benefits and Risks</h5>
+          <br></br>
+          <h5 className="bp3-heading" align = "center"><b>Benefits and Risks</b></h5>
+          <br></br>
           <p>
             <strong>Benefits:</strong> The research team expects to learn about
             how humans solve complex problems from this project which we hope
@@ -124,13 +137,14 @@ export function MyConsent({onConsent}){
             that may come these Research Results being shared with the greater
             scientific community.{" "}
           </p>
+          <br></br>
           <p>
             <strong>Risks: </strong> During your participation, you may
             experience frustration if you are unable to solve a particular
             problem. To help reduce such risks, research team has generated
             problems of different difficulty levels.
           </p>
-
+          <br></br>
           <p>
             <strong>
               You accept the risks described above and whatever consequences may
@@ -149,8 +163,9 @@ export function MyConsent({onConsent}){
               incident.{" "}
             </strong>
           </p>
-
-          <h5 className="bp3-heading">YOUR AUTHORITY TO PARTICIPATE</h5>
+          <br></br>
+          <h5 className="bp3-heading" align = "center"><b>YOUR AUTHORITY TO PARTICIPATE</b></h5>
+          <br></br>
           <p>
             You represent that you have the full right and authority to sign
             this form, and if you are a minor that you have the consent (as
@@ -165,17 +180,21 @@ export function MyConsent({onConsent}){
             thank you for your contribution and look forward to your research
             session.
           </p>
-
+          <br></br>
           <p>
             Thanks for taking time to read the consent form. If you do not want
             to do this HIT, please return it.
           </p>
+          <br></br>
         <div className = "flex w-sw justify-center">
-        <button type="button" onClick={onConsent}>
+        <Button handleClick={onConsent}>
           I AGREE
-        </button>
+        </Button>
         </div>
+        <br></br>
+        <br></br>
         </div>
+        
     //  </Centered>
     );
   }

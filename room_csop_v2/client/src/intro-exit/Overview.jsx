@@ -1,6 +1,5 @@
 import React from "react";
 
-
 //Im not sure how to grab the components from treatment my game is null 
 
 //import { Centered } from "meteor/empirica:core";
@@ -14,18 +13,9 @@ import {
 }from "@empirica/core/player/classic/react";
 
 export function Overview({ next }) {
-  const player = usePlayer();
-  const players = usePlayers();
-  const stage = useStage();
-  const game = useGame();
-  const round =useRound();;
-   // console.log(Game)
-    //console.log(players.length)
-    console.log(player)
-    console.log(players)
-    console.log(game)
-    console.log(round)
-    const social = player.length > 1;
+  
+  console.log(game)
+  const social = player.length > 1;
     return (
       //<Centered>
         <div className="instructions">
