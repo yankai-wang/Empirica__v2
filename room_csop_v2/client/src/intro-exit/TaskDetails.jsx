@@ -1,8 +1,10 @@
-import React from "react";
+import React, {useState,useEffect} from "react";
 import _ from 'lodash'
+import styles from './main.less'
 
 //mport { Centered } from "meteor/empirica:core";
-import { Button, HTMLTable } from "@blueprintjs/core";
+import {HTMLTable } from "@blueprintjs/core";
+import { Button } from "../components/Button";
 import {
   usePlayer,
   usePlayers,
@@ -53,19 +55,58 @@ export const exampleTaskData = {
   }
 };
 
-export function TaskDetails({ next }) {
-    const player = usePlayer();
-    const players = usePlayers();
-    const stage = useStage();
-    const game = useGame();
-    const round =useRound();;
-    this.updateScore();
-    
-    
-    
+export function TaskDetails ({ previous,next }) {
+  
+  const player =usePlayer()
+  const treatment= player.get('treatment')
+  console.log('This is the treatment page')
+  const [state, setState] = useState({
+    hovered: false,
+    studentARoom: "deck",
+    studentBRoom: "deck",
+    studentCRoom: "deck",
+    studentDRoom: "deck",
+    score: 0
+  });
+
+  function updateScore() {
+    console.log('UPDATESCORE RAN')
+    setState(prevState => ({
+      ...prevState,
+      score: 0,
+    }));
+    exampleTaskData.students.forEach(student => {
+      exampleTaskData.rooms.forEach(room => {
+        if (state[`student${student}Room`] === room) {
+          setState(prevState => ({
+            ...prevState,
+            score: prevState.score + exampleTaskData.payoff[student][room],
+          }));
+          //this.state.score += exampleTaskData.payoff[student][room];
+        }
+      });
+    });
+    //if anyone in the deck, then score is 0
+    exampleTaskData.students.forEach(student => {
+      if (state[`student${student}Room`] === "deck") {
+        //if anyone in the deck, score is 0
+        setState(prevState => ({
+          ...prevState,
+          score: "N/A",
+        }));
+        //this.state.score = "N/A";
+      }
+    });
+  }
+
+  useEffect(() => {
+    updateScore();
+  }, []);
+  
     return (
         <div className="instructions">
-          <h1 className={"bp3-heading"}> Room Assignment Tasks </h1>
+          <h1 className={"text-lg font-medium text-gray-1000"}> Room Assignment Tasks </h1>
+          <br></br>
           <p>
             In each task (or round), you will be asked to{" "}
             <strong>assign students to dorm rooms</strong>. Students express
@@ -101,7 +142,7 @@ export function TaskDetails({ next }) {
                           <td
                             key={room}
                             className={
-                              this.state[`student${student}Room`] === room
+                              state[`student${student}Room`] === room
                                 ? "active"
                                 : null
                             }
@@ -118,17 +159,16 @@ export function TaskDetails({ next }) {
               <div className="info">
                 <div className="score">
                   <h5>Score</h5>
-                  <h2>{this.state.score}</h2>
+                  <h2>{state.score}</h2>
                 </div>
               </div>
             </div>
-
             <div className="board">
               <div className="all-rooms">
-                {this.renderRoom("deck", true)}
+                {renderRoom("deck", true)}
                 <div className="rooms">
                   {exampleTaskData.rooms.map(room =>
-                    this.renderRoom(room, false)
+                    renderRoom(room, false)
                   )}
                 </div>
               </div>
@@ -144,69 +184,38 @@ export function TaskDetails({ next }) {
             </p>
           </div>
   
-          <button
-            type="button"
-            className="bp3-button bp3-intent-nope bp3-icon-double-chevron-left"
-            onClick={onPrev}
-            disabled={!hasPrev}
-          >
-            Previous
-          </button>
-          <button
-            type="button"
-            className="bp3-button bp3-intent-primary"
-            onClick={onNext}
-            disabled={!hasNext}
-          >
-            Next
-            <span className="bp3-icon-standard bp3-icon-double-chevron-right bp3-align-right"/>
-          </button>
+          <Button handleClick={previous} autoFocus>
+        <p>Previous</p>
+      </Button>
+      
+          <Button handleClick={next} autoFocus>
+        <p>Next</p>
+      </Button>
         </div>
     );
-  };
+  
 
-  /*
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      hovered: false,
-      studentARoom: "deck",
-      studentBRoom: "deck",
-      studentCRoom: "deck",
-      studentDRoom: "deck",
-      score: 0
-    };
-  }
 
-  updateScore() {
-    this.state.score = 0;
-    exampleTaskData.students.forEach(student => {
-      exampleTaskData.rooms.forEach(room => {
-        if (this.state[`student${student}Room`] === room) {
-          this.state.score += exampleTaskData.payoff[student][room];
-        }
-      });
-    });
-    //if anyone in the deck, then score is 0
-    exampleTaskData.students.forEach(student => {
-      if (this.state[`student${student}Room`] === "deck") {
-        //if anyone in the deck, score is 0
-        this.state.score = "N/A";
-      }
-    });
-  }
 
-  handleDragOver = e => {
+  
+
+  function handleDragOver(e) {
+    console.log('Handle Drag over')
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
-    this.setState({ hovered: true });
+    setState(prevState => ({
+      ...prevState,
+      hovered: true, }));
   };
 
-  handleDragLeave = e => {
-    this.setState({ hovered: false });
+  function handleDragLeave (e) {
+    console.log('HandleDragLeave',e)
+    setState(prevState => ({
+      ...prevState,
+      hovered: false, }));
   };
-
+ /*
   handleDrop = (room, e) => {
     const student = e.dataTransfer.getData("text/plain");
     this.setState({ hovered: false });
@@ -214,60 +223,74 @@ export function TaskDetails({ next }) {
     obj[`student${student}Room`] = room;
     this.setState(obj);
   };
+  */
+  const handleDrop = (room, e) => {
+    const student = e.dataTransfer.getData("text/plain");
+    setState(prevState => ({
+      ...prevState,
+      hovered: false,
+      [`student${student}Room`]: room,
+    }));
+  };
 
-  renderRoom(room, isDeck) {
-    const { hovered } = this.state;
+  function renderRoom(room, isDeck) {
+    const { hovered } = state;
+    console.log('RENDER ROOM',state)
+    console.log(room)
+    console.log(exampleTaskData.students)
     const students = [];
     exampleTaskData.students.forEach(student => {
-      if (this.state[`student${student}Room`] === room) {
+      if (state[`student${student}Room`] === room) {
         students.push(student);
       }
     });
-
+    //functio seems fine here 
     const classNameRoom = isDeck ? "deck bp3-elevation-1" : "room";
     const classNameHovered = hovered ? "bp3-elevation-3" : "";
+
+    console.log('CLASSNAMEROOM',classNameRoom)
+    console.log('CLASSNAMEHovered',classNameHovered)
     return (
       <div
         key={room}
-        onDrop={this.handleDrop.bind(this, room)}
-        onDragOver={this.handleDragOver}
-        onDragLeave={this.handleDragLeave}
+        onDrop={(e) => handleDrop(room,e)}
+        onDragOver={e=> handleDragOver}
+        onDragLeave={e =>handleDragLeave}
         className={`bp3-card ${classNameRoom} ${classNameHovered}`}
       >
         {isDeck ? null : <h6 className={'bp3-heading'}>Room {room}</h6>}
-        {students.map(student => this.renderStudent(student))}
+        {students.map(student => renderStudent(student))}
       </div>
     );
+    
   }
 
-  studentHandleDragStart = (student, e) => {
+  function studentHandleDragStart(student, e) {
     e.dataTransfer.setData("text/plain", student);
   };
 
-  studentHandleDragOver = e => {
+  function studentHandleDragOver(e)  {
     e.preventDefault();
   };
 
-  studentHandleDragEnd = e => {};
+  function studentHandleDragEnd(e) {
 
-  renderStudent(student) {
+  };
+
+  function renderStudent(student) {
     const style = {};
     const cursorStyle = { cursor: "move" };
-
     return (
       <div
         key={student}
         draggable={true}
-        onDragStart={this.studentHandleDragStart.bind(this, student)}
-        onDragOver={this.studentHandleDragOver}
-        onDragEnd={this.studentHandleDragEnd}
+        onDragStart={(e) => studentHandleDragStart(student,e)}
+        onDragOver={e => studentHandleDragOver}
+        onDragEnd={e => studentHandleDragEnd}
         className="student"
         style={cursorStyle}
       >
-        {/* <span className="icon bp3-icon-standard bp3-icon-person" /> *///}
-        
-        
-        /*
+        {/* <span className="icon bp3-icon-standard bp3-icon-person" /> */}
         <span className="icon">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512">
             <path
@@ -279,5 +302,5 @@ export function TaskDetails({ next }) {
         <span className="letter">{student}</span>
       </div>
     );
-  } */
-
+  }
+}

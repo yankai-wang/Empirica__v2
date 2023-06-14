@@ -17,13 +17,16 @@ export default function App() {
 
   const { protocol, host } = window.location;
   const url = `${protocol}//${host}/query`;
-  
+
 
 
 
 
   function introSteps({ game, player }) {
-    return [Overview,TaskDetails,Introduction];
+    console.log('WE GOT TO THE INTROSTEPS')
+    console.log(player.get('treatment'))
+    
+    return [Overview,Introduction,TaskDetails];
   }
   /*
   Empirica.introSteps((game, treatment) => {

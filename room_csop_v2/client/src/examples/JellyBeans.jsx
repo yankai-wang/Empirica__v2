@@ -3,6 +3,7 @@ import {
   usePlayer,
   usePlayers,
   useStage,
+  useGame,
 } from "@empirica/core/player/classic/react";
 import React from "react";
 import { Avatar } from "../components/Avatar";
@@ -12,6 +13,12 @@ export function JellyBeans() {
   const player = usePlayer();
   const players = usePlayers();
   const stage = useStage();
+  const game = useGame();
+
+  console.log(player)
+  console.log(players)
+  console.log(stage)
+  console.log(game)
 
   function handleChange(e) {
     player.round.set("guess", e.target.valueAsNumber);

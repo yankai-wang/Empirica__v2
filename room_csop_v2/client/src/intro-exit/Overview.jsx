@@ -5,25 +5,28 @@ import React from "react";
 //import { Centered } from "meteor/empirica:core";
 import { Button } from "../components/Button";
 import {
-  usePlayer,
-  usePlayers,
-  useStage,
-  useGame,
-  useRound
+  usePlayer
 }from "@empirica/core/player/classic/react";
 
-export function Overview({ next }) {
-  
-  console.log(game)
-  const social = player.length > 1;
+export function Overview({ previous,next }) {
+  //const game=useGame();
+ 
+
+  const player =usePlayer()
+  const treatment= player.get('treatment')
+  console.log(treatment)
+  console.log(next)
+  console.log(previous)
+  const social = treatment.playerCount > 1;
     return (
       //<Centered>
         <div className="instructions">
           <h1 className={"bp3-heading"}> Game Overview </h1>
+          <br></br>
           <p>
             In this game, you will be{" "}
             <strong>
-              asked to solve a sequence of {5} resource
+              asked to solve a sequence of {treatment.nRounds} resource
               allocation tasks
             </strong>
             . In each task, you are going to{" "}
@@ -32,25 +35,27 @@ export function Overview({ next }) {
             satisfaction for the group while respecting certain constraints
             (e.g., some students can not live together in one room).
           </p>
-
+          <br></br>
+         
           <p>
             You have at most{" "}
-            <strong>{Math.ceil(300 / 60.0)} minutes</strong>{" "}
+            <strong>{Math.ceil(treatment.StageDuration / 60.0)} minutes</strong>{" "}
             to work on each task. Completing the entire game may take you as
-            long as {Math.ceil((300 / 60.0) * 6.0)} minutes.{" "}
+            long as {Math.ceil((treatment.StageDuration / 60.0) * 6.0)} minutes.{" "}
             <strong>
               If you do not have at least{" "}
-              {Math.ceil((300 / 60.0) * 6.0)} minutes
+              {Math.ceil((treatment.StageDuration / 60.0) * 6.0)} minutes
               available to work on this HIT please return it now.
             </strong>
+        
           </p>
-
+          <br></br>
           {social ? (
             <div>
               <p>
                 <strong>
                   You will play this game simultaneously with{" "}
-                  {2 - 1} other participants in real-time
+                  {treatment.playerCount - 1} other participants in real-time
                 </strong>
                 . As we will explain in more detail later, in each task, you and
                 your teammates will submit a single room assignment plan.
@@ -61,13 +66,14 @@ export function Overview({ next }) {
               <p>
                 At the end of the game, you will have the opportunity to earn a
                 bonus payment and the amount is dependent on your accumulated
-                score in all {5} tasks.{" "}
+                score in all {treatment.nRounds} tasks.{" "}
                 <strong> Note that "free riding" is not permitted</strong>.{" "}
                 <em style={{ color: "red" }}>
                   If we detect that you are inactive during a task, you will not
                   receive a bonus for that task.
                 </em>
               </p>
+              <br></br>
             </div>
           ) : (
             <p>
@@ -75,7 +81,7 @@ export function Overview({ next }) {
               will evaluate the quality of your plan by scoring it in each task.
               At the end of the game, you will have the opportunity to earn a
               bonus payment and the amount is dependent on your accumulated
-              score in all {5} tasks.{" "}
+              score in all {treatment.nRounds} tasks.{" "}
               <em style={{ color: "red" }}>
                 If we detect that you are inactive during a task, you will not
                 receive a bonus for that task.
@@ -94,6 +100,10 @@ export function Overview({ next }) {
               this task or make it as large as possible.
             </strong>
           </p>
+
+          <Button handleClick={previous} autoFocus>
+        <p>Previous</p>
+      </Button>
       
           <Button handleClick={next} autoFocus>
         <p>Next</p>

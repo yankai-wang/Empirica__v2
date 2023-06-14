@@ -1,10 +1,10 @@
 import { ClassicListenersCollector } from "@empirica/core/admin/classic";
 export const Empirica = new ClassicListenersCollector();
 
+
 Empirica.onGameStart(({ game }) => {
   const players=game.players
-  console.log(game.get('treatment'))
-  console.log("CAN I SEE THIS maybe") 
+  
   const round = game.addRound({
     name: "Round 1 - Jelly Beans",
     task: "jellybeans", 
@@ -19,14 +19,16 @@ Empirica.onGameStart(({ game }) => {
   round2.addStage({ name: "Play", duration: 300 }); 
 });
 
-Empirica.onRoundStart(({ round }) => {});
+Empirica.onRoundStart(({ round }) => {
+  //Idea 1 we could potentially send a random player to the end of the round 
+});
 
 
 
 
 Empirica.onStageStart(({ game, stage }) => {
 //roomgame(stage)
-const players = game.players;
+const players = game.get('treatment')['playerCount'];
 console.log('CAN I SEE THIS stage',players)
 console.debug("Round ", stage.name, "game", game.id, " started");
 const team = game.get("team");

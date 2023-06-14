@@ -11,19 +11,33 @@ factors:
     - name: 5min
       values:
         - value: 300
+    - name: TimelordName
+      values:
+        - value: James
+        - value: Tim
+        - value: Matt
     - name: StageDuration
       values:
         - value: 300
+        - value: 10000
+    - name: nRounds
+      desc: 'This is the amount of rounds you would like to do '
+      values:
+        - value: 1
+        - value: 2
+        - value: 3
 treatments:
-    - name: Two Players
-      desc: Two-player Game
-      factors:
-        playerCount: 2
     - name: stageDuration
       factors:
         5min: 300
+    - name: Two Players
+      desc: Two-player Game
+      factors:
+        TimelordName: James
+        playerCount: 2
     - name: Solo
       desc: Single-player Game
       factors:
-        StageDuration: 300
+        StageDuration: 10000
+        nRounds: 3
         playerCount: 1
