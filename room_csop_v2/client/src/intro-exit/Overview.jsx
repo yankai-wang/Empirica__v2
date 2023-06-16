@@ -8,15 +8,12 @@ import {
   usePlayer
 }from "@empirica/core/player/classic/react";
 
-export function Overview({ previous,next }) {
+export function Overview({ next }) {
   //const game=useGame();
- 
+  const player = usePlayer()
 
-  const player =usePlayer()
   const treatment= player.get('treatment')
   console.log(treatment)
-  console.log(next)
-  console.log(previous)
   const social = treatment.playerCount > 1;
     return (
       //<Centered>
@@ -100,11 +97,6 @@ export function Overview({ previous,next }) {
               this task or make it as large as possible.
             </strong>
           </p>
-
-          <Button handleClick={previous} autoFocus>
-        <p>Previous</p>
-      </Button>
-      
           <Button handleClick={next} autoFocus>
         <p>Next</p>
       </Button>

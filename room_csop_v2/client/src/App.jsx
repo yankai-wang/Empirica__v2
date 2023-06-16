@@ -23,9 +23,6 @@ export default function App() {
 
 
   function introSteps({ game, player }) {
-    console.log('WE GOT TO THE INTROSTEPS')
-    console.log(player.get('treatment'))
-    
     return [Overview,Introduction,TaskDetails];
   }
   /*

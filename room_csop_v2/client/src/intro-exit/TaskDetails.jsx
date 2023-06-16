@@ -59,7 +59,8 @@ export function TaskDetails ({ previous,next }) {
   
   const player =usePlayer()
   const treatment= player.get('treatment')
-  console.log('This is the treatment page')
+ 
+ // console.log('This is the treatment page')
   const [state, setState] = useState({
     hovered: false,
     studentARoom: "deck",
@@ -68,9 +69,14 @@ export function TaskDetails ({ previous,next }) {
     studentDRoom: "deck",
     score: 0
   });
+  
 
+  useEffect(() => {
+    updateScore();
+  }, [state.studentARoom, state.studentBRoom, state.studentCRoom, state.studentDRoom]);
+
+  
   function updateScore() {
-    console.log('UPDATESCORE RAN')
     setState(prevState => ({
       ...prevState,
       score: 0,
@@ -82,7 +88,6 @@ export function TaskDetails ({ previous,next }) {
             ...prevState,
             score: prevState.score + exampleTaskData.payoff[student][room],
           }));
-          //this.state.score += exampleTaskData.payoff[student][room];
         }
       });
     });
@@ -94,14 +99,11 @@ export function TaskDetails ({ previous,next }) {
           ...prevState,
           score: "N/A",
         }));
-        //this.state.score = "N/A";
       }
     });
-  }
+  } 
 
-  useEffect(() => {
-    updateScore();
-  }, []);
+
   
     return (
         <div className="instructions">
@@ -201,7 +203,7 @@ export function TaskDetails ({ previous,next }) {
   
 
   function handleDragOver(e) {
-    console.log('Handle Drag over')
+    //console.log('Handle Drag over')
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
     setState(prevState => ({
@@ -210,7 +212,7 @@ export function TaskDetails ({ previous,next }) {
   };
 
   function handleDragLeave (e) {
-    console.log('HandleDragLeave',e)
+   // console.log('HandleDragLeave',e)
     setState(prevState => ({
       ...prevState,
       hovered: false, }));
@@ -224,20 +226,19 @@ export function TaskDetails ({ previous,next }) {
     this.setState(obj);
   };
   */
-  const handleDrop = (room, e) => {
+  function handleDrop(room, e) {
     const student = e.dataTransfer.getData("text/plain");
+    console.log('Handle Drop')
     setState(prevState => ({
       ...prevState,
       hovered: false,
       [`student${student}Room`]: room,
     }));
+
   };
 
   function renderRoom(room, isDeck) {
     const { hovered } = state;
-    console.log('RENDER ROOM',state)
-    console.log(room)
-    console.log(exampleTaskData.students)
     const students = [];
     exampleTaskData.students.forEach(student => {
       if (state[`student${student}Room`] === room) {
@@ -245,17 +246,15 @@ export function TaskDetails ({ previous,next }) {
       }
     });
     //functio seems fine here 
+
     const classNameRoom = isDeck ? "deck bp3-elevation-1" : "room";
     const classNameHovered = hovered ? "bp3-elevation-3" : "";
-
-    console.log('CLASSNAMEROOM',classNameRoom)
-    console.log('CLASSNAMEHovered',classNameHovered)
     return (
       <div
         key={room}
         onDrop={(e) => handleDrop(room,e)}
-        onDragOver={e=> handleDragOver}
-        onDragLeave={e =>handleDragLeave}
+        onDragOver={(e) =>handleDragOver(e)}
+        onDragLeave={(e) =>handleDragLeave(e)}
         className={`bp3-card ${classNameRoom} ${classNameHovered}`}
       >
         {isDeck ? null : <h6 className={'bp3-heading'}>Room {room}</h6>}
@@ -285,8 +284,8 @@ export function TaskDetails ({ previous,next }) {
         key={student}
         draggable={true}
         onDragStart={(e) => studentHandleDragStart(student,e)}
-        onDragOver={e => studentHandleDragOver}
-        onDragEnd={e => studentHandleDragEnd}
+        onDragOver={e => studentHandleDragOver(e)}
+        onDragEnd={e => studentHandleDragEnd(e)}
         className="student"
         style={cursorStyle}
       >

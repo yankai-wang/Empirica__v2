@@ -3,7 +3,7 @@ export const Empirica = new ClassicListenersCollector();
 
 
 Empirica.onGameStart(({ game }) => {
-  const players=game.players
+  //const players=game.players
   
   const round = game.addRound({
     name: "Round 1 - Jelly Beans",
