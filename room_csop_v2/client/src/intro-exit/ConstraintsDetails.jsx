@@ -1,17 +1,85 @@
-import React from "react";
+import React, {useState,useEffect} from "react";
+import _ from 'lodash'
+import styles from './main.less'
+import { IconNames } from "@blueprintjs/icons";
+import "@blueprintjs/icons/lib/css/blueprint-icons.css";
 
-import {Centered} from "meteor/empirica:core";
+
+
+//import {Centered} from "meteor/empirica:core";
 import { exampleTaskData } from "./TaskDetails";
+import { Button } from "../components/Button";
+import {
+  usePlayer,
+  usePlayers,
+  useStage,
+  useGame,
+  useRound
+}from "@empirica/core/player/classic/react";
 
-export default class ConstraintsDetails extends React.Component {
-  render() {
-    const { hasPrev, hasNext, onNext, onPrev, treatment } = this.props;
-    this.violatedConstraints();
-    this.updateScore();
+export function ConstraintsDetails ({previous,next}) {
+  const player =usePlayer()
+  const treatment= player.get('treatment')
+
+  const [state, setState] = useState({
+    hovered: false,
+    studentARoom: "deck",
+    studentBRoom: "deck",
+    studentCRoom: "deck",
+    studentDRoom: "deck",
+    score: 0,
+    violatedConstraintsIds: []
+  });
+
+  useEffect(() => {
+    /* This makes sure the updatescore function runs only when there is a change on room state 
+    IE when anyone move someone in the task game and that person sticks to a square this will run
+    */
+    updateScore();
+    violatedConstraints();
+  }, [state.studentARoom, state.studentBRoom, state.studentCRoom, state.studentDRoom]);
+
+  
+  function updateScore() {
+    /* This function updates the score it will run through each student and 
+    check their room number
+    */
+    setState(prevState => ({
+      ...prevState,
+      score: 0,
+    }));
+    exampleTaskData.students.forEach(student => {
+      exampleTaskData.rooms.forEach(room => {
+        if (state[`student${student}Room`] === room) {
+          setState(prevState => ({
+            ...prevState,
+            score: prevState.score + exampleTaskData.payoff[student][room],
+          }));
+        }
+      });
+    });
+    //
+    setState(prevState => ({
+      ...prevState,
+      score: prevState.score - 100 * prevState.violatedConstraintsIds.length
+    }));
+    //if anyone in the deck, then score is 0
+    exampleTaskData.students.forEach(student => {
+      if (state[`student${student}Room`] === "deck") {
+        //if anyone in the deck, score is 0
+        setState(prevState => ({
+          ...prevState,
+          score: "N/A",
+        }));
+      }
+    });
+  } 
+  
+
+
     return (
-      <Centered>
-        <div className="instructions">
-          <h1 className={"bp3-heading"}>Respecting the Constraints</h1>
+        <div className="instructions" style={{ margin: "0 auto", width: "95%" }}>
+          <h1 className="bp3-heading" style={{ fontSize: "64px" }}>Respecting the Constraints</h1>
           <p>
             You need to{" "}
             <strong>
@@ -35,11 +103,11 @@ export default class ConstraintsDetails extends React.Component {
             <div className="left">
               <div className="constraints">
                 <h5 className={"bp3-heading"}>Constraints</h5>
-                <ul>
+                <ul style={{ listStyleType: "disc" }}>
                   {exampleTaskData.constraints.map(constraint => {
-                    const failed = this.state.violatedConstraintsIds.includes(
-                      constraint._id
-                    );
+                    console.log(state)
+                    const failed = state.violatedConstraintsIds.includes(constraint._id);
+                    console.log(failed)
                     return (
                       <li
                         key={constraint._id}
@@ -67,10 +135,10 @@ export default class ConstraintsDetails extends React.Component {
 
             <div className="board">
               <div className="all-rooms">
-                {this.renderRoom("deck", true)}
+                {renderRoom("deck", true)}
                 <div className="rooms">
                   {exampleTaskData.rooms.map(room =>
-                    this.renderRoom(room, false)
+                    renderRoom(room, false)
                   )}
                 </div>
               </div>
@@ -92,65 +160,30 @@ export default class ConstraintsDetails extends React.Component {
             </p>
           </div>
 
-          <button
-            type="button"
-            className="bp3-button bp3-intent-nope -icon-standard bp3-icon-double-chevron-left"
-            onClick={onPrev}
-            disabled={!hasPrev}
-          >
-            Previous
-          </button>
-          <button
-            type="button"
-            className="bp3-button bp3-intent-primary"
-            onClick={onNext}
-            disabled={!hasNext}
-          >
-            Next
-            <span className="bp3-icon-standard bp3-icon-double-chevron-right bp3-align-right" />
-          </button>
+          <Button handleClick={previous} autoFocus>
+        <p>Previous</p>
+      </Button>
+      
+          <Button handleClick={next} autoFocus>
+        <p>Next</p>
+      </Button>
         </div>
-      </Centered>
     );
-  }
+  
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      hovered: false,
-      studentARoom: "deck",
-      studentBRoom: "deck",
-      studentCRoom: "deck",
-      studentDRoom: "deck",
-      score: 0,
-      violatedConstraintsIds: []
-    };
-  }
+ 
+  function violatedConstraints() {
+    //this.state.violatedConstraintsIds = [];
+    setState(prevState => ({
+      ...prevState,
+      violatedConstraintsIds: [],
+    }));
 
-  updateScore() {
-    this.state.score = 0;
-    exampleTaskData.students.forEach(student => {
-      exampleTaskData.rooms.forEach(room => {
-        if (this.state[`student${student}Room`] === room) {
-          this.state.score += exampleTaskData.payoff[student][room];
-        }
-      });
-    });
-    this.state.score -= 100 * this.state.violatedConstraintsIds.length;
-    //if anyone in the deck, then score is 0
-    exampleTaskData.students.forEach(student => {
-      if (this.state[`student${student}Room`] === "deck") {
-        //if anyone in the deck, score is 0
-        this.state.score = "N/A";
-      }
-    });
-  }
-
-  violatedConstraints() {
-    this.state.violatedConstraintsIds = [];
     exampleTaskData.constraints.forEach(constraint => {
-      const firstStudentRoom = this.state[`student${constraint.pair[0]}Room`];
-      const secondStudentRoom = this.state[`student${constraint.pair[1]}Room`];
+      console.log(constraint)
+      const firstStudentRoom = state[`student${constraint.pair[0]}Room`];
+      const secondStudentRoom = state[`student${constraint.pair[1]}Room`];
+  
 
       if (firstStudentRoom !== "deck" && secondStudentRoom !== "deck") {
         switch (constraint.type) {
@@ -161,7 +194,11 @@ export default class ConstraintsDetails extends React.Component {
                 constraint.pair.join(" and "),
                 "they are not in the same room, when they should've"
               );
-              this.state.violatedConstraintsIds.push(constraint._id);
+             // this.state.violatedConstraintsIds.push(constraint._id);
+             setState(prevState => ({
+              ...prevState,
+              violatedConstraintsIds: [...prevState.violatedConstraintsIds, constraint._id],
+            }));
             }
             break;
           case 1:
@@ -171,7 +208,11 @@ export default class ConstraintsDetails extends React.Component {
                 constraint.pair.join(" and "),
                 "they are in the same room, when they shouldn't"
               );
-              this.state.violatedConstraintsIds.push(constraint._id);
+              //this.state.violatedConstraintsIds.push(constraint._id);
+              setState(prevState => ({
+                ...prevState,
+                violatedConstraintsIds: [...prevState.violatedConstraintsIds, constraint._id],
+              }));
             }
 
             break;
@@ -182,7 +223,10 @@ export default class ConstraintsDetails extends React.Component {
                 constraint.pair.join(" and "),
                 "they are not neighbors, when they should've been"
               );
-              this.state.violatedConstraintsIds.push(constraint._id);
+              setState(prevState => ({
+                ...prevState,
+                violatedConstraintsIds: [...prevState.violatedConstraintsIds, constraint._id],
+              }));
             }
 
             break;
@@ -192,7 +236,10 @@ export default class ConstraintsDetails extends React.Component {
                 constraint.pair.join(" and "),
                 "can't live in the same room or be neighbors, so why are they?"
               );
-              this.state.violatedConstraintsIds.push(constraint._id);
+              setState(prevState => ({
+                ...prevState,
+                violatedConstraintsIds: [...prevState.violatedConstraintsIds, constraint._id],
+              }));
             }
             break;
         }
@@ -200,16 +247,22 @@ export default class ConstraintsDetails extends React.Component {
     });
   }
 
-  handleDragOver = e => {
+  function handleDragOver(e) {
+    //console.log('Handle Drag over')
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
-    this.setState({ hovered: true });
+    setState(prevState => ({
+      ...prevState,
+      hovered: true, }));
   };
 
-  handleDragLeave = e => {
-    this.setState({ hovered: false });
+  function handleDragLeave (e) {
+   // console.log('HandleDragLeave',e)
+    setState(prevState => ({
+      ...prevState,
+      hovered: false, }));
   };
-
+ /*
   handleDrop = (room, e) => {
     const student = e.dataTransfer.getData("text/plain");
     this.setState({ hovered: false });
@@ -217,55 +270,67 @@ export default class ConstraintsDetails extends React.Component {
     obj[`student${student}Room`] = room;
     this.setState(obj);
   };
+  */
+  function handleDrop(room, e) {
+    const student = e.dataTransfer.getData("text/plain");
+    console.log('Handle Drop')
+    setState(prevState => ({
+      ...prevState,
+      hovered: false,
+      [`student${student}Room`]: room,
+    }));
 
-  renderRoom(room, isDeck) {
-    const { hovered } = this.state;
+  };
+
+  function renderRoom(room, isDeck) {
+    const { hovered } = state;
     const students = [];
     exampleTaskData.students.forEach(student => {
-      if (this.state[`student${student}Room`] === room) {
+      if (state[`student${student}Room`] === room) {
         students.push(student);
       }
     });
+    //functio seems fine here 
 
     const classNameRoom = isDeck ? "deck bp3-elevation-1" : "room";
     const classNameHovered = hovered ? "bp3-elevation-3" : "";
     return (
       <div
         key={room}
-        onDrop={this.handleDrop.bind(this, room)}
-        onDragOver={this.handleDragOver}
-        onDragLeave={this.handleDragLeave}
+        onDrop={(e) => handleDrop(room,e)}
+        onDragOver={(e) =>handleDragOver(e)}
+        onDragLeave={(e) =>handleDragLeave(e)}
         className={`bp3-card ${classNameRoom} ${classNameHovered}`}
       >
-        {isDeck ? null : <h6 className={"bp3-heading"}>Room {room}</h6>}
-        {students.map(student => this.renderStudent(student))}
+        {isDeck ? null : <h6 className={'bp3-heading'}>Room {room}</h6>}
+        {students.map(student => renderStudent(student))}
       </div>
     );
+    
   }
 
-  studentHandleDragStart = (student, e) => {
+  function studentHandleDragStart(student, e) {
     e.dataTransfer.setData("text/plain", student);
   };
 
-  studentHandleDragOver = e => {
+  function studentHandleDragOver(e)  {
     e.preventDefault();
   };
 
-  studentHandleDragEnd = e => {
-    //console.log("Dropped", Math.random());
+  function studentHandleDragEnd(e) {
+
   };
 
-  renderStudent(student) {
+  function renderStudent(student) {
     const style = {};
     const cursorStyle = { cursor: "move" };
-
     return (
       <div
         key={student}
         draggable={true}
-        onDragStart={this.studentHandleDragStart.bind(this, student)}
-        onDragOver={this.studentHandleDragOver}
-        onDragEnd={this.studentHandleDragEnd}
+        onDragStart={(e) => studentHandleDragStart(student,e)}
+        onDragOver={e => studentHandleDragOver(e)}
+        onDragEnd={e => studentHandleDragEnd(e)}
         className="student"
         style={cursorStyle}
       >
@@ -283,3 +348,5 @@ export default class ConstraintsDetails extends React.Component {
     );
   }
 }
+
+

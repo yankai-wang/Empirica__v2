@@ -1,15 +1,21 @@
 import React from "react";
+import { Button } from "../components/Button";
+import {
+  usePlayer,
+  usePlayers,
+  useStage,
+  useGame,
+  useRound
+}from "@empirica/core/player/classic/react";
+//import {Centered} from "meteor/empirica:core";
 
-import {Centered} from "meteor/empirica:core";
-
-export default class MoreAboutBonus extends React.Component {
-  render() {
-    const { hasPrev, hasNext, onNext, onPrev, treatment } = this.props;
-    const social = treatment.playerCount > 1;
+export function MoreAboutBonus ({previous,next }) {
+  const player =usePlayer()
+  const treatment= player.get('treatment')
+  const social = treatment.playerCount >1
     return (
-      <Centered>
-        <div className="instructions">
-          <h1 className={"bp3-heading"}> Scores and Bonuses</h1>
+        <div className="instructions" style={{ margin: "0 auto", width: "95%" }}>
+          <h1 className="bp3-heading" style={{ fontSize: "64px" }}> Scores and Bonuses</h1>
 
           <p>
             In each task, we use "score" to evaluate the quality of the room
@@ -109,25 +115,14 @@ export default class MoreAboutBonus extends React.Component {
             </strong>
           </p>
 
-          <button
-            type="button"
-            className="bp3-button bp3-intent-nope bp3-icon-double-chevron-left"
-            onClick={onPrev}
-            disabled={!hasPrev}
-          >
-            Previous
-          </button>
-          <button
-            type="button"
-            className="bp3-button bp3-intent-primary"
-            onClick={onNext}
-            disabled={!hasNext}
-          >
-            Next
-            <span className="bp3-icon-standard bp3-icon-double-chevron-right bp3-align-right" />
-          </button>
+          <Button handleClick={previous} autoFocus>
+        <p>Previous</p>
+      </Button>
+      
+          <Button handleClick={next} autoFocus>
+        <p>Next</p>
+      </Button>
         </div>
-      </Centered>
     );
   }
-}
+

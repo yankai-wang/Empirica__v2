@@ -106,8 +106,8 @@ export function TaskDetails ({ previous,next }) {
 
   
     return (
-        <div className="instructions">
-          <h1 className={"text-lg font-medium text-gray-1000"}> Room Assignment Tasks </h1>
+        <div className="instructions" style={{ margin: "0 auto", width: "95%" }}>
+          <h1 className="bp3-heading" style={{ fontSize: "64px" }}> Room Assignment Tasks </h1>
           <br></br>
           <p>
             In each task (or round), you will be asked to{" "}

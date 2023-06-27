@@ -8,8 +8,19 @@ import { Introduction } from "./intro-exit/Introduction";
 import { MyConsent } from "./intro-exit/Consent"
 import { Overview } from "./intro-exit/Overview"
 import {TaskDetails} from "./intro-exit/TaskDetails"
-import { Chat, useGame } from "@empirica/core/player/classic/react";
-
+import {ConstraintsDetails} from "./intro-exit/ConstraintsDetails"
+import {RoomArrangements} from "./intro-exit/RoomArrangements"
+import {MoreAboutBonus} from "./intro-exit/MoreAboutBonus"
+import {UIOverview} from "./intro-exit/UIOverview"
+import {IndividualQuiz} from "./intro-exit/IndividualQuiz"
+import {
+  Chat,
+  usePlayer,
+  usePlayers,
+  useStage,
+  useGame,
+  useRound
+}from "@empirica/core/player/classic/react";
 
 export default function App() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -17,31 +28,31 @@ export default function App() {
 
   const { protocol, host } = window.location;
   const url = `${protocol}//${host}/query`;
+  const player=usePlayer()
+  console.log(player)
 
 
 
 
 
   function introSteps({ game, player }) {
-    return [Overview,Introduction,TaskDetails];
-  }
-  /*
-  Empirica.introSteps((game, treatment) => {
-    const steps = [Overview, TaskDetails, ConstraintsDetails, RoomArrangements];
-    if (game.treatment.playerCount > 1) {
+    const treatment=player.get('treatment')
+    const steps= [Overview,Introduction,TaskDetails,ConstraintsDetails, RoomArrangements];
+    if(treatment.playerCount >1){
       steps.push(TeamDetails, SocialInteractionDetails);
     }
     steps.push(MoreAboutBonus, UIOverview);
-  
-    if (game.treatment.playerCount > 1) {
-      steps.push(GroupQuiz);
-    } else {
-      steps.push(IndividualQuiz);
-    }
+   // if (treatment.playerCount > 1) {
+   //   steps.push(GroupQuiz);
+  //  } else {
+   //   steps.push(IndividualQuiz)
+   // }
   
     return steps;
-  });
-  */
+
+  }
+  
+
   function exitSteps({ game, player }) {
     return [ExitSurvey];
   }

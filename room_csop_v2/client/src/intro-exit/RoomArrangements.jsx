@@ -1,13 +1,21 @@
 import React from "react";
-
-import { Centered } from "meteor/empirica:core";
-export default class RoomArrangements extends React.Component {
-  render() {
-    const { hasPrev, hasNext, onNext, onPrev, treatment } = this.props;
+import { Button } from "../components/Button";
+import {
+  usePlayer,
+  usePlayers,
+  useStage,
+  useGame,
+  useRound
+}from "@empirica/core/player/classic/react";
+import logo from '../examples/instruction-room-arrangements.svg'
+//import { Centered } from "meteor/empirica:core";
+export function RoomArrangements({previous,next }) 
+  {
+    const player =usePlayer()
+    const treatment= player.get('treatment')
     return (
-      <Centered>
-        <div className="instructions">
-          <h1 className={"bp3-heading"}> Task Room Arrangements</h1>
+        <div className="instructions" style={{ margin: "0 auto", width: "95%" }}>
+          <h1 className="bp3-heading" style={{ fontSize: "64px" }}> Task Room Arrangements</h1>
           <p>
             Depending on the number of rooms, number of students, and your
             screen/browser size and resolution, the arrangement of the rooms
@@ -15,7 +23,7 @@ export default class RoomArrangements extends React.Component {
           </p>
 
           <div className="image">
-            <img src="/experiment/instruction-room-arrangements.svg" />
+            <img src={logo} alt="Instruction Room Arrangements"/>
           </div>
 
           <p>
@@ -30,25 +38,14 @@ export default class RoomArrangements extends React.Component {
             hand, Room 101 is only next door to Room 102.
           </p>
 
-          <button
-            type="button"
-            className="bp3-button bp3-intent-nope bp3-icon-double-chevron-left"
-            onClick={onPrev}
-            disabled={!hasPrev}
-          >
-            Previous
-          </button>
-          <button
-            type="button"
-            className="bp3-button bp3-intent-primary"
-            onClick={onNext}
-            disabled={!hasNext}
-          >
-            Next
-            <span className="bp3-icon-standard bp3-icon-double-chevron-right bp3-align-right" />
-          </button>
+          <Button handleClick={previous} autoFocus>
+        <p>Previous</p>
+      </Button>
+      
+          <Button handleClick={next} autoFocus>
+        <p>Next</p>
+      </Button>
         </div>
-      </Centered>
     );
   }
-}
+

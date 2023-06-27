@@ -1,21 +1,30 @@
 import React from "react";
+import { Button } from "../components/Button";
+import {
+  usePlayer,
+  usePlayers,
+  useStage,
+  useGame,
+  useRound
+}from "@empirica/core/player/classic/react";
+import singleex from '../experiment/indUIExample.svg'
+import groupex from '../experiment/groupUIExample.svg'
 
-
-import { Centered } from "meteor/empirica:core";
-export default class UIOverview extends React.Component {
-  render() {
-    const { hasPrev, hasNext, onNext, onPrev, treatment } = this.props;
+//import { Centered } from "meteor/empirica:core";
+export function UIOverview ({previous,next}) {
+  const player =usePlayer()
+  const treatment= player.get('treatment')
+  const social = treatment.playerCount >1
     const imagePath =
       treatment.playerCount > 1
-        ? "experiment/groupUIExample.svg"
-        : "experiment/indUIExample.svg";
+        ? groupex
+        : singleex;
 
     console.log("imagePath", imagePath);
 
     return (
-      <Centered>
-        <div className="instructions">
-          <h1 className={"bp3-heading"}> Game Interface</h1>
+        <div className="instructions"style={{ margin: "0 auto", width: "95%" }}>
+          <h1 className="bp3-heading" style={{ fontSize: "64px" }}> Game Interface</h1>
           <p>
             We are almost there! please take a second to familiarize yourself
             with the game User Interface shown here:
@@ -36,25 +45,14 @@ export default class UIOverview extends React.Component {
             luck.
           </p>
 
-          <button
-            type="button"
-            className="bp3-button bp3-intent-nope bp3-icon-double-chevron-left"
-            onClick={onPrev}
-            disabled={!hasPrev}
-          >
-            Previous
-          </button>
-          <button
-            type="button"
-            className="bp3-button bp3-intent-primary"
-            onClick={onNext}
-            disabled={!hasNext}
-          >
-            Next
-            <span className="bp3-icon-standard bp3-icon-double-chevron-right bp3-align-right" />
-          </button>
+          <Button handleClick={previous} autoFocus>
+        <p>Previous</p>
+      </Button>
+      
+          <Button handleClick={next} autoFocus>
+        <p>Next</p>
+      </Button>
         </div>
-      </Centered>
     );
   }
-}
+

@@ -1,10 +1,10 @@
 import React from "react";
 
-import { Centered, AlertToaster } from "meteor/empirica:core";
+//import { Centered, AlertToaster } from "meteor/empirica:core";
 
 import { Checkbox } from "@blueprintjs/core";
 
-export default class IndividualQuiz extends React.Component {
+export function IndividualQuiz ({previous,next}) {
   state = {
     violatedConstraints: "",
     largeError: "",
@@ -57,11 +57,9 @@ export default class IndividualQuiz extends React.Component {
     }
   };
 
-  render() {
     const { hasPrev, onPrev } = this.props;
     const { violatedConstraints, largeError } = this.state;
     return (
-      <Centered>
         <div className="quiz">
           <h1 className={"bp3-heading"}> Quiz </h1>
           <form onSubmit={this.handleSubmit}>
@@ -212,7 +210,6 @@ export default class IndividualQuiz extends React.Component {
             </button>
           </form>
         </div>
-      </Centered>
     );
   }
-}
+
