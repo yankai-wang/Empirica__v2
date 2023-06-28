@@ -23,7 +23,7 @@ export function UIOverview ({previous,next}) {
     console.log("imagePath", imagePath);
 
     return (
-        <div className="instructions"style={{ margin: "0 auto", width: "95%" }}>
+        <div className="instructions" style={{ margin: "0 auto", width: "95%" }}>
           <h1 className="bp3-heading" style={{ fontSize: "64px" }}> Game Interface</h1>
           <p>
             We are almost there! please take a second to familiarize yourself

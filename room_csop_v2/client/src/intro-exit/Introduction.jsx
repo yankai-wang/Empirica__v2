@@ -5,19 +5,18 @@ import {
   usePlayers,
   useStage,
   useGame,
-  useRound
-}from "@empirica/core/player/classic/react";
+  useRound,
+} from "@empirica/core/player/classic/react";
 
-export function Introduction({previous,next })
-{
-  console.log('I can see this?')
-  const game= useGame()
-  const player =usePlayer()
-  const players = usePlayers()
-  console.log(next)
-  console.log(game)
-  console.log(player)
-  console.log(players)
+export function Introduction({ previous, next }) {
+  //console.log('I can see this?')
+  const game = useGame();
+  const player = usePlayer();
+  const players = usePlayers();
+  console.log(next);
+  console.log(game);
+  console.log(player);
+  console.log(players);
 
   return (
     <div className="mt-3 sm:mt-5 p-20">
@@ -34,11 +33,10 @@ export function Introduction({previous,next })
       <Button handleClick={previous} autoFocus>
         <p>Previous</p>
       </Button>
-      
-          <Button handleClick={next} autoFocus>
+
+      <Button handleClick={next} autoFocus>
         <p>Next</p>
       </Button>
-          
     </div>
   );
 }

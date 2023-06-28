@@ -9,8 +9,8 @@ export function MyConsent({onConsent}){
   //  console.log("this is not firefox");
     return (
   //    <Centered>
-        <div className="consent" >
-          <h2 className="bp3-heading" align = "center"> Microsoft Research Project Participation Consent Form </h2>
+        <div className="consent" style={{ margin: "0 auto", width: "95%" }}>
+          <h2 className="bp3-heading" style={{ fontSize: "64px" }} align = "center"> Microsoft Research Project Participation Consent Form </h2>
           <br></br>
           <p>
             This research project has been reviewed and approved by the
