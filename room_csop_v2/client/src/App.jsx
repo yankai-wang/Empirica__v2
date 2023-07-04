@@ -13,8 +13,14 @@ import { RoomArrangements } from "./intro-exit/RoomArrangements";
 import { MoreAboutBonus } from "./intro-exit/MoreAboutBonus";
 import { UIOverview } from "./intro-exit/UIOverview";
 import { IndividualQuiz } from "./intro-exit/IndividualQuiz";
+<<<<<<< HEAD
 import { Thanks } from "./intro-exit/Thanks";
 import { Sorry } from "./intro-exit/Sorry";
+=======
+import { TeamDetails } from "./intro-exit/TeamDetails";
+import { SocialInteractionDetails } from "./intro-exit/SocialInteractionDetails";
+import { GroupQuiz } from "./intro-exit/GroupQuiz";
+>>>>>>> 9850dab1 (Finished mutliplayer social introduction)
 import {
   Chat,
   usePlayer,
