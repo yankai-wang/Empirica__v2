@@ -4,14 +4,14 @@ This is an adaptation of an existing [experiment](https://github.com/amaatouq/ro
 
 
 ./client/intro/IndividualQuiz.jsx ✔️ <br>
-./client/intro/SocialInteractionDetails.jsx <br>
+./client/intro/SocialInteractionDetails.jsx  ✔️ <br>
 ./client/intro/Consent.jsx ✔️ <br>
 ./client/intro/RoomArrangements.jsx ✔️ <br>
-./client/intro/TeamDetails.jsx <br>
+./client/intro/TeamDetails.jsx  ✔️ <br>
 ./client/intro/MoreAboutBonus.jsx ✔️ <br>
 ./client/intro/ConstraintsDetails.jsx ✔️ <br>
 ./client/intro/UIOverview.jsx ✔️ <br>
-./client/intro/GroupQuiz.jsx <br>
+./client/intro/GroupQuiz.jsx  ✔️<br>
 ./client/intro/Overview.jsx ✔️ <br>
 ./client/intro/TaskDetails.jsx  ✔️ <br>
 ./client/game/Student.jsx <br>
