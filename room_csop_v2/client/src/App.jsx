@@ -16,6 +16,9 @@ import { IndividualQuiz } from "./intro-exit/IndividualQuiz";
 import { TeamDetails } from "./intro-exit/TeamDetails";
 import { SocialInteractionDetails } from "./intro-exit/SocialInteractionDetails";
 import { GroupQuiz } from "./intro-exit/GroupQuiz";
+=======
+import { Thanks } from "./intro-exit/Thanks";
+
 import {
   Chat,
   usePlayer,
@@ -52,7 +55,8 @@ export default function App() {
   }
 
   function exitSteps({ game, player }) {
-    return [ExitSurvey];
+    const steps = [ExitSurvey];
+    return steps;
   }
   // The my consent form shows up if you have cleared to localhistory in the player console
   return (
