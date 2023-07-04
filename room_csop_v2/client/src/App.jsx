@@ -13,6 +13,9 @@ import { RoomArrangements } from "./intro-exit/RoomArrangements";
 import { MoreAboutBonus } from "./intro-exit/MoreAboutBonus";
 import { UIOverview } from "./intro-exit/UIOverview";
 import { IndividualQuiz } from "./intro-exit/IndividualQuiz";
+import { TeamDetails } from "./intro-exit/TeamDetails";
+import { SocialInteractionDetails } from "./intro-exit/SocialInteractionDetails";
+import { GroupQuiz } from "./intro-exit/GroupQuiz";
 import {
   Chat,
   usePlayer,
