@@ -16,7 +16,6 @@ import { IndividualQuiz } from "./intro-exit/IndividualQuiz";
 import { TeamDetails } from "./intro-exit/TeamDetails";
 import { SocialInteractionDetails } from "./intro-exit/SocialInteractionDetails";
 import { GroupQuiz } from "./intro-exit/GroupQuiz";
-=======
 import { Thanks } from "./intro-exit/Thanks";
 
 import {
