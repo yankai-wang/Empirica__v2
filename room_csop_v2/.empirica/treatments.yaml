@@ -30,14 +30,16 @@ treatments:
     - name: stageDuration
       factors:
         5min: 300
-    - name: Two Players
-      desc: Two-player Game
-      factors:
-        TimelordName: James
-        playerCount: 2
     - name: Solo
       desc: Single-player Game
       factors:
         StageDuration: 10000
         nRounds: 3
         playerCount: 1
+    - name: Two Players
+      desc: Two-player Game
+      factors:
+        StageDuration: 10000
+        TimelordName: James
+        nRounds: 3
+        playerCount: 2

@@ -4,12 +4,11 @@ import React from "react";
 
 //import { Centered } from "meteor/empirica:core";
 import { Button } from "../components/Button";
-import { usePlayer } from "@empirica/core/player/classic/react";
+import { usePlayer, useGame } from "@empirica/core/player/classic/react";
 
 export function Overview({ next }) {
   //const game=useGame();
   const player = usePlayer();
-
   const treatment = player.get("treatment");
   //console.log(treatment)
   const social = treatment.playerCount > 1;
