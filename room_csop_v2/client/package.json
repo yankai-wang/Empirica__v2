@@ -1,7 +1,19 @@
 {
   "dependencies": {
     "@blueprintjs/core": "^4.20.1",
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
     "@empirica/core": "1.4.6",
+=======
+    "@empirica/core": "1.4.1",
+>>>>>>> 881e339 (Upgrade empirica)
+=======
+    "@empirica/core": "1.4.6",
+>>>>>>> 4ec94174 (Updating the empirica version)
+=======
+    "@empirica/core": "1.4.6",
+>>>>>>> main
     "esbuild": "0.17.15",
     "react": "18.2.0",
     "react-dom": "18.2.0"

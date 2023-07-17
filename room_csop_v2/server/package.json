@@ -1,6 +1,18 @@
 {
   "dependencies": {
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
     "@empirica/core": "1.4.6",
+=======
+    "@empirica/core": "1.4.1",
+>>>>>>> 881e339 (Upgrade empirica)
+=======
+    "@empirica/core": "1.4.6",
+>>>>>>> 4ec94174 (Updating the empirica version)
+=======
+    "@empirica/core": "1.4.6",
+>>>>>>> main
     "minimist": "1.2.6"
   },
   "devDependencies": {
