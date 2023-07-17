@@ -12,10 +12,10 @@ Empirica.onGameStart(({ game }) => {
   round.addStage({ name: "Result", duration: 120 });
 
   const round2 = game.addRound({
-    name: "Round 2 - Minesweeper",
-    task: "minesweeper",
+    name: "Round 2 - roomassignment ",
+    task: "test",
   });
-  round2.addStage({ name: "Play", duration: 300 });
+  round2.addStage({ name: "Play", duration: 3 });
 });
 
 Empirica.onRoundStart(({ round }) => {});
