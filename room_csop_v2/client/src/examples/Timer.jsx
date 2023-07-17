@@ -1,7 +1,7 @@
 import React from "react";
 
 import {StageTimeWrapper} from "meteor/empirica:core";
-import Timer from "./Timer.jsx";
+//import Timer from "../components/Timer";
 
 class timer extends React.Component {
   render() {

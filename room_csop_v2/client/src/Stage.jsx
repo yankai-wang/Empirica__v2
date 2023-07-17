@@ -7,7 +7,7 @@ import { Loading } from "@empirica/core/player/react";
 import React from "react";
 import { JellyBeans } from "./examples/JellyBeans";
 import { MineSweeper } from "./examples/MineSweeper";
-import { Roomassign } from "./examples/Round";
+//import { Roomassign } from "./examples/Round";
 
 export function Stage() {
   const player = usePlayer();
