@@ -14,6 +14,7 @@ import { MoreAboutBonus } from "./intro-exit/MoreAboutBonus";
 import { UIOverview } from "./intro-exit/UIOverview";
 import { IndividualQuiz } from "./intro-exit/IndividualQuiz";
 import { Thanks } from "./intro-exit/Thanks";
+import { Sorry } from "./intro-exit/Sorry";
 import {
   Chat,
   usePlayer,
@@ -50,6 +51,11 @@ export default function App() {
   }
 
   function exitSteps({ game, player }) {
+    console.log("player status", player.get("status"), player.get("ended"))
+    // if (player.exitStatus !== "finished") {
+    if (player.get("ended") !== "game ended") {
+      return [Sorry];
+    }
     const steps = [ExitSurvey];
     return steps;
   }
