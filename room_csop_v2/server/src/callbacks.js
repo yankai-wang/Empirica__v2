@@ -26,13 +26,14 @@ Empirica.onRoundStart(({ round }) => {
 
 
 
-Empirica.onStageStart(({ game, stage }) => {
+// Empirica.onStageStart(({ game, stage }) => {
+Empirica.onStageStart(({ stage }) => {
 //roomgame(stage)
-const players = game.get('treatment')['playerCount'];
-console.log('CAN I SEE THIS stage',players)
-console.debug("Round ", stage.name, "game", game.id, " started");
-const team = game.get("team");
-console.log("is it team?", team);
+// const players = game.get('treatment')['playerCount'];
+// console.log('CAN I SEE THIS stage',players)
+// console.debug("Round ", stage.name, "game", game.id, " started");
+// const team = game.get("team");
+// console.log("is it team?", team);
 
 //initiate the score for this round (because everyone will have the same score, we can save it at the round object
 stage.set("score", 0);
