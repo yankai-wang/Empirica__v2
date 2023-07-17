@@ -1,24 +1,22 @@
 import { ClassicListenersCollector } from "@empirica/core/admin/classic";
 export const Empirica = new ClassicListenersCollector();
 
-
 Empirica.onGameStart(({ game }) => {
-  //const players=game.players
-  
   const round = game.addRound({
     name: "Round 1 - Jelly Beans",
-    task: "jellybeans", 
+    task: "jellybeans",
   });
-  round.addStage({ name: "Game", duration: 300 });
+  round.addStage({ name: "Answer", duration: 300 });
   round.addStage({ name: "Result", duration: 120 });
 
   const round2 = game.addRound({
-    name: "Round 2 - Minesweeper",
+    name: "Round 2 - Room_assignment",
     task: "minesweeper",
   });
-  round2.addStage({ name: "Play", duration: 300 }); 
+  round2.addStage({ name: "Play", duration: 3000 });
 });
 
+<<<<<<< HEAD
 Empirica.onRoundStart(({ round }) => {
   //Idea 1 we could potentially send a random player to the end of the round 
 });
@@ -89,44 +87,21 @@ Empirica.onStageEnded(({ game,stage,round }) => {
   }
 
 */
+=======
+Empirica.onRoundStart(({ round }) => {});
+>>>>>>> 987a5f9d (Updating intro branch to main)
 
+Empirica.onStageStart(({ stage }) => {});
 
+Empirica.onStageEnded(({ stage }) => {
+  calculateJellyBeansScore(stage);
 });
 
 Empirica.onRoundEnded(({ round }) => {});
 
-Empirica.onGameEnded(({ game }) => {
-
-  /*const players = game.players;
-  console.debug("The game", game._id, "has ended");
-  //computing the bonus for everyone (in this game, everyone will get the same value)
-  const conversionRate = game.treatment.conversionRate
-    ? game.treatment.conversionRate
-    : 1;
-
-  const optimalSolutionBonus = game.treatment.optimalSolutionBonus
-    ? game.treatment.optimalSolutionBonus
-    : 0;
-
-  const bonus =
-    game.get("cumulativeScore") > 0
-      ? (
-          game.get("cumulativeScore") * conversionRate +
-          game.get("nOptimalSolutions") * optimalSolutionBonus
-        ).toFixed(2)
-      : 0;
-
-  players.forEach((player) => {
-    if (player.get("bonus") === 0) {
-      //if we never computed their bonus
-      player.set("bonus", bonus);
-      player.set("cumulativeScore", game.get("cumulativeScore"));
-    }
-  });*/
-});
+Empirica.onGameEnded(({ game }) => {});
 
 // Note: this is not the actual number of beans in the pile, it's a guess...
-/*
 const jellyBeansCount = 634;
 
 function calculateJellyBeansScore(stage) {
@@ -153,80 +128,4 @@ function calculateJellyBeansScore(stage) {
     const totalScore = player.get("score") || 0;
     player.set("score", totalScore + roundScore);
   }
-} */
-
-//helpers 
-function getScore(task, assignments, nViolations) {
-  let score = 0;
-  Object.keys(assignments).forEach((room) => {
-    assignments[room].forEach((student) => {
-      score += task.payoff[student][room];
-    });
-  });
-  return score - nViolations * 100;
-}
-
-function find_room(assignments, student) {
-  return Object.keys(assignments).find((room) =>
-    assignments[room].includes(student)
-  );
-}
-
-function getViolations(stage, assignments) {
-  // console.debug("assignments ", assignments);
-  const task = stage.get("task");
-  const violatedConstraintsIds = [];
-
-  task.constraints.forEach((constraint) => {
-    const firstStudentRoom = find_room(assignments, constraint.pair[0]);
-    const secondStudentRoom = find_room(assignments, constraint.pair[1]);
-
-    if (firstStudentRoom !== "deck" && secondStudentRoom !== "deck") {
-      switch (constraint.type) {
-        case 0:
-          //they are not in the same room, when they should've
-          if (firstStudentRoom !== secondStudentRoom) {
-            // console.debug(
-            //   constraint.pair.join(" and "),
-            //   "they are not in the same room, when they should've"
-            // );
-            violatedConstraintsIds.push(constraint._id);
-          }
-          break;
-        case 1:
-          //they are in the same room, when they shouldn't
-          if (firstStudentRoom === secondStudentRoom) {
-            // console.debug(
-            //   constraint.pair.join(" and "),
-            //   "they are in the same room, when they shouldn't"
-            // );
-            violatedConstraintsIds.push(constraint._id);
-          }
-
-          break;
-        case 2:
-          //if they are not neighbors, when they should've been
-          if (Math.abs(firstStudentRoom - secondStudentRoom) !== 1) {
-            // console.debug(
-            //   constraint.pair.join(" and "),
-            //   "they are not neighbors, when they should've been"
-            // );
-            violatedConstraintsIds.push(constraint._id);
-          }
-
-          break;
-        case 3:
-          if (Math.abs(firstStudentRoom - secondStudentRoom) < 2) {
-            // console.debug(
-            //   constraint.pair.join(" and "),
-            //   "can't live in the same room or be neighbors, so why are they?"
-            // );
-            violatedConstraintsIds.push(constraint._id);
-          }
-          break;
-      }
-    }
-  });
-
-  return violatedConstraintsIds;
 }

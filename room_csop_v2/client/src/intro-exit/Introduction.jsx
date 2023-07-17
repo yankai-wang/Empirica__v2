@@ -14,7 +14,7 @@ export function Introduction({ previous, next }) {
   const player = usePlayer();
   const players = usePlayers();
   console.log(next);
-  console.log(game);
+  console.log(game.get("treatments"));
   console.log(player);
   console.log(players);
 
