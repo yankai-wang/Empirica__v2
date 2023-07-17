@@ -14,6 +14,7 @@ import { MoreAboutBonus } from "./intro-exit/MoreAboutBonus";
 import { UIOverview } from "./intro-exit/UIOverview";
 import { IndividualQuiz } from "./intro-exit/IndividualQuiz";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Thanks } from "./intro-exit/Thanks";
 import { Sorry } from "./intro-exit/Sorry";
 =======
@@ -26,6 +27,13 @@ import { GroupQuiz } from "./intro-exit/GroupQuiz";
 import { Thanks } from "./intro-exit/Thanks";
 
 >>>>>>> 4324ab09 (Fixed a small error)
+=======
+import { TeamDetails } from "./intro-exit/TeamDetails";
+import { SocialInteractionDetails } from "./intro-exit/SocialInteractionDetails";
+import { GroupQuiz } from "./intro-exit/GroupQuiz";
+import { Thanks } from "./intro-exit/Thanks";
+
+>>>>>>> main
 import {
   Chat,
   usePlayer,

@@ -17,6 +17,7 @@ Empirica.onGameStart(({ game }) => {
 });
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 Empirica.onRoundStart(({ round }) => {
   //Idea 1 we could potentially send a random player to the end of the round 
 });
@@ -90,6 +91,9 @@ Empirica.onStageEnded(({ game,stage,round }) => {
 =======
 Empirica.onRoundStart(({ round }) => {});
 >>>>>>> 987a5f9d (Updating intro branch to main)
+=======
+Empirica.onRoundStart(({ round }) => {});
+>>>>>>> main
 
 Empirica.onStageStart(({ stage }) => {});
 
