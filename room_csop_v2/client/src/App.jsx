@@ -18,7 +18,7 @@ import { Sorry } from "./intro-exit/Sorry";
 import { TeamDetails } from "./intro-exit/TeamDetails";
 import { SocialInteractionDetails } from "./intro-exit/SocialInteractionDetails";
 import { GroupQuiz } from "./intro-exit/GroupQuiz";
-// import { GroupExitSurvey } from "./intro-exit/GroupExitSurvey";
+import { GroupExitSurvey } from "./intro-exit/GroupExitSurvey";
 import { IndividualExitSurvey } from "./intro-exit/IndividualExitSurvey";
 
 import {
@@ -64,7 +64,7 @@ export default function App() {
     // if (game.players.length > 1) {
     // very weird that game.get("players") is undefined here, so use treatment.playerCount instead
     if (treatment.playerCount > 1) {
-      // return [GroupExitSurvey, Thanks];
+      return [GroupExitSurvey, Thanks];
     } else {
       return [IndividualExitSurvey, Thanks];
     }

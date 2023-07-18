@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect }  from "react";
 
 // import { Centered } from "meteor/empirica:core";
 
@@ -11,10 +11,17 @@ import {
   Intent,
   Radio,
 } from "@blueprintjs/core";
+import {
+  usePlayer,
+  usePlayers,
+  useStage,
+  useGame,
+  useRound,
+} from "@empirica/core/player/classic/react";
 
-export default class GroupExitSurvey extends React.Component {
-  static stepName = "ExitSurvey";
-  state = {
+export function GroupExitSurvey ({ next }) {
+  // static stepName = "ExitSurvey";
+  const [state, setState] = useState({
     strategy: "",
     fair: "",
     feedback: "",
@@ -24,19 +31,24 @@ export default class GroupExitSurvey extends React.Component {
     chatComfort: "",
     chatUseful: "",
     events: "",
-  };
+  });
 
-  handleChange = (event) => {
+  function handleChange (event) {
     const el = event.currentTarget;
-    this.setState({ [el.name]: el.value });
+    // this.setState({ [el.name]: el.value });
+    setState((prevState) => ({
+      ...prevState,
+      [el.name]: el.value,
+    }));
   };
 
-  handleSubmit = (event) => {
+  function handleSubmit (event) {
     event.preventDefault();
-    this.props.onSubmit(this.state);
+    player.set("exitSurvey", state);
+    next();
   };
 
-  exitMessage = (player, game) => {
+  function exitMessage (player, game) {
     return (
       <div>
         {" "}
@@ -56,7 +68,7 @@ export default class GroupExitSurvey extends React.Component {
     );
   };
 
-  exitForm = () => {
+  function exitForm () {
     const {
       strategy,
       fair,
@@ -67,7 +79,7 @@ export default class GroupExitSurvey extends React.Component {
       chatComfort,
       events,
       chatUseful,
-    } = this.state;
+    } = state;
 
     return (
       <div>
@@ -76,13 +88,13 @@ export default class GroupExitSurvey extends React.Component {
           Please answer the following short survey. You do not have to provide
           any information you feel uncomfortable with.
         </p>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={(e) => handleSubmit(e)}>
           <div className="pt-form-group">
             <div className="pt-form-content">
               <RadioGroup
                 name="satisfied"
                 label="How satisfied are you with your team's performance in the game?"
-                onChange={this.handleChange}
+                onChange={(e) => handleChange(e)}
                 selectedValue={satisfied}
               >
                 <Radio
@@ -120,7 +132,7 @@ export default class GroupExitSurvey extends React.Component {
               <RadioGroup
                 name="workedWell"
                 label="Do you think your team worked well together?"
-                onChange={this.handleChange}
+                onChange={(e) => handleChange(e)}
                 selectedValue={workedWell}
               >
                 <Radio
@@ -155,7 +167,7 @@ export default class GroupExitSurvey extends React.Component {
               <RadioGroup
                 name="perspective"
                 label="How valuable do you think your perspective was to the end results?"
-                onChange={this.handleChange}
+                onChange={(e) => handleChange(e)}
                 selectedValue={perspective}
               >
                 <Radio
@@ -192,7 +204,7 @@ export default class GroupExitSurvey extends React.Component {
               <RadioGroup
                 name="chatComfort"
                 label="How comfortable were you in sharing your perspective with the team through the chat?"
-                onChange={this.handleChange}
+                onChange={(e) => handleChange(e)}
                 selectedValue={chatComfort}
               >
                 <Radio
@@ -238,7 +250,7 @@ export default class GroupExitSurvey extends React.Component {
                 id="strategy"
                 large={true}
                 intent={Intent.PRIMARY}
-                onChange={this.handleChange}
+                onChange={(e) => handleChange(e)}
                 value={strategy}
                 fill={true}
                 name="strategy"
@@ -257,7 +269,7 @@ export default class GroupExitSurvey extends React.Component {
                 name="fair"
                 large={true}
                 intent={Intent.PRIMARY}
-                onChange={this.handleChange}
+                onChange={(e) => handleChange(e)}
                 value={fair}
                 fill={true}
               />
@@ -275,7 +287,7 @@ export default class GroupExitSurvey extends React.Component {
                 name="feedback"
                 large={true}
                 intent={Intent.PRIMARY}
-                onChange={this.handleChange}
+                onChange={(e) => handleChange(e)}
                 value={feedback}
                 fill={true}
               />
@@ -295,7 +307,7 @@ export default class GroupExitSurvey extends React.Component {
                 name="chatUseful"
                 large={true}
                 intent={Intent.PRIMARY}
-                onChange={this.handleChange}
+                onChange={(e) => handleChange(e)}
                 value={chatUseful}
                 fill={true}
               />
@@ -313,7 +325,7 @@ export default class GroupExitSurvey extends React.Component {
                 name="events"
                 large={true}
                 intent={Intent.PRIMARY}
-                onChange={this.handleChange}
+                onChange={(e) => handleChange(e)}
                 value={events}
                 fill={true}
               />
@@ -329,18 +341,14 @@ export default class GroupExitSurvey extends React.Component {
     );
   };
 
-  componentWillMount() {}
 
-  render() {
-    const { player, game } = this.props;
-    return (
-      <Centered>
-        <div className="exit-survey">
-          {this.exitMessage(player, game)}
-          <hr />
-          {this.exitForm()}
-        </div>
-      </Centered>
-    );
-  }
+  const player = usePlayer();
+  const game = useGame();
+  return (
+      <div className="exit-survey">
+        {exitMessage(player, game)}
+        <hr />
+        {exitForm()}
+      </div>
+  );
 }
