@@ -119,7 +119,7 @@ export function SocialInteractionDetails({ previous, next }) {
 
       <p>
         Remember, you and your teammates have{" "}
-        {Math.ceil(treatment.stageDuration / 60.0)} minutes in each task to find
+        {Math.ceil(treatment.StageDuration / 60.0)} minutes in each task to find
         a room assignment plan. You will automatically{" "}
         <strong>progress to the next task when the time is up</strong>.
       </p>
