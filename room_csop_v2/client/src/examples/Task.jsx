@@ -1,11 +1,17 @@
 import React from "react";
 
 import Room from "./Room.jsx";
-import Timer from "./Timer.jsx";
+import Timer from "../components/Timer";
 import { HTMLTable } from "@blueprintjs/core";
-import { StageTimeWrapper } from "meteor/empirica:core";
-import { TimeSync } from "meteor/mizzao:timesync";
-import moment from "moment";
+import { useStageTime } from "@empirica/core/player/classic/react";
+//import { TimeSync } from "meteor/mizzao:timesync";
+//import moment from "moment";
+
+const stage = useStage();
+const player = usePlayer();
+const game = useGame();
+const stagetime= useStageTime();
+console.log(stigetime)
 
 const TimedButton_1 = StageTimeWrapper((props) => {
   const { player, onClick, activateAt, remainingSeconds, stage } = props;
@@ -43,12 +49,14 @@ const TimedButton_2 = StageTimeWrapper((props) => {
   );
 });
 
-export default class Task extends React.Component {
+export function Task (stage,player,game) {
+
+
   constructor(props) {
     super(props);
     this.state = { activeButton: false };
   }
-
+  const [activeButton, setActivateButton] = useState(false);
   componentDidMount() {
     const { player } = this.props;
     setTimeout(() => this.setState({ activeButton: true }), 5000); //we make the satisfied button active after 5 seconds
@@ -72,7 +80,7 @@ export default class Task extends React.Component {
     } else {
       //if they are group (or individual that clicked unsatisfied), we want to momentarily disable the button so they don't spam, but they can change their mind so we unlock it after 1.5 seconds
       this.setState({ activeButton: false });
-      setTimeout(() => this.setState({ activeButton: true }), 800); //preventing spam by a group
+      setTimeout(() => this.setState({ activeButton: true }), 800); //preventing spam by a groupƒ
     }
 
     player.set("satisfied", satisfied);

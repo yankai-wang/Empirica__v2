@@ -1,7 +1,7 @@
 import React from "react";
 import Author from "./Author";
 //import { TimeSync } from "meteor/mizzao:timesync";
-import moment from "moment";
+//import moment from "moment";
 
 var Filter = require("bad-words"),
   filter = new Filter();

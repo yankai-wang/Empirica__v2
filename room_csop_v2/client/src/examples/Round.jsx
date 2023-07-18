@@ -1,6 +1,6 @@
 import React from "react";
 
-import SocialInteractions from "./SocialInteractions.jsx";
+//import SocialInteractions from "./SocialInteractions.jsx";
 import Task from "./Task";
 import {
   Chat,
@@ -31,10 +31,11 @@ export function Round() {
 
   return (
     <div className="round">
-      <Task stage={stage} player={player} game={game} />
+      <Task />
       {/*game.player.length is a better check for social interaction than 'game.treatment.playerCount > 1' because of the lobby --> ignor settings*/}
       {game.players.length > 1 ? (
-        <SocialInteractions game={game} stage={stage} player={player} />
+      //  <SocialInteractions game={game} stage={stage} player={player} />
+      <div hi />
       ) : null}
     </div>
   );

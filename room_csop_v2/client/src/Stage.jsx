@@ -7,7 +7,7 @@ import { Loading } from "@empirica/core/player/react";
 import React from "react";
 import { JellyBeans } from "./examples/JellyBeans";
 import { MineSweeper } from "./examples/MineSweeper";
-//import { Roomassign } from "./examples/Round";
+//import { Roomassign } from "./examples/Round"; //round may be keyword in V2? 
 
 export function Stage() {
   const player = usePlayer();
@@ -31,8 +31,8 @@ export function Stage() {
       return <JellyBeans />;
     case "minesweeper":
       return <MineSweeper />;
-    case "test":
-      return <Roomassign />;
+    //case "test":
+    // return <Roomassign />;
     default:
       return <div>Unknown task</div>;
   }

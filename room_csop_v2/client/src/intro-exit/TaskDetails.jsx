@@ -262,11 +262,11 @@ export function TaskDetails({ previous, next }) {
     e.dataTransfer.setData("text/plain", student);
   }
 
-  function studentHandleDragOver(e) {
+  function studentHandleDragOver(student,e) {
     e.preventDefault();
   }
 
-  function studentHandleDragEnd(e) {}
+  function studentHandleDragEnd(student) {}
 
   function renderStudent(student) {
     const style = {};
@@ -282,7 +282,7 @@ export function TaskDetails({ previous, next }) {
         style={cursorStyle}
       >
         {/* <span className="icon bp3-icon-standard bp3-icon-person" /> */}
-        <span className="icon">
+        <span className="icon"> 
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512">
             <path
               style={style}
@@ -290,7 +290,7 @@ export function TaskDetails({ previous, next }) {
             />
           </svg>
         </span>
-        <span className="letter">{student}</span>
+        <span className="letter">{student}</span> 
       </div>
     );
   }

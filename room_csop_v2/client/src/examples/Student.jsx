@@ -1,6 +1,6 @@
 import React from "react";
-import { TimeSync } from "meteor/mizzao:timesync";
-import moment from "moment";
+//import { TimeSync } from "meteor/mizzao:timesync";
+//import moment from "moment";
 
 export default class Student extends React.Component {
   handleDragStart = (e) => {

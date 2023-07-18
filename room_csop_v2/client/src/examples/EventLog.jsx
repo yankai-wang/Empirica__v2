@@ -1,7 +1,7 @@
 import React from "react";
-import moment from "moment/moment";
+//import moment from "moment/moment";
 import Author from "./Author";
-import { TimeSync } from "meteor/mizzao:timesync";
+//import { TimeSync } from "meteor/mizzao:timesync";
 
 export default class EventLog extends React.Component {
   componentDidMount() {

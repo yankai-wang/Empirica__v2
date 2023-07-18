@@ -15,7 +15,7 @@ Empirica.onGameStart(({ game }) => {
     name: "Round 2 - roomassignment ",
     task: "test",
   });
-  round2.addStage({ name: "Play", duration: 3 });
+  round2.addStage({ name: "Play", duration: 3000 });
 });
 
 Empirica.onRoundStart(({ round }) => {});

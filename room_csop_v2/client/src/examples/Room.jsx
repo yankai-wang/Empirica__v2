@@ -2,8 +2,8 @@ import React from "react";
 
 import Student from "./Student.jsx";
 
-import { TimeSync } from "meteor/mizzao:timesync";
-import moment from "moment";
+//import { TimeSync } from "meteor/mizzao:timesync";
+//import moment from "moment";
 
 export default class Room extends React.Component {
   state = { hovered: false };
