@@ -18,7 +18,7 @@ import {
 export function Thanks({ previous, next }) {
   const player = usePlayer();
   return (
-    <Centered>
+    // <Centered>
       <div className="game finished">
         <div className="pt-non-ideal-state">
           <div className="pt-non-ideal-state-visual pt-non-ideal-state-icon">
@@ -38,6 +38,6 @@ export function Thanks({ previous, next }) {
           </div>
         </div>
       </div>
-    </Centered>
+    // </Centered>
   );
 }

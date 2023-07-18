@@ -23,10 +23,10 @@ This is an adaptation of an existing [experiment](https://github.com/amaatouq/ro
 ./client/game/Room.jsx <br>
 ./client/game/Round.jsx <br>
 ./client/game/Task.jsx <br>
-./client/exit/GroupExitSurvey.jsx <br>
-./client/exit/Thanks.jsx <br>
-./client/exit/IndividualExitSurvey.jsx <br>
-./client/exit/Sorry.jsx <br>
+./client/exit/GroupExitSurvey.jsx  ✔️ <br>
+./client/exit/Thanks.jsx  ✔️ <br>
+./client/exit/IndividualExitSurvey.jsx  ✔️ <br>
+./client/exit/Sorry.jsx  ✔️ <br>
 ./server/constants.js <br>
 ./server/bots.js <br>
 ./server/main.js <br>
