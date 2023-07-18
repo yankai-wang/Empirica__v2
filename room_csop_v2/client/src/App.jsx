@@ -18,6 +18,8 @@ import { Sorry } from "./intro-exit/Sorry";
 import { TeamDetails } from "./intro-exit/TeamDetails";
 import { SocialInteractionDetails } from "./intro-exit/SocialInteractionDetails";
 import { GroupQuiz } from "./intro-exit/GroupQuiz";
+// import { GroupExitSurvey } from "./intro-exit/GroupExitSurvey";
+import { IndividualExitSurvey } from "./intro-exit/IndividualExitSurvey";
 
 import {
   Chat,
@@ -34,8 +36,6 @@ export default function App() {
 
   const { protocol, host } = window.location;
   const url = `${protocol}//${host}/query`;
-  const player = usePlayer();
-  //console.log(player)
 
   function introSteps({ game, player }) {
     const treatment = player.get("treatment");
@@ -55,13 +55,19 @@ export default function App() {
   }
 
   function exitSteps({ game, player }) {
+    const treatment = player.get("treatment");
     console.log("player status", player.get("status"), player.get("ended"))
     // if (player.exitStatus !== "finished") {
     if (player.get("ended") !== "game ended") {
       return [Sorry];
     }
-    const steps = [ExitSurvey];
-    return steps;
+    // if (game.players.length > 1) {
+    // very weird that game.get("players") is undefined here, so use treatment.playerCount instead
+    if (treatment.playerCount > 1) {
+      // return [GroupExitSurvey, Thanks];
+    } else {
+      return [IndividualExitSurvey, Thanks];
+    }
   }
   // The my consent form shows up if you have cleared to localhistory in the player console
   return (
