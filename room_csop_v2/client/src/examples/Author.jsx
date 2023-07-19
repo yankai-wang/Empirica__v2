@@ -1,16 +1,14 @@
 import React from "react";
 
-export default class Author extends React.Component {
-  render() {
-    const { player, self } = this.props;
+export function Author ({ player, self }) {
+  console.log(player.get("avatar"), player.get("nameColor"), player.get("name"));
 
-    return (
-      <div className="author">
-        <img src={player.get("avatar")} />
-        <span className="name" style={{ color: player.get("nameColor") }}>
-          {self ? "You" : player.get("name")}
-        </span>
-      </div>
+  return (
+    <div className="author">
+      <img src={player.get("avatar")} />
+      <span className="name" style={{ color: player.get("nameColor") }}>
+        {self ? "You" : player.get("name")}
+      </span>
+    </div>
     );
-  }
 }

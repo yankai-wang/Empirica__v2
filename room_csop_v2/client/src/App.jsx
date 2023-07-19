@@ -39,18 +39,19 @@ export default function App() {
 
   function introSteps({ game, player }) {
     const treatment = player.get("treatment");
-    const steps = [Overview, TaskDetails, ConstraintsDetails, RoomArrangements];
-    if (treatment.playerCount > 1) {
-      steps.push(TeamDetails, SocialInteractionDetails);
-    }
-    steps.push(MoreAboutBonus, UIOverview);
-    if (treatment.playerCount > 1) {
-      steps.push(GroupQuiz);
-    } else {
-      steps.push(IndividualQuiz);
-    }
-    //Testing purposes
-    steps.push(Introduction);
+    const steps = [Introduction]; // for testing purposes
+    // const steps = [Overview, TaskDetails, ConstraintsDetails, RoomArrangements];
+    // if (treatment.playerCount > 1) {
+    //   steps.push(TeamDetails, SocialInteractionDetails);
+    // }
+    // steps.push(MoreAboutBonus, UIOverview);
+    // if (treatment.playerCount > 1) {
+    //   steps.push(GroupQuiz);
+    // } else {
+    //   steps.push(IndividualQuiz);
+    // }
+    // //Testing purposes
+    // steps.push(Introduction);
     return steps;
   }
 

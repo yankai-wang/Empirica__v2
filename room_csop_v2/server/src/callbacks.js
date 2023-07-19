@@ -3,24 +3,76 @@ export const Empirica = new ClassicListenersCollector();
 
 
 
-Empirica.onGameStart(({ game }) => {
+Empirica.onGameStart(({ game}) => {
   const round = game.addRound({
     name: "Round 1 - Jelly Beans",
     task: "jellybeans",
   });
-  round.addStage({ name: "Answer", duration: 300 });
-  round.addStage({ name: "Result", duration: 120 });
+  round.addStage({ name: "Answer", duration: 30000 });
+  round.addStage({ name: "Result", duration: 12000 });
 
   const round2 = game.addRound({
     name: "Round 2 - Minesweeper",
     task: "minesweeper",
   });
-  round2.addStage({ name: "Play", duration: 300 });
+  round2.addStage({ name: "Play", duration: 30000 });
+
+  const players = game.players;
+  // console.debug("game ", game._id, " started");
+  // console.debug("players ", players);
+
+  const names = [
+    "Blue",
+    "Green",
+    "Pink",
+    "Yellow",
+    "Purple",
+    "Red",
+    "Turqoise",
+    "Gold",
+    "Grey",
+    "Magenta",
+  ]; // for the players names to match avatar color
+  const avatarNames = [
+    "Colton",
+    "Aaron",
+    "Alex",
+    "Tristan",
+    "Daniel",
+    "Jill",
+    "Jimmy",
+    "Adam",
+    "Flynn",
+    "Annalise",
+  ]; // to do more go to https://jdenticon.com/#icon-D3
+  const nameColor = [
+    "#3D50B7",
+    "#70A945",
+    "#DE8AAB",
+    "#A59144",
+    "#DER5F4",
+    "#EB8TWV",
+    "#N0WFA4",
+    "#TP3BWU",
+    "#QW7MI9",
+    "#EB8TWj",
+  ]; // similar to the color of the avatar
+
+  players.forEach((player, i) => {
+    player.set("name", names[i]);
+    player.set("avatar", `/avatars/jdenticon/${avatarNames[i]}`);
+    player.set("nameColor", nameColor[i]);
+    player.set("cumulativeScore", 0);
+    player.set("bonus", 0);
+  });
 });
 
 Empirica.onRoundStart(({ round }) => {});
 
-Empirica.onStageStart(({ stage }) => {});
+Empirica.onStageStart(({ stage }) => {
+  stage.set("chat", []);
+  console.log("stage started", stage.get("chat"), typeof(stage.get("chat")));
+});
 
 Empirica.onStageEnded(({ stage }) => {
   calculateJellyBeansScore(stage);
