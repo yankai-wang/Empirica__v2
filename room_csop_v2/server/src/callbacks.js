@@ -1,14 +1,5 @@
 import { ClassicListenersCollector } from "@empirica/core/admin/classic";
 export const Empirica = new ClassicListenersCollector();
-import {
-  usePlayer,
-  usePlayers,
-  useStage,
-  useGame,
-  useRound,
-} from "@empirica/core/player/classic/react";
-
-
 
 Empirica.onGameStart(({ game }) => {
   const round = game.addRound({
