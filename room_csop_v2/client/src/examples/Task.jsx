@@ -1,18 +1,21 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import Room from "./Room.jsx";
-import Timer from "../components/Timer";
+import {Timer} from "../components/Timer";
 import { HTMLTable } from "@blueprintjs/core";
-import { useStageTime } from "@empirica/core/player/classic/react";
+import {
+  Chat,
+  usePlayer,
+  usePlayers,
+  useStage,
+  useGame,
+  useRound,
+  useStageTimer 
+} from "@empirica/core/player/classic/react";
 //import { TimeSync } from "meteor/mizzao:timesync";
 //import moment from "moment";
 
-const stage = useStage();
-const player = usePlayer();
-const game = useGame();
-const stagetime= useStageTime();
-console.log(stigetime)
-
+/*
 const TimedButton_1 = StageTimeWrapper((props) => {
   const { player, onClick, activateAt, remainingSeconds, stage } = props;
 
@@ -48,25 +51,30 @@ const TimedButton_2 = StageTimeWrapper((props) => {
     </button>
   );
 });
+*/
+export function Task () {
 
-export function Task (stage,player,game) {
+  const stage = useStage();
+  const player = usePlayer();
+  const game = useGame();
+  const stagetime= useStageTimer();
+  console.log(stagetime)
+  
+  const [activeButton, setActivateButton] = useState({
+    activeButton: false});
 
-
-  constructor(props) {
-    super(props);
-    this.state = { activeButton: false };
-  }
-  const [activeButton, setActivateButton] = useState(false);
-  componentDidMount() {
-    const { player } = this.props;
-    setTimeout(() => this.setState({ activeButton: true }), 5000); //we make the satisfied button active after 5 seconds
+  function componentDidMount() {
+    const player = usePlayer();
+    setTimeout(() => setActivateButton({ activeButton: true}), 5000); //we make the satisfied button active after 5 seconds
     if (player.stage.submitted) {
-      this.setState({ activeButton: false });
+      setActivateButton({activeButton: false });
     }
   }
 
-  handleSatisfaction = (satisfied, event) => {
-    const { game, player, stage } = this.props;
+  function handleSatisfaction(satisfied, event) {
+    const stage = useStage();
+    const player = usePlayer();
+    const game = useGame();
     event.preventDefault();
 
     //if everyone submitted then, there is nothing to handle
@@ -76,11 +84,11 @@ export function Task (stage,player,game) {
 
     //if it is only one player, and satisfied, we want to lock everything
     if (game.players.length === 1 && satisfied) {
-      this.setState({ activeButton: false });
+      setActivateButton({activeButton : false});
     } else {
       //if they are group (or individual that clicked unsatisfied), we want to momentarily disable the button so they don't spam, but they can change their mind so we unlock it after 1.5 seconds
-      this.setState({ activeButton: false });
-      setTimeout(() => this.setState({ activeButton: true }), 800); //preventing spam by a groupƒ
+      setActivateButton(false);
+      setTimeout(() => setActivateButton({ activeButton : true }), 800); //preventing spam by a groupƒ
     }
 
     player.set("satisfied", satisfied);
@@ -94,11 +102,12 @@ export function Task (stage,player,game) {
     console.log("task moment", moment(TimeSync.serverTime(null, 1000)));
   };
 
-  render() {
-    const { game, stage, player } = this.props;
-
+  
+    //const { game, stage, player } = this.props;
     const task = stage.get("task");
     const violatedConstraints = stage.get("violatedConstraints") || [];
+    console.log('TASK')
+    console.log(task)
 
     return (
       <div className="task">
@@ -237,4 +246,4 @@ export function Task (stage,player,game) {
       </div>
     );
   }
-}
+
