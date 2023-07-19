@@ -23,6 +23,12 @@ export function JellyBeans() {
 
   function handleChange(e) {
     player.round.set("guess", e.target.valueAsNumber);
+    const prelog = stage.get("log");
+    stage.set("log", prelog.concat({
+      verb: "releasedStudent",
+      subjectId: player.id,
+      // object: student,
+    }));
   }
 
   function handleSubmit() {

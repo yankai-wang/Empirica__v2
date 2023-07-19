@@ -3,7 +3,7 @@ export const Empirica = new ClassicListenersCollector();
 
 
 
-Empirica.onGameStart(({ game}) => {
+Empirica.onGameStart(({ game }) => {
   const round = game.addRound({
     name: "Round 1 - Jelly Beans",
     task: "jellybeans",
@@ -71,7 +71,20 @@ Empirica.onRoundStart(({ round }) => {});
 
 Empirica.onStageStart(({ stage }) => {
   stage.set("chat", []);
-  console.log("stage started", stage.get("chat"), typeof(stage.get("chat")));
+  stage.set("log", [
+    {
+      verb: "roundStarted",
+      roundId:
+        stage.name === "practice"
+          ? stage.name + " (will not count towards your score)"
+          : stage.name,
+      at: new Date(),
+    },
+  ]);
+  const players = stage.round.game.players;
+  players.forEach((player) => {
+    player.set("satisfied", false);
+  });
 });
 
 Empirica.onStageEnded(({ stage }) => {

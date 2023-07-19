@@ -7,6 +7,7 @@ import {
   useRound,
 } from "@empirica/core/player/classic/react";
 import { Author } from "./Author";
+import sound from "../experiment/unsure.mp3"
 //import { TimeSync } from "meteor/mizzao:timesync";
 import moment from "moment";
 // import Filter from "bad-words"; TODO: deal with bad words
@@ -18,17 +19,16 @@ export function ChatLog ({messages}) {
   const [state, setState] = useState({ comment: "", time: 0 });
 
   function handleChange (e) {
+    console.log("handleChange");
     const el = e.currentTarget;
-    // console.log("el", el.value);
     setState({ [el.name]: el.value });
   };
 
   function handleSubmit (e) {
+    console.log("handleSubmit");
     e.preventDefault();
     // const text = filter.clean(state.comment.trim());
     const text = state.comment.trim();
-    // console.log("submitted", player, stage);
-
 
     // console.log("submitted");
     // console.log(filter.clean("Don't be an ash0le"));
@@ -41,8 +41,6 @@ export function ChatLog ({messages}) {
     // console.log(new Date(Date.now() + TimeSync.serverOffset()));
 
     if (text !== "") {
-      console.log("before append")
-      console.log("chat", stage.get("chat"), typeof(stage.get("chat")))
       const pre_chat = stage.get("chat")
       // TODO: set to append
       // stage.append("chat", {
@@ -50,11 +48,10 @@ export function ChatLog ({messages}) {
         text,
         playerId: player.id,
         // at: moment(TimeSync.serverTime(null, 1000)), TODO: deal with time
-        at: Date.now(),
+        at: moment(Date.now()),
       }));
-      console.log("before")
       setState({ comment: "", time: 0 });
-      console.log("after")
+      console.log("set state", stage.get("chat"))
     }
   };
 
@@ -62,8 +59,8 @@ export function ChatLog ({messages}) {
   const player = usePlayer();
   const stage = useStage();
 
-  // console.log("message", messages);
-  // console.log("comment", comment);
+  console.log("not here?")
+
   return (
     <div className="chat bp3-card">
       <Messages messages={messages} player={player} />
@@ -88,7 +85,7 @@ export function ChatLog ({messages}) {
   
 }
 
-// const chatSound = new Audio("./experiment/unsure.mp3");
+const chatSound = new Audio(sound);
 function Messages ({ messages, player }) {
 
   console.log("messages", messages);
@@ -102,8 +99,9 @@ function Messages ({ messages, player }) {
   
   // scroll and play sound when new message is added, detected by change in messages.length
   useEffect(() => {
+    console.log("here?")
     messagesEl.scrollTop = messagesEl.scrollHeight;
-    // chatSound.play(); // TODO: deal with sound
+    chatSound.play();
   }, [messages.length]);
     
   return (
