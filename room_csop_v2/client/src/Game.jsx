@@ -1,11 +1,11 @@
-import { Chat, useGame } from "@empirica/core/player/classic/react";
+import { Chat, useGame, useStage, usePlayers } from "@empirica/core/player/classic/react";
 
 import React from "react";
 import { Profile } from "./Profile";
 import { Stage } from "./Stage";
+import { SocialInteractions } from "./examples/SocialInteractions";
 
 export function Game() {
-  const game = useGame();
   return (
     <div className="h-full w-full flex">
       <div className="h-full w-full flex flex-col">
@@ -15,7 +15,8 @@ export function Game() {
         </div>
       </div>
       <div className="h-full w-128 border-l flex justify-center items-center">
-        <Chat scope={game} attribute="chat" />
+        {/* <Chat scope={game} attribute="chat" /> */}
+        <SocialInteractions />
       </div>
     </div>
   );

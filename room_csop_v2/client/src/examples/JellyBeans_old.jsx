@@ -8,7 +8,6 @@ import {
 import React from "react";
 import { Avatar } from "../components/Avatar";
 import { Button } from "../components/Button";
-import { Author } from "./Author";
 
 export function JellyBeans() {
   const player = usePlayer();
@@ -16,19 +15,13 @@ export function JellyBeans() {
   const stage = useStage();
   const game = useGame();
 
-  // console.log(player)
-  // console.log(players)
-  // console.log(stage)
-  // console.log(game)
+  console.log(player)
+  console.log(players)
+  console.log(stage)
+  console.log(game)
 
   function handleChange(e) {
     player.round.set("guess", e.target.valueAsNumber);
-    const prelog = stage.get("log");
-    stage.set("log", prelog.concat({
-      verb: "releasedStudent",
-      subjectId: player.id,
-      // object: student,
-    }));
   }
 
   function handleSubmit() {
@@ -76,8 +69,6 @@ export function JellyBeans() {
           ? "Result"
           : "Guess how many Jelly Beans are in the pile below."}
       </p>
-
-      <Author player={player} self={true} />
 
       {jelly}
 
