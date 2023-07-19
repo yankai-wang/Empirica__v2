@@ -1,5 +1,12 @@
 import { ClassicListenersCollector } from "@empirica/core/admin/classic";
 export const Empirica = new ClassicListenersCollector();
+import {
+  usePlayer,
+  usePlayers,
+  useStage,
+  useGame,
+  useRound,
+} from "@empirica/core/player/classic/react";
 
 
 
@@ -81,7 +88,8 @@ Empirica.onStageStart(({ stage }) => {
       at: new Date(),
     },
   ]);
-  const players = stage.round.game.players;
+  const players = stage.currentGame.players;
+  // const players = usePlayers();
   players.forEach((player) => {
     player.set("satisfied", false);
   });
