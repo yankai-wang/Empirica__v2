@@ -1,31 +1,46 @@
-import React from "react";
 
-import Student from "./Student.jsx";
+import React, { useState, useEffect } from "react";
+import {Student} from "./Student";
+import {
+  Chat,
+  usePlayer,
+  usePlayers,
+  useStage,
+  useGame,
+  useRound,
+} from "@empirica/core/player/classic/react";
 
 //import { TimeSync } from "meteor/mizzao:timesync";
 //import moment from "moment";
 
-export default class Room extends React.Component {
-  state = { hovered: false };
+export function Room (props)  {
+ // state = { hovered: false };
+ console.log('ROOM PROPS')
+ console.log(props)
+ const [state, setState] = useState({
+  hovered: false,
 
-  handleDragOver = (e) => {
-    console.log('timeSync',moment(TimeSync.serverTime(null, 1000)))
+});
+
+  function handleDragOver(e) {
+    //console.log('timeSync',moment(TimeSync.serverTime(null, 1000)))
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
-    this.setState({ hovered: true });
+    setState({ hovered: true });
   };
 
-  handleDragLeave = (e) => {
-    this.setState({ hovered: false });
+  function handleDragLeave (e) {
+    setState({ hovered: false });
   };
 
-  handleDrop = (e) => {
-    const { stage, player, room } = this.props;
+  function handleDrop (props,e) {
+    
+    const { stage, player, room } = props;
     const student = e.dataTransfer.getData("text/plain");
     stage.set(`student-${student}-dragger`, null); //maybe this fixes the problem of stucked colors
     const currentRoom = stage.get(`student-${student}-room`);
 
-    this.setState({ hovered: false });
+    setState({ hovered: false });
 
     // Avoid any unwanted drops!
     // We're using the native DnD system, which mean people can drag anything
@@ -49,14 +64,17 @@ export default class Room extends React.Component {
       object: student,
       target: room,
       // at: new Date()
-      at: moment(TimeSync.serverTime(null, 1000))
+     // at: moment(TimeSync.serverTime(null, 1000))
     });
-    console.log('room moment', moment(TimeSync.serverTime(null, 1000)))
+   // console.log('room moment', moment(TimeSync.serverTime(null, 1000)))
   };
-
-  render() {
-    const { room, isDeck, stage, ...rest } = this.props;
-    const { hovered } = this.state;
+    console.log('RIGHT BEFORE ITERATOR',props)
+    const { room, isDeck, stage, ...rest } = props || {};
+    //const room = props.room
+   // const isDeck = props.isDeck
+   // const stage= 
+  
+    const { hovered } = state;
     const students = [];
     const task = stage.get("task");
     task.students.forEach((student) => {
@@ -69,15 +87,15 @@ export default class Room extends React.Component {
     const classNameHovered = hovered ? "bp3-elevation-3" : "";
     return (
       <div
-        onDrop={this.handleDrop}
-        onDragOver={this.handleDragOver}
-        onDragLeave={this.handleDragLeave}
+        onDrop={(e) => handleDrop(props, e)}
+        onDragOver={(e) => handleDragOver(e)}
+        onDragLeave={(e) => handleDragLeave(e)}
         className={`bp3-card ${classNameRoom} ${classNameHovered}`}
       >
         {isDeck ? null : <h6 className="bp3-heading">Room {room}</h6>}
         {students.map((student) => (
           <Student
-            onDragStart={this.handleDragStart}
+            onDragStart={(e) => Student.handleDragStart(e,props)}
             key={student}
             student={student}
             room={room}
@@ -88,4 +106,4 @@ export default class Room extends React.Component {
       </div>
     );
   }
-}
+

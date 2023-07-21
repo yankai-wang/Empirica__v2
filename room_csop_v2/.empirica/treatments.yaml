@@ -26,16 +26,22 @@ factors:
         - value: 1
         - value: 2
         - value: 3
+    - name: stageOne
+      values:
+        - value: false
+    - name: shuffleTaskOrder
+      values:
+        - value: true
+    - name: stepOne
+      values:
+        - value: false
+    - name: stageDuration
+      values:
+        - value: 300
 treatments:
     - name: stageDuration
       factors:
         5min: 300
-    - name: Solo
-      desc: Single-player Game
-      factors:
-        StageDuration: 10000
-        nRounds: 3
-        playerCount: 1
     - name: Two Players
       desc: Two-player Game
       factors:
@@ -43,3 +49,10 @@ treatments:
         TimelordName: James
         nRounds: 3
         playerCount: 2
+    - name: Solo
+      desc: Single-player Game
+      factors:
+        StageDuration: 10000
+        nRounds: 3
+        playerCount: 1
+        shuffleTaskOrder: true

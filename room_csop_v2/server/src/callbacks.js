@@ -2,7 +2,7 @@ import { ClassicListenersCollector } from "@empirica/core/admin/classic";
 export const Empirica = new ClassicListenersCollector();
 import { stepOneData, stepTwoData } from "./constants";
 import _ from "lodash";
-
+ 
 
 ///FUNCTIONS:
 function customShuffle(taskSequence) {
@@ -85,6 +85,7 @@ Empirica.onGameStart(({ game }) => {
     "Game with a treatment: ",
     treatment,
     " will start, with workers",
+   // _.pluck(game.players, "id")
   );
 
   //initiate the cumulative score for this game (because everyone will have the same score, we can save it at the game object
@@ -92,22 +93,31 @@ Empirica.onGameStart(({ game }) => {
   game.set("nOptimalSolutions", 0); // will count how many times they've got the optimal answer
   game.set("justStarted", true); // I use this to play the sound on the UI when the game starts
   game.set("team", game.players.length > 1);
+  
+
 
   //we don't know the sequence yet
-  let taskSequence = game.treatment.stepOne ? stepOneData : stepTwoData;
+  let taskSequence = game.get('treatment').stepOne ? stepOneData : stepTwoData;
 
-  if (game.treatment.shuffleTaskOrder) {
+  if (game.get('treatment').shuffleTaskOrder) {
     //TODO: I need to make sure that I keep the first task fixed (if it has training)
     //taskSequence = _.shuffle(taskSequence); //this is full shuffle
     taskSequence = customShuffle(taskSequence); //this is with keeping the first practice round fixed
   }
 
   //we'll have 1 round, each task is one stage
+
+  const round = game.addRound();
   _.times(taskSequence.length, i => {
+    console.log('THIS IS I',i)
+    console.log(i === 0 ? "practice" : i)
+    console.log(taskSequence[i].difficulty)
+    console.log(game.get('treatment').StageDuration)
+
     const stage = round.addStage({
       name: i === 0 ? "practice" : i,
       displayName: taskSequence[i].difficulty,
-      durationInSeconds: game.treatment.stageDuration
+      duration: game.get('treatment').StageDuration
     });
     stage.set("task", taskSequence[i]);
   });
@@ -124,20 +134,20 @@ Empirica.onGameStart(({ game }) => {
   });
 
 
-
-  const round = game.addRound({
-    name: "Round 1 - Jelly Beans",
+/*
+  const round1 = game.addRound({
+    name: "Round 2 - Jelly Beans",
     task: "jellybeans",
   });
   round.addStage({ name: "Answer", duration: 300 });
   round.addStage({ name: "Result", duration: 120 });
 
   const round2 = game.addRound({
-    name: "Round 2 - roomassignment ",
+    name: "Round 3 - roomassignment ",
     task: "test",
   });
   round2.addStage({ name: "Play", duration: 3000 });
-
+*/
 
 
 

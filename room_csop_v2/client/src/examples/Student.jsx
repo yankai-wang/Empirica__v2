@@ -1,11 +1,24 @@
-import React from "react";
+
 //import { TimeSync } from "meteor/mizzao:timesync";
 //import moment from "moment";
+import React, { useState, useEffect } from "react";
+import {
+  Chat,
+  usePlayer,
+  usePlayers,
+  useStage,
+  useGame,
+  useRound,
+} from "@empirica/core/player/classic/react";
 
-export default class Student extends React.Component {
-  handleDragStart = (e) => {
-    console.log('timeSync',moment(TimeSync.serverTime(null, 1000)))
-    const { student, stage, player } = this.props;
+
+export function Student (props) {
+  
+  
+  
+  function handleDragStart (e) {
+    //console.log('timeSync',moment(TimeSync.serverTime(null, 1000)))
+    const { student, stage, player } = props;
     const dragger = stage.get(`student-${student}-dragger`); //check if there is already a dragger
     //if so, you can't move it, already someone is moving it!
     if (dragger) {
@@ -20,27 +33,27 @@ export default class Student extends React.Component {
       subjectId: player._id,
       object: student,
       // at: new Date()
-      at: moment(TimeSync.serverTime(null, 1000)),
+     // at: moment(TimeSync.serverTime(null, 1000)),
       
     });
     e.dataTransfer.setData("text/plain", student);
-    console.log('student moment', moment(TimeSync.serverTime(null, 1000)))
+   // console.log('student moment', moment(TimeSync.serverTime(null, 1000)))
   };
 
-  handleDragOver = (e) => {
+  function handleDragOver(e){
     e.preventDefault();
   };
 
-  handleDragLeave = (e) => {
+  function handleDragLeave (e) {
     e.preventDefault();
     console.log("released!");
     const { student, stage } = this.props;
     stage.set(`student-${student}-dragger`, null);
   };
 
-  handleDragEnd = (e) => {
+  function handleDragEnd (props,e) {
     e.preventDefault();
-    const { student, stage, player } = this.props;
+    const { student, stage, player } = props;
     stage.set(`student-${student}-dragger`, null);
 
     //if dropped into non-allowed area
@@ -53,9 +66,8 @@ export default class Student extends React.Component {
     }
   };
 
-  render() {
-    const { student, stage, game, player } = this.props;
-    this.isDragabble = true; // usually everyone can drag, except if it is colored (i.e., being dragged by someone else)
+    const { student, stage, game, player } = props;
+    let isDragabble = true; // usually everyone can drag, except if it is colored (i.e., being dragged by someone else)
     const dragger = stage.get(`student-${student}-dragger`);
     const style = {};
     const cursorStyle = { cursor: null };
@@ -63,7 +75,7 @@ export default class Student extends React.Component {
       const playerDragging = game.players.find((p) => p._id === dragger);
       if (playerDragging) {
         style.fill = playerDragging.get("nameColor");
-        this.isDragabble = playerDragging === player._id; //only one can drag at a time
+        isDragabble = playerDragging === player._id; //only one can drag at a time
       }
     } else {
       //if the student is NOT being dragged by anyone, then the cursor will be changed
@@ -72,10 +84,10 @@ export default class Student extends React.Component {
 
     return (
       <div
-        draggable={this.isDragabble}
-        onDragStart={this.handleDragStart}
-        onDragOver={this.handleDragOver}
-        onDragEnd={this.handleDragEnd}
+        draggable={isDragabble}
+        onDragStart={(e) => handleDragStart(e)}
+        onDragOver={(e) => handleDragOver(e)}
+        onDragEnd={(e) => handleDragEnd(props,e)}
         //onDragExit={this.handleDragLeave}
         className="student"
         style={cursorStyle}
@@ -93,4 +105,4 @@ export default class Student extends React.Component {
       </div>
     );
   }
-}
+

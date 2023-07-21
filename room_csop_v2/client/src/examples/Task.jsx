@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import Room from "./Room.jsx";
+import {Room} from "./Room.jsx";
 import {Timer} from "../components/Timer";
 import { HTMLTable } from "@blueprintjs/core";
 import {
@@ -12,53 +12,79 @@ import {
   useRound,
   useStageTimer 
 } from "@empirica/core/player/classic/react";
+import { Button } from "../components/Button";
+import "@blueprintjs/core/lib/css/blueprint.css";
 //import { TimeSync } from "meteor/mizzao:timesync";
 //import moment from "moment";
 
-/*
-const TimedButton_1 = StageTimeWrapper((props) => {
-  const { player, onClick, activateAt, remainingSeconds, stage } = props;
+//console.log(useStageTimer)
+//timed_button=useStageTimer();
 
-  const disabled = remainingSeconds > activateAt;
-  return (
-    <button
-      type="button"
-      className={`bp3-button bp3-icon-cross bp3-intent-danger bp3-large ${
-        player.get("satisfied") ? "bp3-minimal" : ""
-      }`}
-      onClick={onClick}
-      disabled={disabled}
-    >
-      Unsatisfied
-    </button>
-  );
-});
+//console.log(timed_button)
 
-const TimedButton_2 = StageTimeWrapper((props) => {
-  const { player, onClick, activateAt, remainingSeconds, stage } = props;
-
-  const disabled = remainingSeconds > activateAt;
-  return (
-    <button
-      type="button"
-      className={`bp3-button bp3-icon-tick bp3-intent-success bp3-large ${
-        player.get("satisfied") ? "" : "bp3-minimal"
-      }`}
-      onClick={onClick}
-      disabled={disabled}
-    >
-      Satisfied
-    </button>
-  );
-});
-*/
 export function Task () {
 
   const stage = useStage();
   const player = usePlayer();
   const game = useGame();
   const stagetime= useStageTimer();
-  console.log(stagetime)
+  //console.log('THIS WORKED???????')
+ // console.log(stage)
+  //console.log(stage.scope)
+  //console.log(game)
+  //console.log(stagetime)
+
+
+  //This might not be a good method to pass in stagetime
+  
+  const TimedButton_1 = (props) => {
+    const stagetime1= useStageTimer();
+    const curplayer = props.player
+    const onClick = props.onClick
+    const activateAt =props.activateAt
+    const remainingSeconds =stagetime1.remaining
+  
+    const disabled = remainingSeconds > activateAt;
+    return (
+      <button
+        type="button"
+        className={`bp3-button bp3-icon-cross bp3-intent-danger bp3-large ${
+          curplayer.get("satisfied") ? "bp3-minimal" : "" //Question not sure if individual player will use with the players state change, will test
+        }`}
+        onClick={onClick}
+        disabled={disabled}
+      >
+        Unsatisfied
+      </button>
+    );
+  };
+
+
+  const TimedButton_2 = (props) => {
+    const stagetime1= useStageTimer();
+    const curplayer = props.player
+    const onClick = props.onClick
+    const activateAt =props.activateAt
+    const remainingSeconds =stagetime1.remaining
+
+    const disabled = remainingSeconds > activateAt;
+    return (
+      <button
+        type="button"
+        className={`bp3-button bp3-icon-tick bp3-intent-success bp3-large ${
+          curplayer.get("satisfied") ? "" : "bp3-minimal"
+        }`}
+        onClick={onClick}
+        disabled={disabled}
+      >
+        Satisfied
+      </button>
+    );
+  };
+
+
+
+
   
   const [activeButton, setActivateButton] = useState({
     activeButton: false});
@@ -106,8 +132,8 @@ export function Task () {
     //const { game, stage, player } = this.props;
     const task = stage.get("task");
     const violatedConstraints = stage.get("violatedConstraints") || [];
-    console.log('TASK')
-    console.log(task)
+    //console.log('TASK')
+    //console.log(task)
 
     return (
       <div className="task">
@@ -210,15 +236,15 @@ export function Task () {
             <TimedButton_1
               stage={stage}
               player={player}
-              activateAt={game.treatment.stageDuration - 5}
-              onClick={this.handleSatisfaction.bind(this, false)}
+              activateAt={game.get('treatment').StageDuration - 5}
+              onClick={(e) => handleSatisfaction.bind(e, false)}
             />
 
             <TimedButton_2
               stage={stage}
               player={player}
-              activateAt={game.treatment.stageDuration - 5}
-              onClick={this.handleSatisfaction.bind(this, true)}
+              activateAt={game.get('treatment').StageDuration - 5}
+              onClick={(e) => handleSatisfaction.bind(e, true)}
             />
 
             {/* <button
