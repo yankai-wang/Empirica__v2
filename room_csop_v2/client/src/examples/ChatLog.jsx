@@ -9,7 +9,7 @@ import {
 import { Author } from "./Author";
 import sound from "../experiment/unsure.mp3"
 //import { TimeSync } from "meteor/mizzao:timesync";
-import moment from "moment";
+//import moment from "moment";
 // import Filter from "bad-words"; TODO: deal with bad words
 
 // var Filter = require("bad-words"),
@@ -48,7 +48,7 @@ export function ChatLog ({messages}) {
         text,
         playerId: player.id,
         // at: moment(TimeSync.serverTime(null, 1000)), TODO: deal with time
-        at: moment(Date.now()),
+        //at: moment(Date.now()),
       }));
       setState({ comment: "", time: 0 });
       console.log("set state", stage.get("chat"))

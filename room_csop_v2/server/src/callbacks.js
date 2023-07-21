@@ -36,6 +36,8 @@ function customShuffle(taskSequence) {
 
 
 Empirica.onGameStart(({ game }) => {
+  
+  
   console.log("Game Start Ran")
   const players = game.players
   const treatment = game.get('treatment')
@@ -107,7 +109,11 @@ Empirica.onGameStart(({ game }) => {
   //we'll have 1 round, each task is one stage
 
   const round = game.addRound();
+
   _.times(taskSequence.length, i => {
+    console.log(i === 0 ? "practice" : i)
+    console.log(taskSequence[i].difficulty)
+    console.log(game.get('treatment').StageDuration)
     const stage = round.addStage({
       name: i === 0 ? "practice" : i,
       displayName: taskSequence[i].difficulty,
@@ -128,7 +134,7 @@ Empirica.onGameStart(({ game }) => {
   // });
 
 
-
+/*
   const round1 = game.addRound({
     name: "Round 2 - Jelly Beans",
     task: "jellybeans",
@@ -141,6 +147,7 @@ Empirica.onGameStart(({ game }) => {
     task: "test",
   });
   round2.addStage({ name: "Play", duration: 30000 });
+  */
 
   // const players = game.players;
   // // console.debug("game ", game._id, " started");
@@ -196,10 +203,10 @@ Empirica.onRoundStart(({ round }) => {});
 
 Empirica.onStageStart(({stage}) => {
   const players = stage.currentGame.players
-  console.log(stage)
-  console.debug("Round ", stage.name, "game", stage.currentGame.id, " started");
+  //console.log(stage)
+  //console.debug("Round ", stage.name, "game", stage.currentGame.id, " started");
   const team = stage.currentGame.get("team");
-  console.log("is it team?", team);
+  //console.log("is it team?", team);
 
   //initiate the score for this round (because everyone will have the same score, we can save it at the round object
   stage.set("score", 0);
@@ -263,12 +270,12 @@ Empirica.onGameEnded(({ game }) => {
   const players = game.players;
   console.debug("The game", game.id, "has ended");
   //computing the bonus for everyone (in this game, everyone will get the same value)
-  const conversionRate = game.treatment.conversionRate
-    ? game.treatment.conversionRate
+  const conversionRate = game.get('treatment').conversionRate
+    ? game.get('treatment').conversionRate
     : 1;
 
-  const optimalSolutionBonus = game.treatment.optimalSolutionBonus
-    ? game.treatment.optimalSolutionBonus
+  const optimalSolutionBonus = game.get('treatment').optimalSolutionBonus
+    ? game.get('treatment').optimalSolutionBonus
     : 0;
 
   const bonus =
