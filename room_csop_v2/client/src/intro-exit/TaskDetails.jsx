@@ -276,8 +276,8 @@ export function TaskDetails({ previous, next }) {
         key={student}
         draggable={true}
         onDragStart={(e) => studentHandleDragStart(student, e)}
-        onDragOver={(e) => studentHandleDragOver(e)}
-        onDragEnd={(e) => studentHandleDragEnd(e)}
+        onDragOver={(e) => studentHandleDragOver(student,e)}
+        onDragEnd={(e) => studentHandleDragEnd(student,e)}
         className="student"
         style={cursorStyle}
       >

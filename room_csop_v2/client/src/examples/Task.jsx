@@ -63,7 +63,7 @@ export function Task () {
   const TimedButton_2 = (props) => {
     const stagetime1= useStageTimer();
     const curplayer = props.player
-    const onClick = props.onClick
+    const onClick = props.onClickƒ
     const activateAt =props.activateAt
     const remainingSeconds =stagetime1.remaining
 
@@ -237,14 +237,14 @@ export function Task () {
               stage={stage}
               player={player}
               activateAt={game.get('treatment').StageDuration - 5}
-              onClick={(e) => handleSatisfaction.bind(e, false)}
+              onClick={(e) => handleSatisfaction(e, false)}
             />
 
             <TimedButton_2
               stage={stage}
               player={player}
               activateAt={game.get('treatment').StageDuration - 5}
-              onClick={(e) => handleSatisfaction.bind(e, true)}
+              onClick={(e) => handleSatisfaction(e, true)}
             />
 
             {/* <button

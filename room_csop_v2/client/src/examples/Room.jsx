@@ -15,8 +15,8 @@ import {
 
 export function Room (props)  {
  // state = { hovered: false };
- console.log('ROOM PROPS')
- console.log(props)
+ //console.log('ROOM PROPS')
+ //console.log(props)
  const [state, setState] = useState({
   hovered: false,
 
@@ -68,7 +68,7 @@ export function Room (props)  {
     });
    // console.log('room moment', moment(TimeSync.serverTime(null, 1000)))
   };
-    console.log('RIGHT BEFORE ITERATOR',props)
+    //console.log('RIGHT BEFORE ITERATOR',props)
     const { room, isDeck, stage, ...rest } = props || {};
     //const room = props.room
    // const isDeck = props.isDeck

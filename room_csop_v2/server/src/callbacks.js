@@ -2,9 +2,12 @@ import { ClassicListenersCollector } from "@empirica/core/admin/classic";
 export const Empirica = new ClassicListenersCollector();
 import { stepOneData, stepTwoData } from "./constants";
 import _ from "lodash";
- 
+
+
+
 
 ///FUNCTIONS:
+
 function customShuffle(taskSequence) {
   // Find and remove first and last:
   const practiceTask = taskSequence[0];
@@ -29,8 +32,6 @@ function customShuffle(taskSequence) {
 
   return taskSequence;
 }
-
-
 
 
 
@@ -193,38 +194,216 @@ Empirica.onStageStart(({game, stage }) => {
 });
 
 Empirica.onStageEnded(({ stage }) => {
-  calculateJellyBeansScore(stage);
+  console.debug("Round ", stage.name, "game", stage.currentGame.id, " ended");
+
+  const currentScore = stage.get("score");
+  const optimalScore = stage.get("task").optimal;
+
+  if (currentScore === optimalScore) {
+    if (stage.name !== "practice") {
+      stage.currentGame.set("nOptimalSolutions", stage.currentGame.get("nOptimalSolutions") + 1);
+    }
+    stage.set("optimalSubmitted", true);
+    console.log("You found the optimal");
+  }
+
+  //add the round score to the game total cumulative score (only if it is not practice)
+  if (stage.name !== "practice") {
+    const cumScore = game.get("cumulativeScore") || 0;
+    const scoreIncrement = currentScore > 0 ? Math.round(currentScore) : 0;
+    stage.currentGame.set("cumulativeScore", Math.round(scoreIncrement + cumScore));
+  }
+  
 });
 
 Empirica.onRoundEnded(({ round }) => {});
 
-Empirica.onGameEnded(({ game }) => {});
+Empirica.onGameEnded(({ game }) => {  /* const players = game.players;
+  console.debug("The game", game.id, "has ended");
+  //computing the bonus for everyone (in this game, everyone will get the same value)
+  const conversionRate = game.treatment.conversionRate
+    ? game.treatment.conversionRate
+    : 1;
+
+  const optimalSolutionBonus = game.treatment.optimalSolutionBonus
+    ? game.treatment.optimalSolutionBonus
+    : 0;
+
+  const bonus =
+    game.get("cumulativeScore") > 0
+      ? (
+          game.get("cumulativeScore") * conversionRate +
+          game.get("nOptimalSolutions") * optimalSolutionBonus
+        ).toFixed(2)
+      : 0;
+
+  players.forEach((player) => {
+    if (player.get("bonus") === 0) {
+      //if we never computed their bonus
+      player.set("bonus", bonus);
+      player.set("cumulativeScore", game.get("cumulativeScore"));
+    }
+  });*/});
 
 // Note: this is not the actual number of beans in the pile, it's a guess...
-const jellyBeansCount = 634;
 
-function calculateJellyBeansScore(stage) {
-  if (
-    stage.get("name") !== "Answer" ||
-    stage.round.get("task") !== "jellybeans"
-  ) {
-    return;
-  }
-
-  for (const player of stage.currentGame.players) {
-    let roundScore = 0;
-
-    const playerGuess = player.round.get("guess");
-
-    if (playerGuess) {
-      const deviation = Math.abs(playerGuess - jellyBeansCount);
-      const score = Math.round((1 - deviation / jellyBeansCount) * 10);
-      roundScore = Math.max(0, score);
+/*
+Empirica.onSet(
+  (
+    game,
+    round,
+    stage,
+    player, // Player who made the change
+    target, // Object on which the change was made (eg. player.set() => player)
+    targetType, // Type of object on which the change was made (eg. player.set() => "player")
+    key, // Key of changed value (e.g. player.set("score", 1) => "score")
+    value, // New value
+    prevValue // Previous value
+  ) => {
+    const players = game.players;
+    //someone changed their satisfaction status
+    console.log("key", key);
+    if (key === "satisfied") {
+      //check if everyone is satisfied and if so, submit their answer
+      let allSatisfied = true;
+      players.forEach((player) => {
+        allSatisfied = player.get("satisfied") && allSatisfied;
+      });
+      if (allSatisfied) {
+        players.forEach((player) => {
+          player.stage.submit();
+        });
+      }
+      return;
     }
 
-    player.round.set("score", roundScore);
+    //someone placed a student to a room
+    if (key.substring(0, 8) === "student-" && key.slice(-4) === "room") {
+      const task = stage.get("task");
+      let assignments = { deck: [] };
+      task.rooms.forEach((room) => {
+        assignments[room] = [];
+      });
 
-    const totalScore = player.get("score") || 0;
-    player.set("score", totalScore + roundScore);
+      //find the rooms for each player
+      task.students.forEach((student) => {
+        const room = stage.get(`student-${student}-room`);
+        assignments[room].push(student);
+      });
+
+      //check for constraint violations
+      const violationIds = getViolations(stage, assignments);
+      stage.set("violatedConstraints", violationIds);
+
+      //get score if there are no violations, otherwise, the score is 0
+      const currentScore =
+        assignments["deck"].length === 0
+          ? getScore(task, assignments, violationIds.length)
+          : 0;
+      //console.debug("currentScore", currentScore);
+      stage.set("score", currentScore || 0);
+
+      if (currentScore === task.optimal) {
+        stage.set("optimalFound", true);
+      }
+
+      //keep track of solution, scores, and violated constraints
+      //TODO: eventually this should have the 'log' parameter so it is not sent to the UI
+      //TODO: how about I store everything here, and that's it! less data
+      stage.append("intermediateSolutions", {
+        solution: assignments,
+        at: new Date(),
+        violatedConstraintsIds: violationIds,
+        nConstraintsViolated: violationIds.length,
+        score: getScore(task, assignments, violationIds.length),
+        optimalFound: currentScore === task.optimal,
+        completeSolution: assignments["deck"].length === 0,
+        completeSolutionScore: currentScore,
+      });
+    }
   }
+);
+
+*/
+
+
+
+
+
+
+
+
+function getScore(task, assignments, nViolations) {
+  let score = 0;
+  Object.keys(assignments).forEach((room) => {
+    assignments[room].forEach((student) => {
+      score += task.payoff[student][room];
+    });
+  });
+  return score - nViolations * 100;
+}
+
+function find_room(assignments, student) {
+  return Object.keys(assignments).find((room) =>
+    assignments[room].includes(student)
+  );
+}
+
+function getViolations(stage, assignments) {
+  // console.debug("assignments ", assignments);
+  const task = stage.get("task");
+  const violatedConstraintsIds = [];
+
+  task.constraints.forEach((constraint) => {
+    const firstStudentRoom = find_room(assignments, constraint.pair[0]);
+    const secondStudentRoom = find_room(assignments, constraint.pair[1]);
+
+    if (firstStudentRoom !== "deck" && secondStudentRoom !== "deck") {
+      switch (constraint.type) {
+        case 0:
+          //they are not in the same room, when they should've
+          if (firstStudentRoom !== secondStudentRoom) {
+            // console.debug(
+            //   constraint.pair.join(" and "),
+            //   "they are not in the same room, when they should've"
+            // );
+            violatedConstraintsIds.push(constraint._id);
+          }
+          break;
+        case 1:
+          //they are in the same room, when they shouldn't
+          if (firstStudentRoom === secondStudentRoom) {
+            // console.debug(
+            //   constraint.pair.join(" and "),
+            //   "they are in the same room, when they shouldn't"
+            // );
+            violatedConstraintsIds.push(constraint._id);
+          }
+
+          break;
+        case 2:
+          //if they are not neighbors, when they should've been
+          if (Math.abs(firstStudentRoom - secondStudentRoom) !== 1) {
+            // console.debug(
+            //   constraint.pair.join(" and "),
+            //   "they are not neighbors, when they should've been"
+            // );
+            violatedConstraintsIds.push(constraint._id);
+          }
+
+          break;
+        case 3:
+          if (Math.abs(firstStudentRoom - secondStudentRoom) < 2) {
+            // console.debug(
+            //   constraint.pair.join(" and "),
+            //   "can't live in the same room or be neighbors, so why are they?"
+            // );
+            violatedConstraintsIds.push(constraint._id);
+          }
+          break;
+      }
+    }
+  });
+
+  return violatedConstraintsIds;
 }
