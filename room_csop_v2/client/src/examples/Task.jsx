@@ -1,96 +1,143 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-import Room from "./Room.jsx";
-import Timer from "./Timer.jsx";
+import {Room} from "./Room.jsx";
+import {Timer} from "../components/Timer";
 import { HTMLTable } from "@blueprintjs/core";
-import { StageTimeWrapper } from "meteor/empirica:core";
-import { TimeSync } from "meteor/mizzao:timesync";
-import moment from "moment";
+import {
+  Chat,
+  usePlayer,
+  usePlayers,
+  useStage,
+  useGame,
+  useRound,
+  useStageTimer 
+} from "@empirica/core/player/classic/react";
+import { Button } from "../components/Button";
+import "@blueprintjs/core/lib/css/blueprint.css";
+//import { TimeSync } from "meteor/mizzao:timesync";
+//import moment from "moment";
 
-const TimedButton_1 = StageTimeWrapper((props) => {
-  const { player, onClick, activateAt, remainingSeconds, stage } = props;
+//console.log(useStageTimer)
+//timed_button=useStageTimer();
 
-  const disabled = remainingSeconds > activateAt;
-  return (
-    <button
-      type="button"
-      className={`bp3-button bp3-icon-cross bp3-intent-danger bp3-large ${
-        player.get("satisfied") ? "bp3-minimal" : ""
-      }`}
-      onClick={onClick}
-      disabled={disabled}
-    >
-      Unsatisfied
-    </button>
-  );
-});
+//console.log(timed_button)
 
-const TimedButton_2 = StageTimeWrapper((props) => {
-  const { player, onClick, activateAt, remainingSeconds, stage } = props;
+export function Task () {
 
-  const disabled = remainingSeconds > activateAt;
-  return (
-    <button
-      type="button"
-      className={`bp3-button bp3-icon-tick bp3-intent-success bp3-large ${
-        player.get("satisfied") ? "" : "bp3-minimal"
-      }`}
-      onClick={onClick}
-      disabled={disabled}
-    >
-      Satisfied
-    </button>
-  );
-});
+  const stage = useStage();
+  const player = usePlayer();
+  const game = useGame();
+  const stagetime= useStageTimer();
+  //console.log('THIS WORKED???????')
+ // console.log(stage)
+  //console.log(stage.scope)
+  //console.log(game)
+  //console.log(stagetime)
 
-export default class Task extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { activeButton: false };
-  }
 
-  componentDidMount() {
-    const { player } = this.props;
-    setTimeout(() => this.setState({ activeButton: true }), 5000); //we make the satisfied button active after 5 seconds
-    if (player.stage.submitted) {
-      this.setState({ activeButton: false });
-    }
-  }
-
-  handleSatisfaction = (satisfied, event) => {
-    const { game, player, stage } = this.props;
-    event.preventDefault();
-
-    //if everyone submitted then, there is nothing to handle
-    if (player.stage.submitted) {
-      return;
-    }
-
-    //if it is only one player, and satisfied, we want to lock everything
-    if (game.players.length === 1 && satisfied) {
-      this.setState({ activeButton: false });
-    } else {
-      //if they are group (or individual that clicked unsatisfied), we want to momentarily disable the button so they don't spam, but they can change their mind so we unlock it after 1.5 seconds
-      this.setState({ activeButton: false });
-      setTimeout(() => this.setState({ activeButton: true }), 800); //preventing spam by a group
-    }
-
-    player.set("satisfied", satisfied);
-    stage.append("log", {
-      verb: "playerSatisfaction",
-      subjectId: player._id,
-      state: satisfied ? "satisfied" : "unsatisfied",
-      // at: new Date()
-      at: moment(TimeSync.serverTime(null, 1000)),
-    });
-    console.log("task moment", moment(TimeSync.serverTime(null, 1000)));
+  //This might not be a good method to pass in stagetime
+  
+  const TimedButton_1 = (props) => {
+    const curplayer = props.player
+    const onClick = props.onClick
+    const activateAt =props.activateAt
+    const remainingSeconds = props.remainingSeconds
+    //const disabled = remainingSeconds > activateAt;
+    
+    
+    return (
+      <button
+        type="button"
+        className={`bp3-button bp3-icon-cross bp3-intent-danger bp3-large ${
+          curplayer.get("satisfied") ? "bp3-minimal" : "" //Question not sure if individual player will use with the players state change, will test
+        }`}
+        onClick={onClick}
+      //  disabled={disabled}
+      >
+        Unsatisfied
+      </button>
+    );
   };
 
-  render() {
-    const { game, stage, player } = this.props;
 
+  const TimedButton_2 = (props) => {
+    const curplayer = props.player
+    const onClick = props.onClick
+    const activateAt =props.activateAt
+    const remainingSeconds = props.remainingSeconds
+   // const disabled = remainingSeconds > activateAt;
+
+    return (
+      <button
+        type="button"
+        className={`bp3-button bp3-icon-tick bp3-intent-success bp3-large ${
+          curplayer.get("satisfied") ? "" : "bp3-minimal"
+        }`}
+        onClick={props.onClick}
+    //    disabled={disabled}
+      >
+        Satisfied
+      </button>
+    );
+  };
+
+
+
+
+  
+  const [activeButton, setActivateButton] = useState({
+    activeButton: false});
+
+  useEffect(() => {
+    setTimeout(() => setActivateButton({ activeButton: true}), 5000); //we make the satisfied button active after 5 seconds
+    if (player.stage.get('submit') )
+    {
+      setActivateButton({activeButton: false });
+    }
+  })
+
+  function handleSatisfaction(event,satisfied,game,stage,player) {
+    
+    
+    event.preventDefault();
+    //if everyone submitted then, there is nothing to handle
+
+    if (player.stage.get('submit')) {
+      return;
+    }
+    console.log(event)
+    console.log(satisfied)
+    console.log(game.get('treatment'))
+    console.log(stage)
+    //if it is only one player, and satisfied, we want to lock everything
+    if (game.get('treatment').playerCount=== 1 && satisfied) {
+      setActivateButton({activeButton : false});
+    } else {
+      //if they are group (or individual that clicked unsatisfied), we want to momentarily disable the button so they don't spam, but they can change their mind so we unlock it after 1.5 seconds
+      setActivateButton(false);
+      setTimeout(() => setActivateButton({ activeButton : true }), 800); //preventing spam by a groupƒ
+    }
+
+
+    player.set("satisfied", satisfied);
+
+    // THis looks like its going to log some meta data
+    /*stage.append("log", {
+      verb: "playerSatisfaction",
+      subjectId: player.id,
+      state: satisfied ? "satisfied" : "unsatisfied",
+      // at: new Date()
+      //at: moment(TimeSync.serverTime(null, 1000)),
+    }); */
+   // console.log("task moment", moment(TimeSync.serverTime(null, 1000)));
+  };
+
+  
+    //const { game, stage, player } = this.props;
     const task = stage.get("task");
     const violatedConstraints = stage.get("violatedConstraints") || [];
+    //console.log('TASK')
+    //console.log(task)
 
     return (
       <div className="task">
@@ -193,15 +240,17 @@ export default class Task extends React.Component {
             <TimedButton_1
               stage={stage}
               player={player}
-              activateAt={game.treatment.stageDuration - 5}
-              onClick={this.handleSatisfaction.bind(this, false)}
+              activateAt={game.get('treatment').StageDuration - 5}
+              remainingSeconds= {stagetime.remaining}
+              onClick={(e) => handleSatisfaction(e, false,game,stage,player)}
             />
 
             <TimedButton_2
               stage={stage}
               player={player}
-              activateAt={game.treatment.stageDuration - 5}
-              onClick={this.handleSatisfaction.bind(this, true)}
+              activateAt={game.get('treatment').StageDuration - 5}
+              remainingSeconds= {stagetime.remaining}
+              onClick={(e) => handleSatisfaction(e, true,game, stage,player)}
             />
 
             {/* <button
@@ -229,4 +278,4 @@ export default class Task extends React.Component {
       </div>
     );
   }
-}
+

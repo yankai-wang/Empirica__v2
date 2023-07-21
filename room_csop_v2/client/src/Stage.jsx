@@ -2,17 +2,21 @@ import {
   usePlayer,
   usePlayers,
   useRound,
+  useStage,
 } from "@empirica/core/player/classic/react";
 import { Loading } from "@empirica/core/player/react";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { JellyBeans } from "./examples/JellyBeans";
 import { MineSweeper } from "./examples/MineSweeper";
-//import { Roomassign } from "./examples/Round";
+import { Round } from "./examples/Round"; //round may be keyword in V2? 
 
 export function Stage() {
   const player = usePlayer();
   const players = usePlayers();
-  const round = useRound();
+  const stage = useStage();
+
+  console.log('DID THIS STAGE FILE RUN?')
+  
 
   if (player.stage.get("submit")) {
     if (players.length === 1) {
@@ -25,15 +29,16 @@ export function Stage() {
       </div>
     );
   }
-
-  switch (round.get("task")) {
+  console.log(stage.get("task"))
+  switch (stage.get("task")) {
     case "jellybeans":
       return <JellyBeans />;
     case "minesweeper":
       return <MineSweeper />;
     case "test":
-      return <Roomassign />;
+     return <Round />;
     default:
-      return <div>Unknown task</div>;
+      return <Round />;
+     // return <div>Unknown task</div>;
   }
 }
