@@ -110,11 +110,6 @@ Empirica.onGameStart(({ game }) => {
 
   const round = game.addRound();
   _.times(taskSequence.length, i => {
-    console.log('THIS IS I',i)
-    console.log(i === 0 ? "practice" : i)
-    console.log(taskSequence[i].difficulty)
-    console.log(game.get('treatment').StageDuration)
-
     const stage = round.addStage({
       name: i === 0 ? "practice" : i,
       displayName: taskSequence[i].difficulty,
@@ -156,8 +151,9 @@ Empirica.onGameStart(({ game }) => {
 
 Empirica.onRoundStart(({ round }) => {});
 
-Empirica.onStageStart(({game, stage }) => {
+Empirica.onStageStart(({stage}) => {
   const players = stage.currentGame.players
+  console.log(stage)
   console.debug("Round ", stage.name, "game", stage.currentGame.id, " started");
   const team = stage.currentGame.get("team");
   console.log("is it team?", team);
@@ -177,12 +173,14 @@ Empirica.onStageStart(({game, stage }) => {
   ]);
   stage.set("intermediateSolutions", []);
 
+  //Puts the icons on the deck at the beginning of each stage 
   const task = stage.get("task");// Changed this to rounds
   task.students.forEach((student) => {
     stage.set(`student-${student}-room`, "deck");
     stage.set(`student-${student}-dragger`, null);
   });
 
+  // Makes sure each player starts in unsatified
   players.forEach((player) => {
     player.set("satisfied", false);
   });
@@ -209,7 +207,7 @@ Empirica.onStageEnded(({ stage }) => {
 
   //add the round score to the game total cumulative score (only if it is not practice)
   if (stage.name !== "practice") {
-    const cumScore = game.get("cumulativeScore") || 0;
+    const cumScore = stage.currentGame.get("cumulativeScore") || 0;
     const scoreIncrement = currentScore > 0 ? Math.round(currentScore) : 0;
     stage.currentGame.set("cumulativeScore", Math.round(scoreIncrement + cumScore));
   }
@@ -218,7 +216,8 @@ Empirica.onStageEnded(({ stage }) => {
 
 Empirica.onRoundEnded(({ round }) => {});
 
-Empirica.onGameEnded(({ game }) => {  /* const players = game.players;
+Empirica.onGameEnded(({ game }) => { 
+  const players = game.players;
   console.debug("The game", game.id, "has ended");
   //computing the bonus for everyone (in this game, everyone will get the same value)
   const conversionRate = game.treatment.conversionRate
@@ -243,11 +242,11 @@ Empirica.onGameEnded(({ game }) => {  /* const players = game.players;
       player.set("bonus", bonus);
       player.set("cumulativeScore", game.get("cumulativeScore"));
     }
-  });*/});
+  });});
 
 // Note: this is not the actual number of beans in the pile, it's a guess...
-
 /*
+
 Empirica.onSet(
   (
     game,
@@ -298,7 +297,7 @@ Empirica.onSet(
       //get score if there are no violations, otherwise, the score is 0
       const currentScore =
         assignments["deck"].length === 0
-          ? getScore(task, assignments, violationIds.length)
+        /  ? getScore(task, assignments, violationIds.length)
           : 0;
       //console.debug("currentScore", currentScore);
       stage.set("score", currentScore || 0);

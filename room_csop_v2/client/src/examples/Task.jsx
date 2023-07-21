@@ -38,13 +38,13 @@ export function Task () {
   //This might not be a good method to pass in stagetime
   
   const TimedButton_1 = (props) => {
-    const stagetime1= useStageTimer();
     const curplayer = props.player
     const onClick = props.onClick
     const activateAt =props.activateAt
-    const remainingSeconds =stagetime1.remaining
-  
-    const disabled = remainingSeconds > activateAt;
+    const remainingSeconds = props.remainingSeconds
+    //const disabled = remainingSeconds > activateAt;
+    
+    
     return (
       <button
         type="button"
@@ -52,7 +52,7 @@ export function Task () {
           curplayer.get("satisfied") ? "bp3-minimal" : "" //Question not sure if individual player will use with the players state change, will test
         }`}
         onClick={onClick}
-        disabled={disabled}
+      //  disabled={disabled}
       >
         Unsatisfied
       </button>
@@ -61,21 +61,20 @@ export function Task () {
 
 
   const TimedButton_2 = (props) => {
-    const stagetime1= useStageTimer();
     const curplayer = props.player
-    const onClick = props.onClickƒ
+    const onClick = props.onClick
     const activateAt =props.activateAt
-    const remainingSeconds =stagetime1.remaining
+    const remainingSeconds = props.remainingSeconds
+   // const disabled = remainingSeconds > activateAt;
 
-    const disabled = remainingSeconds > activateAt;
     return (
       <button
         type="button"
         className={`bp3-button bp3-icon-tick bp3-intent-success bp3-large ${
           curplayer.get("satisfied") ? "" : "bp3-minimal"
         }`}
-        onClick={onClick}
-        disabled={disabled}
+        onClick={props.onClick}
+    //    disabled={disabled}
       >
         Satisfied
       </button>
@@ -89,27 +88,29 @@ export function Task () {
   const [activeButton, setActivateButton] = useState({
     activeButton: false});
 
-  function componentDidMount() {
-    const player = usePlayer();
+  useEffect(() => {
     setTimeout(() => setActivateButton({ activeButton: true}), 5000); //we make the satisfied button active after 5 seconds
-    if (player.stage.submitted) {
+    if (player.stage.get('submit') )
+    {
       setActivateButton({activeButton: false });
     }
-  }
+  })
 
-  function handleSatisfaction(satisfied, event) {
-    const stage = useStage();
-    const player = usePlayer();
-    const game = useGame();
+  function handleSatisfaction(event,satisfied,game,stage,player) {
+    
+    
     event.preventDefault();
-
     //if everyone submitted then, there is nothing to handle
-    if (player.stage.submitted) {
+
+    if (player.stage.get('submit')) {
       return;
     }
-
+    console.log(event)
+    console.log(satisfied)
+    console.log(game.get('treatment'))
+    console.log(stage)
     //if it is only one player, and satisfied, we want to lock everything
-    if (game.players.length === 1 && satisfied) {
+    if (game.get('treatment').playerCount=== 1 && satisfied) {
       setActivateButton({activeButton : false});
     } else {
       //if they are group (or individual that clicked unsatisfied), we want to momentarily disable the button so they don't spam, but they can change their mind so we unlock it after 1.5 seconds
@@ -117,15 +118,18 @@ export function Task () {
       setTimeout(() => setActivateButton({ activeButton : true }), 800); //preventing spam by a groupƒ
     }
 
+
     player.set("satisfied", satisfied);
-    stage.append("log", {
+
+    // THis looks like its going to log some meta data
+    /*stage.append("log", {
       verb: "playerSatisfaction",
-      subjectId: player._id,
+      subjectId: player.id,
       state: satisfied ? "satisfied" : "unsatisfied",
       // at: new Date()
-      at: moment(TimeSync.serverTime(null, 1000)),
-    });
-    console.log("task moment", moment(TimeSync.serverTime(null, 1000)));
+      //at: moment(TimeSync.serverTime(null, 1000)),
+    }); */
+   // console.log("task moment", moment(TimeSync.serverTime(null, 1000)));
   };
 
   
@@ -237,14 +241,16 @@ export function Task () {
               stage={stage}
               player={player}
               activateAt={game.get('treatment').StageDuration - 5}
-              onClick={(e) => handleSatisfaction(e, false)}
+              remainingSeconds= {stagetime.remaining}
+              onClick={(e) => handleSatisfaction(e, false,game,stage,player)}
             />
 
             <TimedButton_2
               stage={stage}
               player={player}
               activateAt={game.get('treatment').StageDuration - 5}
-              onClick={(e) => handleSatisfaction(e, true)}
+              remainingSeconds= {stagetime.remaining}
+              onClick={(e) => handleSatisfaction(e, true,game, stage,player)}
             />
 
             {/* <button
