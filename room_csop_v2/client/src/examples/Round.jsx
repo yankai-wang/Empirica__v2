@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-//import SocialInteractions from "./SocialInteractions.jsx";
+//import {SocialInteractions} from "./SocialInteractions";
 import {Task} from "./Task";
 import {
   Chat,
@@ -34,8 +34,8 @@ export function Round() {
       <Task />
       {/*game.player.length is a better check for social interaction than 'game.treatment.playerCount > 1' because of the lobby --> ignor settings*/}
       {player.get("treatment").playerCount > 1 ? (
-      //  <SocialInteractions game={game} stage={stage} player={player} />
-      console.log('MUTLIPLAYER NOT YET ENABLED')
+     //   <SocialInteractions game={game} stage={stage} player={player} />
+     console.log('no multiplayer')
       ) : null}
     </div>
   );

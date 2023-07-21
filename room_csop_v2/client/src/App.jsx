@@ -30,6 +30,8 @@ import {
   useRound,
 } from "@empirica/core/player/classic/react";
 
+
+// MODIFYING FOR GAME DEV SPEED UP
 export default function App() {
   const urlParams = new URLSearchParams(window.location.search);
   const playerKey = urlParams.get("participantKey") || "";
@@ -39,8 +41,8 @@ export default function App() {
 
   function introSteps({ game, player }) {
     const treatment = player.get("treatment");
-    // const steps = [Introduction]; // for testing purposes
-    const steps = [Overview, TaskDetails, ConstraintsDetails, RoomArrangements];
+    const steps = [Introduction]; // for testing purposes
+   /* const steps = [Overview, TaskDetails, ConstraintsDetails, RoomArrangements];
     if (treatment.playerCount > 1) {
       steps.push(TeamDetails, SocialInteractionDetails);
     }
@@ -50,14 +52,15 @@ export default function App() {
     } else {
       steps.push(IndividualQuiz);
     }
+    */
     //Testing purposes
-    steps.push(Introduction);
+   // steps.push(Introduction);
     return steps;
   }
 
   function exitSteps({ game, player }) {
-    const treatment = player.get("treatment");
-    console.log("player status", player.get("status"), player.get("ended"))
+    const treatment =game.get("treatment");
+    //console.log("player status", player.get("status"), player.get("ended"))
     // if (player.exitStatus !== "finished") {
     if (player.get("ended") !== "game ended") {
       return [Sorry];

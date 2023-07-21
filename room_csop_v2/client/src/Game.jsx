@@ -1,5 +1,4 @@
 import { Chat, useGame, useStage, usePlayers } from "@empirica/core/player/classic/react";
-
 import React from "react";
 import { Profile } from "./Profile";
 import { Stage } from "./Stage";
