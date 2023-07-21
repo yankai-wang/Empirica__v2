@@ -3,6 +3,7 @@ import { Chat, useGame, useStage, usePlayers } from "@empirica/core/player/class
 import React from "react";
 import { Profile } from "./Profile";
 import { Stage } from "./Stage";
+import { Round } from "./examples/Round";
 import { SocialInteractions } from "./examples/SocialInteractions";
 
 export function Game() {

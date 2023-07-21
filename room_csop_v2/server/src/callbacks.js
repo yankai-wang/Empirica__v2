@@ -119,13 +119,13 @@ Empirica.onGameStart(({ game }) => {
   /// END OF MAIN.JS CODE 
 
 
-  players.forEach((player, i) => {
-    player.set("name", names[i]);
-    player.set("avatar", `https://api.dicebear.com/6.x/identicon/svg?seed=${avatarNames[i]}`);
-    player.set("nameColor", nameColor[i]);
-    player.set("cumulativeScore", 0);
-    player.set("bonus", 0);
-  });
+  // players.forEach((player, i) => {
+  //   player.set("name", names[i]);
+  //   player.set("avatar", `https://api.dicebear.com/6.x/identicon/svg?seed=${avatarNames[i]}`);
+  //   player.set("nameColor", nameColor[i]);
+  //   player.set("cumulativeScore", 0);
+  //   player.set("bonus", 0);
+  // });
 
 
 
@@ -142,46 +142,46 @@ Empirica.onGameStart(({ game }) => {
   });
   round2.addStage({ name: "Play", duration: 30000 });
 
-  const players = game.players;
-  // console.debug("game ", game._id, " started");
-  // console.debug("players ", players);
+  // const players = game.players;
+  // // console.debug("game ", game._id, " started");
+  // // console.debug("players ", players);
 
-  const names = [
-    "Blue",
-    "Green",
-    "Pink",
-    "Yellow",
-    "Purple",
-    "Red",
-    "Turqoise",
-    "Gold",
-    "Grey",
-    "Magenta",
-  ]; // for the players names to match avatar color
-  const avatarNames = [
-    "Colton",
-    "Aaron",
-    "Alex",
-    "Tristan",
-    "Daniel",
-    "Jill",
-    "Jimmy",
-    "Adam",
-    "Flynn",
-    "Annalise",
-  ]; // to do more go to https://jdenticon.com/#icon-D3
-  const nameColor = [
-    "#3D50B7",
-    "#70A945",
-    "#DE8AAB",
-    "#A59144",
-    "#DER5F4",
-    "#EB8TWV",
-    "#N0WFA4",
-    "#TP3BWU",
-    "#QW7MI9",
-    "#EB8TWj",
-  ]; // similar to the color of the avatar
+  // const names = [
+  //   "Blue",
+  //   "Green",
+  //   "Pink",
+  //   "Yellow",
+  //   "Purple",
+  //   "Red",
+  //   "Turqoise",
+  //   "Gold",
+  //   "Grey",
+  //   "Magenta",
+  // ]; // for the players names to match avatar color
+  // const avatarNames = [
+  //   "Colton",
+  //   "Aaron",
+  //   "Alex",
+  //   "Tristan",
+  //   "Daniel",
+  //   "Jill",
+  //   "Jimmy",
+  //   "Adam",
+  //   "Flynn",
+  //   "Annalise",
+  // ]; // to do more go to https://jdenticon.com/#icon-D3
+  // const nameColor = [
+  //   "#3D50B7",
+  //   "#70A945",
+  //   "#DE8AAB",
+  //   "#A59144",
+  //   "#DER5F4",
+  //   "#EB8TWV",
+  //   "#N0WFA4",
+  //   "#TP3BWU",
+  //   "#QW7MI9",
+  //   "#EB8TWj",
+  // ]; // similar to the color of the avatar
 
   players.forEach((player, i) => {
     player.set("name", names[i]);

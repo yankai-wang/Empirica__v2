@@ -217,9 +217,6 @@ export function Task () {
           <div className="all-rooms">
             <Room
               room="deck"
-              stage={stage}
-              game={game}
-              player={player}
               isDeck
             />
 
@@ -228,9 +225,6 @@ export function Task () {
                 <Room
                   key={room}
                   room={room}
-                  stage={stage}
-                  game={game}
-                  player={player}
                 />
               ))}
             </div>

@@ -12,13 +12,12 @@ import {
 } from "@empirica/core/player/classic/react";
 
 
-export function Student (props) {
+export function Student ({ student }) {
   
   
   
   function handleDragStart (e) {
     //console.log('timeSync',moment(TimeSync.serverTime(null, 1000)))
-    const { student, stage, player } = props;
     const dragger = stage.get(`student-${student}-dragger`); //check if there is already a dragger
     //if so, you can't move it, already someone is moving it!
     if (dragger) {
@@ -27,15 +26,24 @@ export function Student (props) {
       e.preventDefault();
       return;
     }
-    stage.set(`student-${student}-dragger`, player._id);
-    stage.append("log", {
+    stage.set(`student-${student}-dragger`, player.id);
+    // stage.append("log", {
+    //   verb: "draggingStudent",
+    //   subjectId: player._id,
+    //   object: student,
+    //   // at: new Date()
+    //  // at: moment(TimeSync.serverTime(null, 1000)),
+      
+    // });
+    const prelog = stage.get("log");
+    stage.set("log", prelog.concat({
       verb: "draggingStudent",
-      subjectId: player._id,
+      subjectId: player.id,
       object: student,
       // at: new Date()
      // at: moment(TimeSync.serverTime(null, 1000)),
       
-    });
+    }));
     e.dataTransfer.setData("text/plain", student);
    // console.log('student moment', moment(TimeSync.serverTime(null, 1000)))
   };
@@ -47,35 +55,42 @@ export function Student (props) {
   function handleDragLeave (e) {
     e.preventDefault();
     console.log("released!");
-    const { student, stage } = this.props;
     stage.set(`student-${student}-dragger`, null);
   };
 
-  function handleDragEnd (props,e) {
+  function handleDragEnd (e) {
     e.preventDefault();
-    const { student, stage, player } = props;
     stage.set(`student-${student}-dragger`, null);
 
     //if dropped into non-allowed area
     if (e.dataTransfer.dropEffect === "none") {
-      stage.append("log", {
+      // stage.append("log", {
+      //   verb: "releasedStudent",
+      //   subjectId: player._id,
+      //   object: student,
+      // });
+      const prelog = stage.get("log");
+      stage.set("log", prelog.concat({
         verb: "releasedStudent",
-        subjectId: player._id,
+        subjectId: player.id,
         object: student,
-      });
+      }));
     }
   };
 
-    const { student, stage, game, player } = props;
+    const stage = useStage();
+    const player = usePlayer();
+    const players = usePlayers();
+    const game = useGame();
     let isDragabble = true; // usually everyone can drag, except if it is colored (i.e., being dragged by someone else)
     const dragger = stage.get(`student-${student}-dragger`);
     const style = {};
     const cursorStyle = { cursor: null };
     if (dragger) {
-      const playerDragging = game.players.find((p) => p._id === dragger);
+      const playerDragging = players.find((p) => p.id === dragger);
       if (playerDragging) {
         style.fill = playerDragging.get("nameColor");
-        isDragabble = playerDragging === player._id; //only one can drag at a time
+        isDragabble = playerDragging === player.id; //only one can drag at a time
       }
     } else {
       //if the student is NOT being dragged by anyone, then the cursor will be changed
@@ -87,7 +102,7 @@ export function Student (props) {
         draggable={isDragabble}
         onDragStart={(e) => handleDragStart(e)}
         onDragOver={(e) => handleDragOver(e)}
-        onDragEnd={(e) => handleDragEnd(props,e)}
+        onDragEnd={(e) => handleDragEnd(e)}
         //onDragExit={this.handleDragLeave}
         className="student"
         style={cursorStyle}
