@@ -16,10 +16,10 @@ This is an adaptation of an existing [experiment](https://github.com/amaatouq/ro
 ./client/intro/TaskDetails.jsx  ✔️ <br>
 ./client/game/Student.jsx <br>
 ./client/game/Timer.jsx <br>
-./client/game/Author.jsx <br>
-./client/game/SocialInteractions.jsx <br>
-./client/game/EventLog.jsx <br>
-./client/game/ChatLog.jsx <br>
+./client/game/Author.jsx  ✔️ <br>
+./client/game/SocialInteractions.jsx  ✔️ <br>
+./client/game/EventLog.jsx  ✔️ <br>
+./client/game/ChatLog.jsx  ✔️ <br>
 ./client/game/Room.jsx <br>
 ./client/game/Round.jsx <br>
 ./client/game/Task.jsx <br>

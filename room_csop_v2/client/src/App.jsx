@@ -39,6 +39,7 @@ export default function App() {
 
   function introSteps({ game, player }) {
     const treatment = player.get("treatment");
+    // const steps = [Introduction]; // for testing purposes
     const steps = [Overview, TaskDetails, ConstraintsDetails, RoomArrangements];
     if (treatment.playerCount > 1) {
       steps.push(TeamDetails, SocialInteractionDetails);
