@@ -90,7 +90,7 @@ Empirica.onGameStart(({ game }) => {
   );
 
   //initiate the cumulative score for this game (because everyone will have the same score, we can save it at the game object
-  game.set("cumulativeScore", 0); // the total score at the end of the game
+  game.set("cumul=ativeScore", 0); // the total score at the end of the game
   game.set("nOptimalSolutions", 0); // will count how many times they've got the optimal answer
   game.set("justStarted", true); // I use this to play the sound on the UI when the game starts
   game.set("team", game.players.length > 1);
@@ -295,9 +295,9 @@ Empirica.onGameEnded(({ game }) => {
   });});
 
 // Note: this is not the actual number of beans in the pile, it's a guess...
-/*
 
-Empirica.onSet(
+/*
+Empirica.on(
   (
     game,
     round,
@@ -372,12 +372,43 @@ Empirica.onSet(
     }
   }
 );
-
 */
 
 
+Empirica.on("player","satisfied",(ctx,{player,satisfied}) => {
+  //console.log(player.get('game'));
+  // const games = ctx.scopesByKind("game");
+  // console.log(games);
+  // console.log("player game id: " + player.get("gameId"))
+  // const game = games?.get(player.get("gameId"));
+  // console.log(game === undefined);
+  // console.log(game.scopesByKind('player'))
+  console.log("current game" + player.currentGame.players);
+  console.log('Current Stage' + player.currentStage)
+  const players = player.currentGame.players;
+  //console.log(players.length);
+  //console.log(players)
+ //const players = player.ctx.game.get('players')
+  if (satisfied === true) {
+    console.log('The satisfaction is satisfied')
+    //check if everyone is satisfied and if so, submit their answer
+    let allSatisfied = true;
+    players.forEach((player) => {
+      //console.log("player is satisfied:" + player.get("satisfied"));
+      allSatisfied = player.get("satisfied") && allSatisfied;
+    });
+    console.log(allSatisfied);
+    if (allSatisfied) {
+      console.log('DOES THIS RUN')
+      players.forEach((player) => {
+        player.stage.set("submit", true);
+      });
+    }
+    return;
+  }
 
 
+});
 
 
 

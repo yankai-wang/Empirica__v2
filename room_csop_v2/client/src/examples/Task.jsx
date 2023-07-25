@@ -26,13 +26,21 @@ export function Task () {
 
   const stage = useStage();
   const player = usePlayer();
+  //const player_check=usePlayers()
   const game = useGame();
-  const stagetime= useStageTimer();
+
+  let stageTime = useStageTimer();
+
+  // useEffect(() => {
+  //   stagetime = useStageTimer();
+  // }, []);
+  
   //console.log('THIS WORKED???????')
  // console.log(stage)
   //console.log(stage.scope)
   //console.log(game)
   //console.log(stagetime)
+  //console.log(player_check)
 
 
   //This might not be a good method to pass in stagetime
@@ -41,7 +49,7 @@ export function Task () {
     const curplayer = props.player
     const onClick = props.onClick
     const activateAt =props.activateAt
-    const remainingSeconds = props.remainingSeconds
+   // const remainingSeconds = props.remainingSeconds
     //const disabled = remainingSeconds > activateAt;
     
     
@@ -64,7 +72,7 @@ export function Task () {
     const curplayer = props.player
     const onClick = props.onClick
     const activateAt =props.activateAt
-    const remainingSeconds = props.remainingSeconds
+   // const remainingSeconds = props.remainingSeconds
    // const disabled = remainingSeconds > activateAt;
 
     return (
@@ -105,11 +113,13 @@ export function Task () {
     if (player.stage.get('submit')) {
       return;
     }
-    console.log(event)
-    console.log(satisfied)
-    console.log(game.get('treatment'))
-    console.log(stage)
+    console.log('THIS RAN WHEN I CLICKED SATISFIED')
+    console.log(game)
+    console.log(player)
+    console.log(player.ctx.game)
     //if it is only one player, and satisfied, we want to lock everything
+    console.log(game.get('treatment'))
+    console.log(satisfied)
     if (game.get('treatment').playerCount=== 1 && satisfied) {
       setActivateButton({activeButton : false});
     } else {
@@ -118,9 +128,18 @@ export function Task () {
       setTimeout(() => setActivateButton({ activeButton : true }), 800); //preventing spam by a groupƒ
     }
 
+    console.log(satisfied)
+    player.set("satisfied", satisfied);// HERE IS THE WHERE THE EMPIRCIA ON WILL RUN
+    console.log(player.get('satisfied'))
+    
+    const prelog = stage.get("log");
 
-    player.set("satisfied", satisfied);
-
+    stage.set("log", prelog.concat({
+      verb: "playerSatisfaction",
+      subjectId: player.id,
+      state: satisfied ? "satisfied" : "unsatisfied"
+    }));
+    return 
     // THis looks like its going to log some meta data
     /*stage.append("log", {
       verb: "playerSatisfaction",
@@ -235,7 +254,7 @@ export function Task () {
               stage={stage}
               player={player}
               activateAt={game.get('treatment').StageDuration - 5}
-              remainingSeconds= {stagetime.remaining}
+             // remainingSeconds= {stagetime.remaining}
               onClick={(e) => handleSatisfaction(e, false,game,stage,player)}
             />
 
@@ -243,7 +262,7 @@ export function Task () {
               stage={stage}
               player={player}
               activateAt={game.get('treatment').StageDuration - 5}
-              remainingSeconds= {stagetime.remaining}
+             // remainingSeconds= {stagetime.remaining}
               onClick={(e) => handleSatisfaction(e, true,game, stage,player)}
             />
 
