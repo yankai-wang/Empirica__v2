@@ -51,7 +51,7 @@ export function ChatLog ({messages}) {
         //at: moment(Date.now()),
       }));
       setState({ comment: "", time: 0 });
-      console.log("set state", stage.get("chat"))
+    //  console.log("set state", stage.get("chat"))
     }
   };
 
@@ -59,7 +59,7 @@ export function ChatLog ({messages}) {
   const player = usePlayer();
   const stage = useStage();
 
-  console.log("not here?")
+  //console.log("not here?")
 
   return (
     <div className="chat bp3-card">
@@ -88,7 +88,7 @@ export function ChatLog ({messages}) {
 const chatSound = new Audio(sound);
 function Messages ({ messages, player }) {
 
-  console.log("messages", messages);
+  //console.log("messages", messages);
   // get a reference to the messages div, so we can scroll it
   const messagesEl = useRef(null);
 
@@ -99,7 +99,7 @@ function Messages ({ messages, player }) {
   
   // scroll and play sound when new message is added, detected by change in messages.length
   useEffect(() => {
-    console.log("here?")
+    // console.log("here?")
     messagesEl.scrollTop = messagesEl.scrollHeight;
     chatSound.play();
   }, [messages.length]);
@@ -122,7 +122,7 @@ function Messages ({ messages, player }) {
 
 function Message ({message, self}) {
   const { text, subject } = message;
-  console.log("message", message);
+ // console.log("message", message);
   return (
     <div className="message">
       <Author player={subject} self={self} />
