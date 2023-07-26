@@ -31,7 +31,7 @@ export function Room ({ room, isDeck })  {
   };
 
   function handleDrop (e) {
-    console.log(stage)
+    //console.log(stage)
     
     const student = e.dataTransfer.getData("text/plain");
     stage.set(`student-${student}-dragger`, null); //maybe this fixes the problem of stucked colors
@@ -58,10 +58,10 @@ export function Room ({ room, isDeck })  {
       }));
       return;
     }
-    console.log(`student-${student}-room `+ room)
+    //console.log(`student-${student}-room `+ room)
     
     stage.set(`student-${student}-room`, room); // THIS IS WHERE THE SECOND CALL IS handeled
-    console.log(stage)
+    //console.log(stage)
     // stage.append("log", {
     //   verb: "movedStudent",
     //   subjectId: player._id,

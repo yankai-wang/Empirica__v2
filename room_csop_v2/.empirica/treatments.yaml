@@ -56,3 +56,10 @@ treatments:
         nRounds: 3
         playerCount: 1
         shuffleTaskOrder: true
+    - name: Mutliplayer_test
+      factors:
+        StageDuration: 10000
+        nRounds: 3
+        playerCount: 2
+        shuffleTaskOrder: true
+        stageDuration: 300

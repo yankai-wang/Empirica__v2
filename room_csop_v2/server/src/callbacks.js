@@ -296,84 +296,6 @@ Empirica.onGameEnded(({ game }) => {
 
 // Note: this is not the actual number of beans in the pile, it's a guess...
 
-/*
-Empirica.on(
-  (
-    game,
-    round,
-    stage,
-    player, // Player who made the change
-    target, // Object on which the change was made (eg. player.set() => player)
-    targetType, // Type of object on which the change was made (eg. player.set() => "player")
-    key, // Key of changed value (e.g. player.set("score", 1) => "score")
-    value, // New value
-    prevValue // Previous value
-  ) => {
-    const players = game.players;
-    //someone changed their satisfaction status
-    console.log("key", key);
-    if (key === "satisfied") {
-      //check if everyone is satisfied and if so, submit their answer
-      let allSatisfied = true;
-      players.forEach((player) => {
-        allSatisfied = player.get("satisfied") && allSatisfied;
-      });
-      if (allSatisfied) {
-        players.forEach((player) => {
-          player.stage.submit();
-        });
-      }
-      return;
-    }
-
-    //someone placed a student to a room
-    if (key.substring(0, 8) === "student-" && key.slice(-4) === "room") {
-      const task = stage.get("task");
-      let assignments = { deck: [] };
-      task.rooms.forEach((room) => {
-        assignments[room] = [];
-      });
-
-      //find the rooms for each player
-      task.students.forEach((student) => {
-        const room = stage.get(`student-${student}-room`);
-        assignments[room].push(student);
-      });
-
-      //check for constraint violations
-      const violationIds = getViolations(stage, assignments);
-      stage.set("violatedConstraints", violationIds);
-
-      //get score if there are no violations, otherwise, the score is 0
-      const currentScore =
-        assignments["deck"].length === 0
-        /  ? getScore(task, assignments, violationIds.length)
-          : 0;
-      //console.debug("currentScore", currentScore);
-      stage.set("score", currentScore || 0);
-
-      if (currentScore === task.optimal) {
-        stage.set("optimalFound", true);
-      }
-
-      //keep track of solution, scores, and violated constraints
-      //TODO: eventually this should have the 'log' parameter so it is not sent to the UI
-      //TODO: how about I store everything here, and that's it! less data
-      stage.append("intermediateSolutions", {
-        solution: assignments,
-        at: new Date(),
-        violatedConstraintsIds: violationIds,
-        nConstraintsViolated: violationIds.length,
-        score: getScore(task, assignments, violationIds.length),
-        optimalFound: currentScore === task.optimal,
-        completeSolution: assignments["deck"].length === 0,
-        completeSolutionScore: currentScore,
-      });
-    }
-  }
-);
-*/
-
 
 Empirica.on("player","satisfied",(ctx,{player,satisfied}) => {
  // console.log("current game" + player.currentGame.players);
@@ -406,13 +328,9 @@ Empirica.on("player","satisfied",(ctx,{player,satisfied}) => {
 
 // THERE IS A MUCH BETTER WAY TO DO THIS CURRENTLY BLANKING
 
-
-
-const dumbstring = 'student-A-room' || 'student-B-room' ||  'student-C-room' ||  'student-D-room' ||' student-E-room' || 'student-F-room' ||  'student-G-room' ||  'student-H-room' || 'student-I-room' || 'student-J-room' ||  'student-K-room' ||  'student-L-room' || 'student-M-room' || 'student-N-room' ||  'student-O-room' ||  'student-P-room' || 'student-Q-room' ||  'student-R-room'
 Empirica.on("stage", 'student-A-room' ,(ctx,{stage,room}) => 
 {
   const task = stage.get("task");
- 
   let assignments = { deck: [] };
   task.rooms.forEach((room) => {
     assignments[room] = [];
