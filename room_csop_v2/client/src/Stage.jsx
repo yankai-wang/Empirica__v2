@@ -15,7 +15,7 @@ export function Stage() {
   const players = usePlayers();
   const stage = useStage();
 
-  console.log('DID THIS STAGE FILE RUN?')
+  //console.log('DID THIS STAGE FILE RUN?')
   
 
   if (player.stage.get("submit")) {
@@ -29,7 +29,7 @@ export function Stage() {
       </div>
     );
   }
-  console.log(stage.get("task"))
+  //console.log(stage.get("task"))
   switch (stage.get("task")) {
     case "jellybeans":
       return <JellyBeans />;
