@@ -1,7 +1,7 @@
 import React from "react";
+import { FaCheck, FaTimes } from "react-icons/fa";
 import {EventLog} from "./EventLog";
 import {ChatLog} from "./ChatLog";
-import { Avatar } from "../components/Avatar";
 import {
   usePlayer,
   usePlayers,
@@ -25,17 +25,39 @@ export function SocialInteractions () {
               player.get("satisfied") ? "bp3-intent-success" : "bp3-intent-danger"
             }`}
           >
+            {player.satisfied && (
+              <FaCheck
+                style={{
+                  color: "green",
+                  marginRight: "5px",
+                  border: "2px solid green",
+                  borderRadius: "50%",
+                }}
+              />
+            )}
             <span
               className={`bp3-icon-standard ${
                 player.get("satisfied") ? "bp3-icon-tick" : "bp3-icon-cross"
               }`}
             />
+            {!player.satisfied && (
+              <FaTimes
+                style={{
+                  color: "red",
+                  marginRight: "5px",
+                  border: "2px solid red",
+                  borderRadius: "50%",
+                }}
+              />
+            )}
           </span>
 
-          {/* <img src={player.get("avatar")} /> */}
-          <Avatar player={player} />
+          <img
+            className="h-full w-full rounded-md shadow bg-white p-1"
+            src={`https://api.dicebear.com/6.x/identicon/svg?seed=${player.get("avatar")}`}
+            alt="Avatar"
+          />
         </span>
-        {/* <span className="name" style={{ color: player.get("nameColor") }}> */}
         <span className="name" style={{ color: player.get("nameColor") }}>
           {player.get("name")}
           {self ? " (You)" : ""}
@@ -47,9 +69,6 @@ export function SocialInteractions () {
  
   // const otherPlayers = _.reject(players, p => p.id === player.id);
   const otherPlayers = players.filter(p => p.id !== player.id);
-  console.log("otherPlayers", otherPlayers);
-  console.log("chat", stage.get("chat"));
-  console.log("log", stage.get("log"));
   const messages = stage.get("chat").map(({ text, playerId }) => ({
     text,
     subject: players.find(p => p.id === playerId)

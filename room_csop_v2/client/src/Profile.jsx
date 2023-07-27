@@ -4,7 +4,6 @@ import {
   useStage,
 } from "@empirica/core/player/classic/react";
 import React, { useState, useEffect } from "react";
-import { Avatar } from "./components/Avatar"
 import { Timer } from "./components/Timer"
 
 export function Profile() {
@@ -37,7 +36,11 @@ export function Profile() {
           </h1>
         </div>
         <div className="h-11 w-11">
-          <Avatar player={player} />
+          <img
+              className="h-full w-full rounded-md shadow bg-white p-1"
+              src={`https://api.dicebear.com/6.x/identicon/svg?seed=${player.get("avatar")}`}
+              alt="Avatar"
+            />
         </div>
       </div>
     </div>
