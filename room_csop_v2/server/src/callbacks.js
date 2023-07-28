@@ -297,34 +297,37 @@ Empirica.onGameEnded(({ game }) => {
 // Note: this is not the actual number of beans in the pile, it's a guess...
 
 
-Empirica.on("player","satisfied",(ctx,{player,satisfied}) => {
- // console.log("current game" + player.currentGame.players);
- // console.log('Current Stage' + player.currentStage)
- if(player.currentGame === undefined)
- {
-   return
- }
-  const players = player.currentGame.players;
+// Empirica.on("player","satisfied",(ctx,{player,satisfied}) => {
+//  // console.log("current game" + player.currentGame.players);
+//  // console.log('Current Stage' + player.currentStage)
+//  console.log("satisfied change detected")
+// //  console.log(player.currentGame)
+//  if(player.currentGame === undefined)
+//  {
+//    return
+//  }
+//   const players = player.currentGame.players;
 
 
-  if (satisfied === true) {
-  //  console.log('The satisfaction is satisfied')
-    //check if everyone is satisfied and if so, submit their answer
-    let allSatisfied = true;
-    players.forEach((player) => {
-      //console.log("player is satisfied:" + player.get("satisfied"));
-      allSatisfied = player.get("satisfied") && allSatisfied;
-    });
-    console.log(allSatisfied);
-    if (allSatisfied) {
-     // console.log('DOES THIS RUN')
-      players.forEach((player) => {
-        player.stage.set("submit", true);
-      });
-    }
-    return;
-  }
-});
+//   if (satisfied === true) {
+//    console.log('The satisfaction is satisfied')
+//     //check if everyone is satisfied and if so, submit their answer
+//     let allSatisfied = true;
+//     players.forEach((player) => {
+//       console.log("player" +  player.get("nameColor") + "is satisfied:" + player.get("satisfied"));
+//       allSatisfied = player.get("satisfied") && allSatisfied;
+//     });
+//     console.log(allSatisfied);
+//     if (allSatisfied) {
+//      console.log('DOES THIS RUN')
+//       players.forEach((player) => {
+//         // player.stage.set("submit", true);
+//         console.log("player" +  player.get("nameColor") + "set satisfied");
+//       });
+//     }
+//     return;
+//   }
+// });
 
 // THERE IS A MUCH BETTER WAY TO DO THIS CURRENTLY BLANKING
 

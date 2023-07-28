@@ -26,7 +26,7 @@ export function Task () {
 
   const stage = useStage();
   const player = usePlayer();
-  //const player_check=usePlayers()
+  const players=usePlayers()
   const game = useGame();
 
   let stageTime = useStageTimer();
@@ -104,8 +104,7 @@ export function Task () {
     }
   })
 
-  function handleSatisfaction(event,satisfied,game,stage,player) {
-    
+  function handleSatisfaction(event,satisfied) {
     
     event.preventDefault();
     //if everyone submitted then, there is nothing to handle
@@ -113,13 +112,13 @@ export function Task () {
     if (player.stage.get('submit')) {
       return;
     }
-    //console.log('THIS RAN WHEN I CLICKED SATISFIED')
+    console.log('THIS RAN WHEN I CLICKED SATISFIED')
    // console.log(game)
    // console.log(player)
    // console.log(player.ctx.game)
     //if it is only one player, and satisfied, we want to lock everything
    // console.log(game.get('treatment'))
-   // console.log(satisfied)
+  //  console.log(satisfied)
     if (game.get('treatment').playerCount=== 1 && satisfied) {
       setActivateButton({activeButton : false});
     } else {
@@ -128,9 +127,13 @@ export function Task () {
       setTimeout(() => setActivateButton({ activeButton : true }), 800); //preventing spam by a groupƒ
     }
 
-   // console.log(satisfied)
     player.set("satisfied", satisfied);// HERE IS THE WHERE THE EMPIRCIA ON WILL RUN
-    //console.log(player.get('satisfied'))
+    // check if everyone is satisfied
+    const allSatisfied = players.every(p => p.get("satisfied"));
+    if (allSatisfied) {
+      // submit all players
+      players.forEach(p => p.stage.set("submit", true));
+    }
     
     const prelog = stage.get("log");
 
@@ -255,7 +258,7 @@ export function Task () {
               player={player}
               activateAt={game.get('treatment').StageDuration - 5}
              // remainingSeconds= {stagetime.remaining}
-              onClick={(e) => handleSatisfaction(e, false,game,stage,player)}
+              onClick={(e) => handleSatisfaction(e, false)}
             />
 
             <TimedButton_2
@@ -263,7 +266,7 @@ export function Task () {
               player={player}
               activateAt={game.get('treatment').StageDuration - 5}
              // remainingSeconds= {stagetime.remaining}
-              onClick={(e) => handleSatisfaction(e, true,game, stage,player)}
+              onClick={(e) => handleSatisfaction(e, true)}
             />
 
             {/* <button

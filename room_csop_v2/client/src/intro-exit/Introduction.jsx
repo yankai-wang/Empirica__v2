@@ -16,13 +16,13 @@ export function Introduction({ previous, next }) {
   const player = usePlayer();
   const players = usePlayers();
   const stagetime =useStageTimer()
-  console.log(next);
-  console.log(game.get("treatments"));
-  console.log(player);
-  console.log(players);
-  console.log('STAGE TIMER')
-  console.log(stagetime)
-  console.log('STAGE TIME END')
+  // console.log(next);
+  // console.log(game.get("treatments"));
+  // console.log(player);
+  // console.log(players);
+  // console.log('STAGE TIMER')
+  // console.log(stagetime)
+  // console.log('STAGE TIME END')
 
   return (
     <div className="mt-3 sm:mt-5 p-20">
