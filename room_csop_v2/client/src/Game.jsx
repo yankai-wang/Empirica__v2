@@ -16,7 +16,7 @@ export function Game() {
       </div>
       <div className="h-full w-128 border-l flex justify-center items-center">
         {/* <Chat scope={game} attribute="chat" /> */}
-        <SocialInteractions />
+        {/* <SocialInteractions /> */}
       </div>
     </div>
   );

@@ -25,7 +25,7 @@ export function SocialInteractions () {
               player.get("satisfied") ? "bp3-intent-success" : "bp3-intent-danger"
             }`}
           >
-            {player.satisfied && (
+            {player.get("satisfied") && (
               <FaCheck
                 style={{
                   color: "green",
@@ -40,7 +40,7 @@ export function SocialInteractions () {
                 player.get("satisfied") ? "bp3-icon-tick" : "bp3-icon-cross"
               }`}
             />
-            {!player.satisfied && (
+            {!player.get("satisfied") && (
               <FaTimes
                 style={{
                   color: "red",

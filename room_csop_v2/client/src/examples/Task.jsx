@@ -113,13 +113,13 @@ export function Task () {
     if (player.stage.get('submit')) {
       return;
     }
-    //console.log('THIS RAN WHEN I CLICKED SATISFIED')
+    console.log('THIS RAN WHEN I CLICKED SATISFIED')
    // console.log(game)
    // console.log(player)
    // console.log(player.ctx.game)
     //if it is only one player, and satisfied, we want to lock everything
    // console.log(game.get('treatment'))
-   // console.log(satisfied)
+   console.log(satisfied)
     if (game.get('treatment').playerCount=== 1 && satisfied) {
       setActivateButton({activeButton : false});
     } else {
@@ -130,7 +130,7 @@ export function Task () {
 
    // console.log(satisfied)
     player.set("satisfied", satisfied);// HERE IS THE WHERE THE EMPIRCIA ON WILL RUN
-    //console.log(player.get('satisfied'))
+    console.log(player.get('satisfied'))
     
     const prelog = stage.get("log");
 

@@ -300,6 +300,8 @@ Empirica.onGameEnded(({ game }) => {
 Empirica.on("player","satisfied",(ctx,{player,satisfied}) => {
  // console.log("current game" + player.currentGame.players);
  // console.log('Current Stage' + player.currentStage)
+ console.log("satisfied change detected")
+//  console.log(player.currentGame)
  if(player.currentGame === undefined)
  {
    return
@@ -308,18 +310,19 @@ Empirica.on("player","satisfied",(ctx,{player,satisfied}) => {
 
 
   if (satisfied === true) {
-  //  console.log('The satisfaction is satisfied')
+   console.log('The satisfaction is satisfied')
     //check if everyone is satisfied and if so, submit their answer
     let allSatisfied = true;
     players.forEach((player) => {
-      //console.log("player is satisfied:" + player.get("satisfied"));
+      console.log("player" +  player.get("nameColor") + "is satisfied:" + player.get("satisfied"));
       allSatisfied = player.get("satisfied") && allSatisfied;
     });
     console.log(allSatisfied);
     if (allSatisfied) {
-     // console.log('DOES THIS RUN')
+     console.log('DOES THIS RUN')
       players.forEach((player) => {
         player.stage.set("submit", true);
+        console.log("player" +  player.get("nameColor") + "set satisfied");
       });
     }
     return;
