@@ -61,15 +61,9 @@ export function Room ({ room, isDeck })  {
     //console.log(`student-${student}-room `+ room)
     
     stage.set(`student-${student}-room`, room); // THIS IS WHERE THE SECOND CALL IS handeled
-    //console.log(stage)
-    // stage.append("log", {
-    //   verb: "movedStudent",
-    //   subjectId: player._id,
-    //   object: student,
-    //   target: room,
-    //   // at: new Date()
-    //  // at: moment(TimeSync.serverTime(null, 1000))
-    // });
+
+
+
     const prelog = stage.get("log");
     stage.set("log", prelog.concat({
       verb: "movedStudent",

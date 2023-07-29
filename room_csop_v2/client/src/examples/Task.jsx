@@ -14,6 +14,7 @@ import {
 } from "@empirica/core/player/classic/react";
 import { Button } from "../components/Button";
 import "@blueprintjs/core/lib/css/blueprint.css";
+import { FaCheck, FaTimes } from "react-icons/fa";
 //import { TimeSync } from "meteor/mizzao:timesync";
 //import moment from "moment";
 
@@ -30,17 +31,6 @@ export function Task () {
   const game = useGame();
 
   let stageTime = useStageTimer();
-
-  // useEffect(() => {
-  //   stagetime = useStageTimer();
-  // }, []);
-  
-  //console.log('THIS WORKED???????')
- // console.log(stage)
-  //console.log(stage.scope)
-  //console.log(game)
-  //console.log(stagetime)
-  //console.log(player_check)
 
 
   //This might not be a good method to pass in stagetime
@@ -107,18 +97,11 @@ export function Task () {
   function handleSatisfaction(event,satisfied) {
     
     event.preventDefault();
-    //if everyone submitted then, there is nothing to handle
 
     if (player.stage.get('submit')) {
       return;
     }
-    console.log('THIS RAN WHEN I CLICKED SATISFIED')
-   // console.log(game)
-   // console.log(player)
-   // console.log(player.ctx.game)
-    //if it is only one player, and satisfied, we want to lock everything
-   // console.log(game.get('treatment'))
-  //  console.log(satisfied)
+
     if (game.get('treatment').playerCount=== 1 && satisfied) {
       setActivateButton({activeButton : false});
     } else {
@@ -143,33 +126,20 @@ export function Task () {
       state: satisfied ? "satisfied" : "unsatisfied"
     }));
     return 
-    // THis looks like its going to log some meta data
-    /*stage.append("log", {
-      verb: "playerSatisfaction",
-      subjectId: player.id,
-      state: satisfied ? "satisfied" : "unsatisfied",
-      // at: new Date()
-      //at: moment(TimeSync.serverTime(null, 1000)),
-    }); */
-   // console.log("task moment", moment(TimeSync.serverTime(null, 1000)));
   };
 
-  
-    //const { game, stage, player } = this.props;
+
     const task = stage.get("task");
     const violatedConstraints = stage.get("violatedConstraints") || [];
-    //console.log('TASK')
-    //console.log(task)
-
     return (
-      <div className="task">
+      <div className="task" >
         <div className="left">
-          <div className="info">
+          <div className="info" style={{ margin: "0 auto", width: "90%" }}>
             <Timer stage={stage} />
             <div className="score">
-              <h5 className="bp3-heading">Score</h5>
+              <h5 className="font-mono text-3xl text-gray-700 font-semibold">Score</h5>
 
-              <h2 className="bp3-heading">{stage.get("score")}</h2>
+              <h2 className="font-mono text-3xl text-gray-700 font-semibold">{stage.get("score")}</h2>
             </div>
           </div>
 
@@ -183,18 +153,32 @@ export function Task () {
             ) : (
               ""
             )}
-            <h5 className="bp3-heading">Constraints</h5>
+            <h5 className="font-sans text-2xl text-gray-700 font-semibold underline">Constraints</h5>
             <ul>
               {task.constraints.map((constraint) => {
                 const failed = violatedConstraints.includes(constraint._id);
                 return (
                   <li key={constraint._id} className={failed ? "failed" : ""}>
                     {failed ? (
-                      <span className="bp3-icon-standard bp3-icon-cross" />
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <FaTimes
+                          style={{
+                            color: "red",
+                            marginRight: "5px", /* Adjust this margin as needed */
+                            border: "2px solid red",
+                            borderRadius: "50%",
+                          }}
+                        />
+                        <span style={{ fontSize: "14px", lineHeight: "1.5" }}>
+                        {constraint.pair.join(" and ")} {constraint.text}.</span>
+                      </div>
                     ) : (
-                      <span className="bp3-icon-standard bp3-icon-dot" />
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <span className="font-sans text-xl text-gray-700" style={{ marginRight: "5px" }} />
+                        <span style={{ fontSize: "14px", lineHeight: "1.5"  }}>
+                        {constraint.pair.join(" and ")} {constraint.text}.</span>
+                      </div>
                     )}
-                    {constraint.pair.join(" and ")} {constraint.text}.
                   </li>
                 );
               })}
@@ -202,8 +186,9 @@ export function Task () {
           </div>
 
           <div className="payoff">
-            <h5 className="bp3-heading">Payoff</h5>
-            <HTMLTable className="bp3-table">
+            <h5 className="font-sans text-2xl text-gray-700 font-semibold underline">Payoff</h5>
+            <div class="border-2 border-black p-4 inline-block">
+            <HTMLTable className="bp3-table" style={{ fontSize: "14px" }}>
               <thead>
                 <tr>
                   <th>Rooms</th>
@@ -232,6 +217,7 @@ export function Task () {
                 ))}
               </tbody>
             </HTMLTable>
+            </div>
           </div>
         </div>
 
@@ -269,26 +255,6 @@ export function Task () {
               onClick={(e) => handleSatisfaction(e, true)}
             />
 
-            {/* <button
-                type="button"
-                className={`bp3-button bp3-icon-cross bp3-intent-danger bp3-large ${
-                  player.get("satisfied") ? "bp3-minimal" : ""
-                }`}
-                onClick={this.handleSatisfaction.bind(this, false)}
-                disabled={!this.state.activeButton}
-              >
-                Unsatisfied
-              </button>
-            <button
-              type="button"
-              className={`bp3-button bp3-icon-tick bp3-intent-success bp3-large ${
-                player.get("satisfied") ? "" : "bp3-minimal"
-              }`}
-              onClick={this.handleSatisfaction.bind(this, true)}
-              disabled={!this.state.activeButton}
-            >
-              Satisfied
-            </button> */}
           </div>
         </div>
       </div>
