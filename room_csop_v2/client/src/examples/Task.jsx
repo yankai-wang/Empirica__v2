@@ -95,6 +95,7 @@ export function Task () {
   })
 
   function handleSatisfaction(event,satisfied) {
+    console.log("handlesubmit")
     
     event.preventDefault();
 
@@ -187,7 +188,7 @@ export function Task () {
 
           <div className="payoff">
             <h5 className="font-sans text-2xl text-gray-700 font-semibold underline">Payoff</h5>
-            <div class="border-2 border-black p-4 inline-block">
+            <div className="border-2 border-black p-4 inline-block">
             <HTMLTable className="bp3-table" style={{ fontSize: "14px" }}>
               <thead>
                 <tr>
@@ -239,18 +240,21 @@ export function Task () {
           </div>
 
           <div className="response">
-            <TimedButton_1
+            {/* temporarily commented out for testing */}
+            {/* <TimedButton_1 */}
+            <Button
               stage={stage}
               player={player}
-              activateAt={game.get('treatment').StageDuration - 5}
+              // activateAt={game.get('treatment').StageDuration - 5}
              // remainingSeconds= {stagetime.remaining}
               onClick={(e) => handleSatisfaction(e, false)}
             />
 
-            <TimedButton_2
+            {/* <TimedButton_2 */} 
+            <Button
               stage={stage}
               player={player}
-              activateAt={game.get('treatment').StageDuration - 5}
+              // activateAt={game.get('treatment').StageDuration - 5}
              // remainingSeconds= {stagetime.remaining}
               onClick={(e) => handleSatisfaction(e, true)}
             />

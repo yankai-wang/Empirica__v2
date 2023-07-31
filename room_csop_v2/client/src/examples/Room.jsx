@@ -61,6 +61,7 @@ export function Room ({ room, isDeck })  {
     //console.log(`student-${student}-room `+ room)
     
     stage.set(`student-${student}-room`, room); // THIS IS WHERE THE SECOND CALL IS handeled
+    stage.set("studentMoved", `student-${student}-room`); // then the "On" function in the server side will know the change
 
 
 
