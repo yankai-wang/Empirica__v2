@@ -232,20 +232,25 @@ Empirica.onGameEnded(({ game }) => {
 
 Empirica.on("stage", "studentMoved" ,(ctx,{stage, studentMoved}) => 
 {
-  const task = stage.get("task");
-  let assignments = { deck: [] };
-  task.rooms.forEach((room) => {
-    assignments[room] = [];
-  });
+  if (!studentMoved) return;
 
-  //find the rooms for each player
-  task.students.forEach((student) => {
-    const room = stage.get(`student-${student}-room`);
-    assignments[room].push(student);
-  });
+  // const task = stage.get("task");
+  // let assignments = { deck: [] };
+  // task.rooms.forEach((room) => {
+  //   assignments[room] = [];
+  // });
 
+  // //find the rooms for each player
+  // task.students.forEach((student) => {
+  //   const room = stage.get(`student-${student}-room`);
+  //   assignments[room].push(student);
+  // });
+
+  const {task, assignments, preIS} = studentMoved
+
+  // console.log("assignments", assignments);
   //get score if there are no violations, otherwise, the score is 0
-  const violationIds = getViolations(stage, assignments);
+  const violationIds = getViolations(stage, assignments, task);
   stage.set("violatedConstraints", violationIds);
   const currentScore =
     assignments["deck"].length === 0
@@ -256,7 +261,7 @@ Empirica.on("stage", "studentMoved" ,(ctx,{stage, studentMoved}) =>
   if (currentScore === task.optimal) {
     stage.set("optimalFound", true);
   }
-  const preIS= stage.get('intermediateSolutions')
+  // const preIS= stage.get('intermediateSolutions')
   stage.set("intermediateSolutions",preIS.concat( {
     solution: assignments,
     at: new Date(),
@@ -990,9 +995,9 @@ function find_room(assignments, student) {
   );
 }
 
-function getViolations(stage, assignments) {
+function getViolations(stage, assignments, task) {
   // console.debug("assignments ", assignments);
-  const task = stage.get("task");
+  // const task = stage.get("task");
   const violatedConstraintsIds = [];
 
   task.constraints.forEach((constraint) => {
