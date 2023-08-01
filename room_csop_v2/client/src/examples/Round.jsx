@@ -10,6 +10,7 @@ import {
   useGame,
   useRound,
 } from "@empirica/core/player/classic/react";
+import { JellyBeans } from "../examples/JellyBeans";
 
 //const roundSound = new Audio("./experiment/round-sound.mp3");
 //const gameSound = new Audio("./experiment/bell.mp3");
@@ -28,10 +29,14 @@ export function Round() {
   const stage = useStage();
   const player = usePlayer();
   const game = useGame();
+  // return different things depending on 
 
   return (
     <div className="round">
-      <Task />
+      {console.log(player.get("dropcondition"))}
+      {console.log(player.get("satisfaction"))}
+      {player.get("dropcondition") && <Task />}
+      {!player.get("dropcondition") && <JellyBeans />}
       {/*game.player.length is a better check for social interaction than 'game.treatment.playerCount > 1' because of the lobby --> ignor settings*/}
       {player.get("treatment").playerCount > 1 ? (
         <SocialInteractions  />

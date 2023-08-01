@@ -38,17 +38,27 @@ factors:
     - name: stageDuration
       values:
         - value: 300
+        - value: 3000
+    - name: AddDropList
+      values:
+        - value:
+            - 0
+            - 1
+            - 2
+            - 1
+            - 0
+            - 1
+        - value:
+            - 0
+            - 1
+            - 2
+            - 1
+            - 0
+            - 1
 treatments:
     - name: stageDuration
       factors:
         5min: 300
-    - name: Two Players
-      desc: Two-player Game
-      factors:
-        StageDuration: 10000
-        TimelordName: James
-        nRounds: 3
-        playerCount: 2
     - name: Solo
       desc: Single-player Game
       factors:
@@ -56,10 +66,25 @@ treatments:
         nRounds: 3
         playerCount: 1
         shuffleTaskOrder: true
-    - name: Mutliplayer_test
+    - name: Three Players
+      desc: Two-player Game
       factors:
         StageDuration: 10000
+        TimelordName: James
         nRounds: 3
-        playerCount: 2
+        playerCount: 3
+    - name: Mutliplayer_test
+      desc: This is to test out the add Drop Functionality
+      factors:
+        AddDropList:
+            - 0
+            - 1
+            - 2
+            - 1
+            - 0
+            - 1
+        StageDuration: 10000
+        nRounds: 3
+        playerCount: 3
         shuffleTaskOrder: true
-        stageDuration: 300
+        stageDuration: 3000

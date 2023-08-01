@@ -33,6 +33,33 @@ function customShuffle(taskSequence) {
   return taskSequence;
 }
 
+function custom_ordering(add_drop_list,length_stage,player_count){
+  const game_drop_array=[]
+  for(let i =0; i < add_drop_list.length;i++)
+    {  const booleanArray = Array(player_count).fill(true);
+    let k =0
+    if(add_drop_list[i] >= player_count){
+      throw "You are dropping too many players"
+    }
+
+    while (k < add_drop_list[i])
+    {
+    	let rand_loc=Math.floor(Math.random() * player_count)
+    	if(booleanArray[rand_loc] != false){
+      	booleanArray[rand_loc] = false
+        k++
+      }
+    
+    }
+    //console.log(booleanArray)
+    game_drop_array.push(booleanArray)
+    }
+
+return game_drop_array
+}
+
+
+
 
 
 Empirica.onGameStart(({ game }) => {
@@ -109,6 +136,9 @@ Empirica.onGameStart(({ game }) => {
   //we'll have 1 round, each task is one stage
 
   const round = game.addRound();
+  console.log(('GAME STARTED'))
+  
+  const drop_array=custom_ordering(treatment['AddDropList'],taskSequence.length,players.length)
 
   _.times(taskSequence.length, i => {
     console.log(i === 0 ? "practice" : i)
@@ -120,9 +150,11 @@ Empirica.onGameStart(({ game }) => {
       duration: game.get('treatment').StageDuration
     });
     stage.set("task", taskSequence[i]);
+    console.log(drop_array[i])
+    stage.set('DropList',drop_array[i]);
   });
 
- 
+ //const starting_pos=[true,false,true]
 
   players.forEach((player, i) => {
     player.set("name", names[i]);
@@ -130,6 +162,7 @@ Empirica.onGameStart(({ game }) => {
     player.set("nameColor", nameColor[i]);
     player.set("cumulativeScore", 0);
     player.set("bonus", 0);
+   // player.set('jefftestcondition', starting_pos[i]);
   });
 });
 
@@ -137,9 +170,12 @@ Empirica.onRoundStart(({ round }) => {});
 
 Empirica.onStageStart(({stage}) => {
   const players = stage.currentGame.players
-  //console.log(stage)
-  //console.debug("Round ", stage.name, "game", stage.currentGame.id, " started");
+  //console.log(players)
+  //console.log("Round ", stage.name, "game", stage.currentGame.id, " started");
   const team = stage.currentGame.get("team");
+  const player_drops = stage.get('DropList')
+ 
+  console.log(player_drops)
   //console.log("is it team?", team);
 
   //initiate the score for this round (because everyone will have the same score, we can save it at the round object
@@ -158,11 +194,17 @@ Empirica.onStageStart(({stage}) => {
   stage.set("intermediateSolutions", []);
 
   //Puts the icons on the deck at the beginning of each stage 
-  const task = stage.get("task");// Changed this to rounds
+  const task = stage.get("task");
   task.students.forEach((student) => {
     stage.set(`student-${student}-room`, "deck");
     stage.set(`student-${student}-dragger`, null);
   });
+  //Determines which player(s) are going to get dropped this round
+  players.forEach((player,i) => {
+    console.log(player_drops[i])
+    player.set("dropcondition",player_drops[i])
+  });
+
 
   // Makes sure each player starts in unsatified
   players.forEach((player) => {
@@ -180,6 +222,7 @@ Empirica.onStageEnded(({ stage }) => {
 
   const currentScore = stage.get("score");
   const optimalScore = stage.get("task").optimal;
+
 
   if (currentScore === optimalScore) {
     if (stage.name !== "practice") {
@@ -276,704 +319,6 @@ Empirica.on("stage", "studentMoved" ,(ctx,{stage, studentMoved}) =>
   stage.set("studentMoved", null)
 }
 )
-
-
-//THERE IS A MUCH BETTER WAY TO DO THIS CURRENTLY BLANKING
-
-
-// Empirica.on("stage", 'student-A-room' ,(ctx,{stage,room}) => 
-// {
-//   const task = stage.get("task");
-//   let assignments = { deck: [] };
-//   task.rooms.forEach((room) => {
-//     assignments[room] = [];
-//   });
-//   task.students.forEach((student) => {
-//     const room = stage.get(`student-${student}-room`);
-//     assignments[room].push(student);
-//   });
-
-//   const violationIds = getViolations(stage, assignments);
-//   stage.set("violatedConstraints", violationIds);
-//   const currentScore =
-//     assignments["deck"].length === 0
-//     ? getScore(task, assignments, violationIds.length)
-//       : 0;
-//   stage.set("score", currentScore || 0);
-
-//   if (currentScore === task.optimal) {
-//     stage.set("optimalFound", true);
-//   }
-//   const preIS= stage.get('intermediateSolutions')
-//   stage.set("intermediateSolutions",preIS.concat( {
-//     solution: assignments,
-//     at: new Date(),
-//     violatedConstraintsIds: violationIds,
-//     nConstraintsViolated: violationIds.length,
-//     score: getScore(task, assignments, violationIds.length),
-//     optimalFound: currentScore === task.optimal,
-//     completeSolution: assignments["deck"].length === 0,
-//     completeSolutionScore: currentScore,
-//   }));
-// }
-// )
-
-// Empirica.on("stage", 'student-B-room' ,(ctx,{stage,room}) => 
-// {
-//   const task = stage.get("task");
-//   let assignments = { deck: [] };
-//   task.rooms.forEach((room) => {
-//     assignments[room] = [];
-//   });
-//   task.students.forEach((student) => {
-//     const room = stage.get(`student-${student}-room`);
-//     assignments[room].push(student);
-//   });
-
-//   const violationIds = getViolations(stage, assignments);
-//   stage.set("violatedConstraints", violationIds);
-//   const currentScore =
-//     assignments["deck"].length === 0
-//     ? getScore(task, assignments, violationIds.length)
-//       : 0;
-//   stage.set("score", currentScore || 0);
-
-//   if (currentScore === task.optimal) {
-//     stage.set("optimalFound", true);
-//   }
-//   const preIS= stage.get('intermediateSolutions')
-//   stage.set("intermediateSolutions",preIS.concat( {
-//     solution: assignments,
-//     at: new Date(),
-//     violatedConstraintsIds: violationIds,
-//     nConstraintsViolated: violationIds.length,
-//     score: getScore(task, assignments, violationIds.length),
-//     optimalFound: currentScore === task.optimal,
-//     completeSolution: assignments["deck"].length === 0,
-//     completeSolutionScore: currentScore,
-//   }));
-// }
-// )
-
-// Empirica.on("stage", 'student-C-room' ,(ctx,{stage,room}) => 
-// {
-//   const task = stage.get("task");
-//   let assignments = { deck: [] };
-//   task.rooms.forEach((room) => {
-//     assignments[room] = [];
-//   });
-//   task.students.forEach((student) => {
-//     const room = stage.get(`student-${student}-room`);
-//     assignments[room].push(student);
-//   });
-
-//   const violationIds = getViolations(stage, assignments);
-//   stage.set("violatedConstraints", violationIds);
-//   const currentScore =
-//     assignments["deck"].length === 0
-//     ? getScore(task, assignments, violationIds.length)
-//       : 0;
-//   stage.set("score", currentScore || 0);
-
-//   if (currentScore === task.optimal) {
-//     stage.set("optimalFound", true);
-//   }
-//   const preIS= stage.get('intermediateSolutions')
-//   stage.set("intermediateSolutions",preIS.concat( {
-//     solution: assignments,
-//     at: new Date(),
-//     violatedConstraintsIds: violationIds,
-//     nConstraintsViolated: violationIds.length,
-//     score: getScore(task, assignments, violationIds.length),
-//     optimalFound: currentScore === task.optimal,
-//     completeSolution: assignments["deck"].length === 0,
-//     completeSolutionScore: currentScore,
-//   }));
-// }
-// )
-
-// Empirica.on("stage", 'student-D-room' ,(ctx,{stage,room}) => 
-// {
-//   const task = stage.get("task");
-//   let assignments = { deck: [] };
-//   task.rooms.forEach((room) => {
-//     assignments[room] = [];
-//   });
-//   task.students.forEach((student) => {
-//     const room = stage.get(`student-${student}-room`);
-//     assignments[room].push(student);
-//   });
-
-//   const violationIds = getViolations(stage, assignments);
-//   stage.set("violatedConstraints", violationIds);
-//   const currentScore =
-//     assignments["deck"].length === 0
-//     ? getScore(task, assignments, violationIds.length)
-//       : 0;
-//   stage.set("score", currentScore || 0);
-
-//   if (currentScore === task.optimal) {
-//     stage.set("optimalFound", true);
-//   }
-//   const preIS= stage.get('intermediateSolutions')
-//   stage.set("intermediateSolutions",preIS.concat( {
-//     solution: assignments,
-//     at: new Date(),
-//     violatedConstraintsIds: violationIds,
-//     nConstraintsViolated: violationIds.length,
-//     score: getScore(task, assignments, violationIds.length),
-//     optimalFound: currentScore === task.optimal,
-//     completeSolution: assignments["deck"].length === 0,
-//     completeSolutionScore: currentScore,
-//   }));
-// }
-// )
-
-// Empirica.on("stage", 'student-E-room' ,(ctx,{stage,room}) => 
-// {
-//   const task = stage.get("task");
-//   let assignments = { deck: [] };
-//   task.rooms.forEach((room) => {
-//     assignments[room] = [];
-//   });
-//   task.students.forEach((student) => {
-//     const room = stage.get(`student-${student}-room`);
-//     assignments[room].push(student);
-//   });
-
-//   const violationIds = getViolations(stage, assignments);
-//   stage.set("violatedConstraints", violationIds);
-//   const currentScore =
-//     assignments["deck"].length === 0
-//     ? getScore(task, assignments, violationIds.length)
-//       : 0;
-//   stage.set("score", currentScore || 0);
-
-//   if (currentScore === task.optimal) {
-//     stage.set("optimalFound", true);
-//   }
-//   const preIS= stage.get('intermediateSolutions')
-//   stage.set("intermediateSolutions",preIS.concat( {
-//     solution: assignments,
-//     at: new Date(),
-//     violatedConstraintsIds: violationIds,
-//     nConstraintsViolated: violationIds.length,
-//     score: getScore(task, assignments, violationIds.length),
-//     optimalFound: currentScore === task.optimal,
-//     completeSolution: assignments["deck"].length === 0,
-//     completeSolutionScore: currentScore,
-//   }));
-// }
-// )
-
-// Empirica.on("stage", 'student-F-room' ,(ctx,{stage,room}) => 
-// {
-//   const task = stage.get("task");
-//   let assignments = { deck: [] };
-//   task.rooms.forEach((room) => {
-//     assignments[room] = [];
-//   });
-//   task.students.forEach((student) => {
-//     const room = stage.get(`student-${student}-room`);
-//     assignments[room].push(student);
-//   });
-
-//   const violationIds = getViolations(stage, assignments);
-//   stage.set("violatedConstraints", violationIds);
-//   const currentScore =
-//     assignments["deck"].length === 0
-//     ? getScore(task, assignments, violationIds.length)
-//       : 0;
-//   stage.set("score", currentScore || 0);
-
-//   if (currentScore === task.optimal) {
-//     stage.set("optimalFound", true);
-//   }
-//   const preIS= stage.get('intermediateSolutions')
-//   stage.set("intermediateSolutions",preIS.concat( {
-//     solution: assignments,
-//     at: new Date(),
-//     violatedConstraintsIds: violationIds,
-//     nConstraintsViolated: violationIds.length,
-//     score: getScore(task, assignments, violationIds.length),
-//     optimalFound: currentScore === task.optimal,
-//     completeSolution: assignments["deck"].length === 0,
-//     completeSolutionScore: currentScore,
-//   }));
-// }
-// )
-
-// Empirica.on("stage", 'student-G-room' ,(ctx,{stage,room}) => 
-// {
-//   const task = stage.get("task");
-//   let assignments = { deck: [] };
-//   task.rooms.forEach((room) => {
-//     assignments[room] = [];
-//   });
-//   task.students.forEach((student) => {
-//     const room = stage.get(`student-${student}-room`);
-//     assignments[room].push(student);
-//   });
-
-//   const violationIds = getViolations(stage, assignments);
-//   stage.set("violatedConstraints", violationIds);
-//   const currentScore =
-//     assignments["deck"].length === 0
-//     ? getScore(task, assignments, violationIds.length)
-//       : 0;
-//   stage.set("score", currentScore || 0);
-
-//   if (currentScore === task.optimal) {
-//     stage.set("optimalFound", true);
-//   }
-//   const preIS= stage.get('intermediateSolutions')
-//   stage.set("intermediateSolutions",preIS.concat( {
-//     solution: assignments,
-//     at: new Date(),
-//     violatedConstraintsIds: violationIds,
-//     nConstraintsViolated: violationIds.length,
-//     score: getScore(task, assignments, violationIds.length),
-//     optimalFound: currentScore === task.optimal,
-//     completeSolution: assignments["deck"].length === 0,
-//     completeSolutionScore: currentScore,
-//   }));
-// }
-// )
-
-// Empirica.on("stage", 'student-H-room' ,(ctx,{stage,room}) => 
-// {
-//   const task = stage.get("task");
-//   let assignments = { deck: [] };
-//   task.rooms.forEach((room) => {
-//     assignments[room] = [];
-//   });
-//   task.students.forEach((student) => {
-//     const room = stage.get(`student-${student}-room`);
-//     assignments[room].push(student);
-//   });
-
-//   const violationIds = getViolations(stage, assignments);
-//   stage.set("violatedConstraints", violationIds);
-//   const currentScore =
-//     assignments["deck"].length === 0
-//     ? getScore(task, assignments, violationIds.length)
-//       : 0;
-//   stage.set("score", currentScore || 0);
-
-//   if (currentScore === task.optimal) {
-//     stage.set("optimalFound", true);
-//   }
-//   const preIS= stage.get('intermediateSolutions')
-//   stage.set("intermediateSolutions",preIS.concat( {
-//     solution: assignments,
-//     at: new Date(),
-//     violatedConstraintsIds: violationIds,
-//     nConstraintsViolated: violationIds.length,
-//     score: getScore(task, assignments, violationIds.length),
-//     optimalFound: currentScore === task.optimal,
-//     completeSolution: assignments["deck"].length === 0,
-//     completeSolutionScore: currentScore,
-//   }));
-// }
-// )
-
-// Empirica.on("stage", 'student-I-room' ,(ctx,{stage,room}) => 
-// {
-//   const task = stage.get("task");
-//   let assignments = { deck: [] };
-//   task.rooms.forEach((room) => {
-//     assignments[room] = [];
-//   });
-//   task.students.forEach((student) => {
-//     const room = stage.get(`student-${student}-room`);
-//     assignments[room].push(student);
-//   });
-
-//   const violationIds = getViolations(stage, assignments);
-//   stage.set("violatedConstraints", violationIds);
-//   const currentScore =
-//     assignments["deck"].length === 0
-//     ? getScore(task, assignments, violationIds.length)
-//       : 0;
-//   stage.set("score", currentScore || 0);
-
-//   if (currentScore === task.optimal) {
-//     stage.set("optimalFound", true);
-//   }
-//   const preIS= stage.get('intermediateSolutions')
-//   stage.set("intermediateSolutions",preIS.concat( {
-//     solution: assignments,
-//     at: new Date(),
-//     violatedConstraintsIds: violationIds,
-//     nConstraintsViolated: violationIds.length,
-//     score: getScore(task, assignments, violationIds.length),
-//     optimalFound: currentScore === task.optimal,
-//     completeSolution: assignments["deck"].length === 0,
-//     completeSolutionScore: currentScore,
-//   }));
-// }
-// )
-
-// Empirica.on("stage", 'student-J-room' ,(ctx,{stage,room}) => 
-// {
-//   const task = stage.get("task");
-//   let assignments = { deck: [] };
-//   task.rooms.forEach((room) => {
-//     assignments[room] = [];
-//   });
-//   task.students.forEach((student) => {
-//     const room = stage.get(`student-${student}-room`);
-//     assignments[room].push(student);
-//   });
-
-//   const violationIds = getViolations(stage, assignments);
-//   stage.set("violatedConstraints", violationIds);
-//   const currentScore =
-//     assignments["deck"].length === 0
-//     ? getScore(task, assignments, violationIds.length)
-//       : 0;
-//   stage.set("score", currentScore || 0);
-
-//   if (currentScore === task.optimal) {
-//     stage.set("optimalFound", true);
-//   }
-//   const preIS= stage.get('intermediateSolutions')
-//   stage.set("intermediateSolutions",preIS.concat( {
-//     solution: assignments,
-//     at: new Date(),
-//     violatedConstraintsIds: violationIds,
-//     nConstraintsViolated: violationIds.length,
-//     score: getScore(task, assignments, violationIds.length),
-//     optimalFound: currentScore === task.optimal,
-//     completeSolution: assignments["deck"].length === 0,
-//     completeSolutionScore: currentScore,
-//   }));
-// }
-// )
-
-// Empirica.on("stage", 'student-K-room' ,(ctx,{stage,room}) => 
-// {
-//   const task = stage.get("task");
-//   let assignments = { deck: [] };
-//   task.rooms.forEach((room) => {
-//     assignments[room] = [];
-//   });
-//   task.students.forEach((student) => {
-//     const room = stage.get(`student-${student}-room`);
-//     assignments[room].push(student);
-//   });
-
-//   const violationIds = getViolations(stage, assignments);
-//   stage.set("violatedConstraints", violationIds);
-//   const currentScore =
-//     assignments["deck"].length === 0
-//     ? getScore(task, assignments, violationIds.length)
-//       : 0;
-//   stage.set("score", currentScore || 0);
-
-//   if (currentScore === task.optimal) {
-//     stage.set("optimalFound", true);
-//   }
-//   const preIS= stage.get('intermediateSolutions')
-//   stage.set("intermediateSolutions",preIS.concat( {
-//     solution: assignments,
-//     at: new Date(),
-//     violatedConstraintsIds: violationIds,
-//     nConstraintsViolated: violationIds.length,
-//     score: getScore(task, assignments, violationIds.length),
-//     optimalFound: currentScore === task.optimal,
-//     completeSolution: assignments["deck"].length === 0,
-//     completeSolutionScore: currentScore,
-//   }));
-// }
-// )
-
-// Empirica.on("stage", 'student-L-room' ,(ctx,{stage,room}) => 
-// {
-//   const task = stage.get("task");
-//   let assignments = { deck: [] };
-//   task.rooms.forEach((room) => {
-//     assignments[room] = [];
-//   });
-//   task.students.forEach((student) => {
-//     const room = stage.get(`student-${student}-room`);
-//     assignments[room].push(student);
-//   });
-
-//   const violationIds = getViolations(stage, assignments);
-//   stage.set("violatedConstraints", violationIds);
-//   const currentScore =
-//     assignments["deck"].length === 0
-//     ? getScore(task, assignments, violationIds.length)
-//       : 0;
-//   stage.set("score", currentScore || 0);
-
-//   if (currentScore === task.optimal) {
-//     stage.set("optimalFound", true);
-//   }
-//   const preIS= stage.get('intermediateSolutions')
-//   stage.set("intermediateSolutions",preIS.concat( {
-//     solution: assignments,
-//     at: new Date(),
-//     violatedConstraintsIds: violationIds,
-//     nConstraintsViolated: violationIds.length,
-//     score: getScore(task, assignments, violationIds.length),
-//     optimalFound: currentScore === task.optimal,
-//     completeSolution: assignments["deck"].length === 0,
-//     completeSolutionScore: currentScore,
-//   }));
-// }
-// )
-
-// Empirica.on("stage", 'student-M-room' ,(ctx,{stage,room}) => 
-// {
-//   const task = stage.get("task");
-//   let assignments = { deck: [] };
-//   task.rooms.forEach((room) => {
-//     assignments[room] = [];
-//   });
-//   task.students.forEach((student) => {
-//     const room = stage.get(`student-${student}-room`);
-//     assignments[room].push(student);
-//   });
-
-//   const violationIds = getViolations(stage, assignments);
-//   stage.set("violatedConstraints", violationIds);
-//   const currentScore =
-//     assignments["deck"].length === 0
-//     ? getScore(task, assignments, violationIds.length)
-//       : 0;
-//   stage.set("score", currentScore || 0);
-
-//   if (currentScore === task.optimal) {
-//     stage.set("optimalFound", true);
-//   }
-//   const preIS= stage.get('intermediateSolutions')
-//   stage.set("intermediateSolutions",preIS.concat( {
-//     solution: assignments,
-//     at: new Date(),
-//     violatedConstraintsIds: violationIds,
-//     nConstraintsViolated: violationIds.length,
-//     score: getScore(task, assignments, violationIds.length),
-//     optimalFound: currentScore === task.optimal,
-//     completeSolution: assignments["deck"].length === 0,
-//     completeSolutionScore: currentScore,
-//   }));
-// }
-// )
-
-// Empirica.on("stage", 'student-N-room' ,(ctx,{stage,room}) => 
-// {
-//   const task = stage.get("task");
-//   let assignments = { deck: [] };
-//   task.rooms.forEach((room) => {
-//     assignments[room] = [];
-//   });
-//   task.students.forEach((student) => {
-//     const room = stage.get(`student-${student}-room`);
-//     assignments[room].push(student);
-//   });
-
-//   const violationIds = getViolations(stage, assignments);
-//   stage.set("violatedConstraints", violationIds);
-//   const currentScore =
-//     assignments["deck"].length === 0
-//     ? getScore(task, assignments, violationIds.length)
-//       : 0;
-//   stage.set("score", currentScore || 0);
-
-//   if (currentScore === task.optimal) {
-//     stage.set("optimalFound", true);
-//   }
-//   const preIS= stage.get('intermediateSolutions')
-//   stage.set("intermediateSolutions",preIS.concat( {
-//     solution: assignments,
-//     at: new Date(),
-//     violatedConstraintsIds: violationIds,
-//     nConstraintsViolated: violationIds.length,
-//     score: getScore(task, assignments, violationIds.length),
-//     optimalFound: currentScore === task.optimal,
-//     completeSolution: assignments["deck"].length === 0,
-//     completeSolutionScore: currentScore,
-//   }));
-// }
-// )
-
-// Empirica.on("stage", 'student-O-room' ,(ctx,{stage,room}) => 
-// {
-//   const task = stage.get("task");
-//   let assignments = { deck: [] };
-//   task.rooms.forEach((room) => {
-//     assignments[room] = [];
-//   });
-//   task.students.forEach((student) => {
-//     const room = stage.get(`student-${student}-room`);
-//     assignments[room].push(student);
-//   });
-
-//   const violationIds = getViolations(stage, assignments);
-//   stage.set("violatedConstraints", violationIds);
-//   const currentScore =
-//     assignments["deck"].length === 0
-//     ? getScore(task, assignments, violationIds.length)
-//       : 0;
-//   stage.set("score", currentScore || 0);
-
-//   if (currentScore === task.optimal) {
-//     stage.set("optimalFound", true);
-//   }
-//   const preIS= stage.get('intermediateSolutions')
-//   stage.set("intermediateSolutions",preIS.concat( {
-//     solution: assignments,
-//     at: new Date(),
-//     violatedConstraintsIds: violationIds,
-//     nConstraintsViolated: violationIds.length,
-//     score: getScore(task, assignments, violationIds.length),
-//     optimalFound: currentScore === task.optimal,
-//     completeSolution: assignments["deck"].length === 0,
-//     completeSolutionScore: currentScore,
-//   }));
-// }
-// )
-
-// Empirica.on("stage", 'student-P-room' ,(ctx,{stage,room}) => 
-// {
-//   const task = stage.get("task");
-//   let assignments = { deck: [] };
-//   task.rooms.forEach((room) => {
-//     assignments[room] = [];
-//   });
-//   task.students.forEach((student) => {
-//     const room = stage.get(`student-${student}-room`);
-//     assignments[room].push(student);
-//   });
-
-//   const violationIds = getViolations(stage, assignments);
-//   stage.set("violatedConstraints", violationIds);
-//   const currentScore =
-//     assignments["deck"].length === 0
-//     ? getScore(task, assignments, violationIds.length)
-//       : 0;
-//   stage.set("score", currentScore || 0);
-
-//   if (currentScore === task.optimal) {
-//     stage.set("optimalFound", true);
-//   }
-//   const preIS= stage.get('intermediateSolutions')
-//   stage.set("intermediateSolutions",preIS.concat( {
-//     solution: assignments,
-//     at: new Date(),
-//     violatedConstraintsIds: violationIds,
-//     nConstraintsViolated: violationIds.length,
-//     score: getScore(task, assignments, violationIds.length),
-//     optimalFound: currentScore === task.optimal,
-//     completeSolution: assignments["deck"].length === 0,
-//     completeSolutionScore: currentScore,
-//   }));
-// }
-// )
-
-// Empirica.on("stage", 'student-Q-room' ,(ctx,{stage,room}) => 
-// {
-//   const task = stage.get("task");
-//   let assignments = { deck: [] };
-//   task.rooms.forEach((room) => {
-//     assignments[room] = [];
-//   });
-//   task.students.forEach((student) => {
-//     const room = stage.get(`student-${student}-room`);
-//     assignments[room].push(student);
-//   });
-
-//   const violationIds = getViolations(stage, assignments);
-//   stage.set("violatedConstraints", violationIds);
-//   const currentScore =
-//     assignments["deck"].length === 0
-//     ? getScore(task, assignments, violationIds.length)
-//       : 0;
-//   stage.set("score", currentScore || 0);
-
-//   if (currentScore === task.optimal) {
-//     stage.set("optimalFound", true);
-//   }
-//   const preIS= stage.get('intermediateSolutions')
-//   stage.set("intermediateSolutions",preIS.concat( {
-//     solution: assignments,
-//     at: new Date(),
-//     violatedConstraintsIds: violationIds,
-//     nConstraintsViolated: violationIds.length,
-//     score: getScore(task, assignments, violationIds.length),
-//     optimalFound: currentScore === task.optimal,
-//     completeSolution: assignments["deck"].length === 0,
-//     completeSolutionScore: currentScore,
-//   }));
-// }
-// )
-
-// Empirica.on("stage", 'student-R-room' ,(ctx,{stage,room}) => 
-// {
-//   const task = stage.get("task");
-//   let assignments = { deck: [] };
-//   task.rooms.forEach((room) => {
-//     assignments[room] = [];
-//   });
-//   task.students.forEach((student) => {
-//     const room = stage.get(`student-${student}-room`);
-//     assignments[room].push(student);
-//   });
-
-//   const violationIds = getViolations(stage, assignments);
-//   stage.set("violatedConstraints", violationIds);
-//   const currentScore =
-//     assignments["deck"].length === 0
-//     ? getScore(task, assignments, violationIds.length)
-//       : 0;
-//   stage.set("score", currentScore || 0);
-
-//   if (currentScore === task.optimal) {
-//     stage.set("optimalFound", true);
-//   }
-//   const preIS= stage.get('intermediateSolutions')
-//   stage.set("intermediateSolutions",preIS.concat( {
-//     solution: assignments,
-//     at: new Date(),
-//     violatedConstraintsIds: violationIds,
-//     nConstraintsViolated: violationIds.length,
-//     score: getScore(task, assignments, violationIds.length),
-//     optimalFound: currentScore === task.optimal,
-//     completeSolution: assignments["deck"].length === 0,
-//     completeSolutionScore: currentScore,
-//   }));
-// }
-// )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
