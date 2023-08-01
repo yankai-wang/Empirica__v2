@@ -26,6 +26,19 @@ export function Student ({ student }) {
       e.preventDefault();
       return;
     }
+
+    // check the unit of the player and the student to see if they match
+    // ADD TREATMENT HERE
+    const playerUnit = player.get("unit");
+    const task = stage.get("task");
+    if (!task.division[playerUnit].includes(student)) {
+      // pop up a message saying that the student is out of scope
+      alert("This student is out of your scope. Please only drag the students assigned to you.");
+      e.preventDefault();
+      return;
+    }
+    // TREATMENT ENDS HERE
+
     stage.set(`student-${student}-dragger`, player.id);
     // stage.append("log", {
     //   verb: "draggingStudent",
@@ -86,6 +99,28 @@ export function Student ({ student }) {
     const dragger = stage.get(`student-${student}-dragger`);
     const style = {};
     const cursorStyle = { cursor: null };
+
+    // if (game.treatment.nudge) { // ADD TREATMENT HERE
+
+      // in the nudge treatment, the students are colored according to the division of labor
+      // get the divisionColor of the student
+      // const divisionColor = game.get(divisionColors)
+      // but this can't deal with the case where the student belongs to multiple divisions
+      // maybe just highlight students belonging to the player's division?
+      // fill the student with the divisionColor
+      // style.fill = divisionColor;
+
+      const playerUnit = player.get("unit");
+      const task = stage.get("task");
+      if (task.division[playerUnit].includes(student)) {
+        style.fill = game.get("divisionColor")[playerUnit]
+      }
+
+
+      // console.log(style)
+    // } // TREATMENT ENDS HERE
+
+
     if (dragger) {
       const playerDragging = players.find((p) => p.id === dragger);
       if (playerDragging) {

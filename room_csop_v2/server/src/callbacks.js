@@ -78,6 +78,20 @@ Empirica.onGameStart(({ game }) => {
     "#QW7MI9",
     "#EB8TWj",
   ]; // similar to the color of the avatar
+  const divisionColor = [
+    "#B0DAFF",
+    "#B0DAFF",
+    "#B0DAFF",
+    "#B0DAFF",
+    "#A4D0A4",
+    "#A4D0A4",
+    "#A4D0A4",
+    "#A4D0A4",
+    "#FCC8D1",
+    "#FCC8D1",
+    "#FCC8D1",
+    "#FCC8D1"
+  ];
 
 
   /// ADDING IN THE MAIN.jS Code 
@@ -94,6 +108,9 @@ Empirica.onGameStart(({ game }) => {
   game.set("nOptimalSolutions", 0); // will count how many times they've got the optimal answer
   game.set("justStarted", true); // I use this to play the sound on the UI when the game starts
   game.set("team", game.players.length > 1);
+
+  // set the color of the division of labor
+  game.set("divisionColor", divisionColor);
   
 
 
@@ -130,6 +147,13 @@ Empirica.onGameStart(({ game }) => {
     player.set("nameColor", nameColor[i]);
     player.set("cumulativeScore", 0);
     player.set("bonus", 0);
+
+    // set the unit (the division of labor) of the player
+    if (i % 2 === 0) {
+      player.set("unit", 1);
+    } else {
+      player.set("unit", 2);
+    }
   });
 });
 
