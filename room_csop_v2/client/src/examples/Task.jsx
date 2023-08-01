@@ -241,8 +241,8 @@ export function Task () {
 
           <div className="response">
             {/* temporarily commented out for testing */}
-            {/* <TimedButton_1 */}
-            <Button
+            <TimedButton_1
+            // <Button
               stage={stage}
               player={player}
               // activateAt={game.get('treatment').StageDuration - 5}
@@ -250,8 +250,8 @@ export function Task () {
               onClick={(e) => handleSatisfaction(e, false)}
             />
 
-            {/* <TimedButton_2 */} 
-            <Button
+            <TimedButton_2 
+            // <Button
               stage={stage}
               player={player}
               // activateAt={game.get('treatment').StageDuration - 5}

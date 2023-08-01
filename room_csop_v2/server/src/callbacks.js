@@ -232,6 +232,8 @@ Empirica.onGameEnded(({ game }) => {
 
 Empirica.on("stage", "studentMoved" ,(ctx,{stage, studentMoved}) => 
 {
+  if (!studentMoved) return;
+
   const task = stage.get("task");
   let assignments = { deck: [] };
   task.rooms.forEach((room) => {

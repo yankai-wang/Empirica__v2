@@ -57,7 +57,7 @@ export function MoreAboutBonus ({previous,next }) {
           ) : null}
 
           <p>
-            There are two parts of the bonus that you will have opportunity to
+            You will get a base pay of <strong>$2</strong> for participating. There are two parts of the bonus that you will have opportunity to
             earn in each task:
           </p>
 
@@ -66,7 +66,8 @@ export function MoreAboutBonus ({previous,next }) {
             positive, no matter whether your answer is the BEST possible
             assignment or not. The exchange rate is{" "}
             <strong style={{ color: "red" }}>
-              {Math.round(1 / treatment.conversionRate)} game points = $1 bonus
+              {/* {Math.round(1 / treatment.conversionRate)}  */}400
+              game points = $1 bonus
             </strong>.
           </p>
 
@@ -74,19 +75,21 @@ export function MoreAboutBonus ({previous,next }) {
             2. <strong>"optimal assignment bonus" </strong>: When your answer is
             the BEST possible assignment, you get{" "}
             <strong style={{ color: "red" }}>
-              an additional bonus of ${treatment.optimalSolutionBonus} in that
+              an additional bonus of 
+              {/* ${treatment.optimalSolutionBonus} */} $2
+               in that
               task
             </strong>.
           </p>
 
           <p>
-            Therefore,
+            Therefore,&nbsp;
             <strong>
               big part of the bonus is for finding the BEST possible
               assignment{" "}
             </strong>{" "}
             (i.e., "optimal assignment bonus", which can be up to $5 total).
-            Also,
+            Also,&nbsp;
             <strong>
               you can earn more game points (i.e., more performance-based
               bonuses) from the difficult tasks{" "}
