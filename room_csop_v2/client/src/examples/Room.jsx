@@ -58,13 +58,26 @@ export function Room ({ room, isDeck })  {
       }));
       return;
     }
-    //console.log(`student-${student}-room `+ room)
     
     stage.set(`student-${student}-room`, room); // THIS IS WHERE THE SECOND CALL IS handeled
-    stage.set("studentMoved", `student-${student}-room`); // then the "On" function in the server side will know the change
 
+    // get data used in the on function here so there's no delay
+    const task = stage.get("task");
+    let assignments = { deck: [] };
+    task.rooms.forEach((room) => {
+      assignments[room] = [];
+    });
+  
+    //find the rooms for each player
+    task.students.forEach((student) => {
+      const room = stage.get(`student-${student}-room`);
+      assignments[room].push(student);
+    });
 
+    const preIS= stage.get('intermediateSolutions')
 
+    stage.set("studentMoved", {task, assignments, preIS}); // then the "On" function in the server side will know the change
+    
     const prelog = stage.get("log");
     stage.set("log", prelog.concat({
       verb: "movedStudent",
