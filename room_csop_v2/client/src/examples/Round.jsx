@@ -33,8 +33,6 @@ export function Round() {
 
   return (
     <div className="round">
-      {console.log(player.get("dropcondition"))}
-      {console.log(player.get("satisfaction"))}
       {player.get("dropcondition") && <Task />}
       {!player.get("dropcondition") && <JellyBeans />}
       {/*game.player.length is a better check for social interaction than 'game.treatment.playerCount > 1' because of the lobby --> ignor settings*/}
