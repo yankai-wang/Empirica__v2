@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Mention, MentionsInput } from "react-mentions";
 import {
   usePlayer,
   usePlayers,
@@ -16,11 +17,36 @@ import sound from "../experiment/unsure.mp3"
   // filter = new Filter();
 
 export function ChatLog ({messages}) {
-  const [state, setState] = useState({ comment: "", time: 0 });
-  const { comment } = state;
+  // const [state, setState] = useState({ comment: "", time: 0 });
+  const [value, setValue] = useState("");
+  const comment = value;
+  // const { comment } = state;
   const player = usePlayer();
   const stage = useStage();
   const game = useGame();
+  const players = usePlayers();
+
+  // const users = [
+  //   {
+  //     id: "isaac",
+  //     display: "Isaac Newton",
+  //   },
+  //   {
+  //     id: "sam",
+  //     display: "Sam Victor",
+  //   },
+  //   {
+  //     id: "emma",
+  //     display: "emmanuel@nobody.com",
+  //   },
+  // ];
+
+  // generate a list of users, in which the id is the player's id and the display is the player's nameColor
+  const users = players.map((player) => ({
+    id: player.id,
+    display: player.get("name"),
+  }));
+
 
   function handleChange (e) {
     console.log("handleChange");
@@ -32,7 +58,8 @@ export function ChatLog ({messages}) {
     console.log("handleSubmit");
     e.preventDefault();
     // const text = filter.clean(state.comment.trim());
-    const text = state.comment.trim();
+    // const text = state.comment.trim();
+    const text = comment.trim();
 
     // console.log("submitted");
     // console.log(filter.clean("Don't be an ash0le"));
@@ -54,7 +81,8 @@ export function ChatLog ({messages}) {
         // at: moment(TimeSync.serverTime(null, 1000)), TODO: deal with time
         //at: moment(Date.now()),
       }));
-      setState({ comment: "", time: 0 });
+      // setState({ comment: "", time: 0 });
+      setValue("");
     //  console.log("set state", stage.get("chat"))
     }
   };
@@ -67,15 +95,26 @@ export function ChatLog ({messages}) {
       <Messages messages={messages} player={player} game={game}/>
       <form onSubmit={(e) => handleSubmit(e)}>
         <div className="bp3-control-group">
-          <input
-            name="comment"
-            type="text"
-            className="bp3-input bp3-fill"
+          <MentionsInput
+            // name="comment"
+            // type="text"
+            // className="bp3-input bp3-fill"
             placeholder="Enter chat message"
-            value={comment}
-            onChange={(e) => handleChange(e)}
-            autoComplete="off"
-          />
+            // value={comment}
+            value={value}
+            // onChange={(e) => handleChange(e)}
+            onChange={(e) => setValue(e.target.value)}
+            // autoComplete="off"
+            style={{margin: "1em 0"}}
+          >
+            <Mention
+              data={users}
+              markup="@__display__"
+              appendSpaceOnAdd={true}
+              style={{color: "blue", position: "relative", z_index: 1, text_decoration: "underline"}}
+            />
+          </MentionsInput>
+
           <button type="submit" className="bp3-button bp3-intent-primary">
             Send
           </button>
@@ -91,22 +130,15 @@ function Messages ({ messages, player, game }) {
   // get a reference to the messages div, so we can scroll it
   const messagesEl = useRef(null);
 
-  const scrollToBottom = () => {
-    messagesEl.current?.scrollIntoView({ behavior: "smooth" })
-  }
-
   // useEffect seems to be an equivalent of componentDidMount
   useEffect(() => {
-    // messagesEl.scrollTop = messagesEl.scrollHeight;
-    // messagesEl.current?.scrollIntoView({ behavior: "smooth" })
-    scrollToBottom()
+    messagesEl.current.scrollTop = messagesEl.current.scrollHeight;
   }, []);
   
   // scroll and play sound when new message is added, detected by change in messages.length
   useEffect(() => {
-    // messagesEl.scrollTop = messagesEl.scrollHeight;
-    // messagesEl.current?.scrollIntoView({ behavior: "smooth" })
-    scrollToBottom()
+    console.log(messages)
+    messagesEl.current.scrollTop = messagesEl.current.scrollHeight;
     // play sound only if the message is from the same unit
     if (game.get("treatment").dolMessage && messages.at(-1).subject.get("unit") !== player.get("unit")) {
       return;
