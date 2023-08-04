@@ -91,22 +91,14 @@ function Messages ({ messages, player, game }) {
   // get a reference to the messages div, so we can scroll it
   const messagesEl = useRef(null);
 
-  const scrollToBottom = () => {
-    messagesEl.current?.scrollIntoView({ behavior: "smooth" })
-  }
-
   // useEffect seems to be an equivalent of componentDidMount
   useEffect(() => {
-    // messagesEl.scrollTop = messagesEl.scrollHeight;
-    // messagesEl.current?.scrollIntoView({ behavior: "smooth" })
-    scrollToBottom()
+    messagesEl.current.scrollTop = messagesEl.current.scrollHeight;
   }, []);
   
   // scroll and play sound when new message is added, detected by change in messages.length
   useEffect(() => {
-    // messagesEl.scrollTop = messagesEl.scrollHeight;
-    // messagesEl.current?.scrollIntoView({ behavior: "smooth" })
-    scrollToBottom()
+    messagesEl.current.scrollTop = messagesEl.current.scrollHeight;
     // play sound only if the message is from the same unit
     if (game.get("treatment").dolMessage && messages.at(-1).subject.get("unit") !== player.get("unit")) {
       return;
