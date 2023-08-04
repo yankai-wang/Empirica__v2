@@ -16,6 +16,11 @@ export const stepOneData = [
     difficulty: "Training - Hard",
     students: ["A", "B", "C", "D", "E", "F", "G", "H"],
     rooms: [101, 102, 103, 104, 105],
+    division: {
+      1: ["A", "B", "C", "D"],
+      2: ["E", "F"],
+      3: ["G", "H"]
+    },
     constraints: [
       {
         _id: 0,
@@ -55,6 +60,11 @@ export const stepOneData = [
     difficulty: "Easy",
     students: ["A", "B", "C", "D", "E", "F"],
     rooms: [101, 102, 103, 104],
+    division: {
+      1: ["A", "B"],
+      2: ["E", "F"],
+      3: ["C", "D"]
+    },
     constraints: [
       {
         _id: 0,
@@ -90,6 +100,11 @@ export const stepOneData = [
     difficulty: "Hard",
     students: ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
     rooms: [101, 102, 103, 104, 105, 106],
+    division: {
+      1: ["A", "B"],
+      2: ["E", "F", "G", "H", "I"],
+      3: ["C", "D"]
+    },
     constraints: [
       {
         _id: 0,
@@ -148,6 +163,11 @@ export const stepOneData = [
     difficulty: "Easy",
     students: ["A", "B", "C", "D", "E", "F"],
     rooms: [101, 102, 103, 104],
+    division: {
+      1: ["A", "B"],
+      2: ["E", "F"],
+      3: ["C", "D"]
+    },
     constraints: [
       {
         _id: 0,
@@ -178,6 +198,11 @@ export const stepOneData = [
     difficulty: "Hard",
     students: ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
     rooms: [101, 102, 103, 104, 105, 106],
+    division: {
+      1: ["A", "B"],
+      2: ["E", "F", "G", "H", "I"],
+      3: ["C", "D"]
+    },
     constraints: [
       {
         _id: 0,
@@ -236,6 +261,11 @@ export const stepOneData = [
     difficulty: "Easy",
     students: ["A", "B", "C", "D", "E", "F"],
     rooms: [101, 102, 103, 104],
+    division: {
+      1: ["A", "B"],
+      2: ["E", "F"],
+      3: ["C", "D"]
+    },
     constraints: [
       {
         _id: 0,
@@ -269,6 +299,11 @@ export const stepTwoData = [
     difficulty: "Training - Hard",
     students: ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
     rooms: [101, 102, 103, 104, 105, 106],
+    division: {
+      1: ["A", "B"],
+      2: ["E", "F", "G", "H", "I"],
+      3: ["C", "D"]
+    },
     constraints: [
       {
         _id: 0,
@@ -322,6 +357,11 @@ export const stepTwoData = [
     difficulty: "Easy",
     students: ["A", "B", "C", "D", "E", "F"],
     rooms: [101, 102, 103, 104],
+    division: {
+      1: ["A", "B"],
+      2: ["E", "F"],
+      3: ["C", "D"]
+    },
     constraints: [
       {
         _id: 0,
@@ -356,6 +396,11 @@ export const stepTwoData = [
     difficulty: "Medium",
     students: ["A", "B", "C", "D", "E", "F", "G", "H"],
     rooms: [101, 102, 103, 104, 105],
+    division: {
+      1: ["A", "B"],
+      2: ["E", "F", "G", "H"],
+      3: ["C", "D"]
+    },
     constraints: [
       {
         _id: 0,
@@ -394,6 +439,11 @@ export const stepTwoData = [
     difficulty: "Hard",
     students: ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
     rooms: [101, 102, 103, 104, 105, 106],
+    division: {
+      1: ["A", "B"],
+      2: ["E", "F", "G", "H", "I"],
+      3: ["C", "D"]
+    },
     constraints: [
       {
         _id: 0,
@@ -471,6 +521,11 @@ export const stepTwoData = [
     difficulty: "Very Hard",
     students: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"],
     rooms: [101, 102, 103, 104, 105, 106, 107],
+    division: {
+      1: ["A", "B"],
+      2: ["E", "F", "G", "H", "I"],
+      3: ["C", "D", "J", "K", "L"]
+    },
     constraints: [
       {
         _id: 0,
@@ -736,6 +791,11 @@ export const stepTwoData = [
       "R"
     ],
     rooms: [101, 102, 103, 104, 105, 106, 107, 108],
+    division: {
+      1: ["A", "B", "M", "N", "O", "P", "Q", "R"],
+      2: ["E", "F", "G", "H", "I"],
+      3: ["C", "D", "J", "K", "L"]
+    },
     constraints: [
       {
         _id: 0,

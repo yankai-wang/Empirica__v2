@@ -17,6 +17,10 @@ import sound from "../experiment/unsure.mp3"
 
 export function ChatLog ({messages}) {
   const [state, setState] = useState({ comment: "", time: 0 });
+  const { comment } = state;
+  const player = usePlayer();
+  const stage = useStage();
+  const game = useGame();
 
   function handleChange (e) {
     console.log("handleChange");
@@ -55,15 +59,12 @@ export function ChatLog ({messages}) {
     }
   };
 
-  const { comment } = state;
-  const player = usePlayer();
-  const stage = useStage();
 
   //console.log("not here?")
 
   return (
     <div className="chat bp3-card">
-      <Messages messages={messages} player={player} />
+      <Messages messages={messages} player={player} game={game}/>
       <form onSubmit={(e) => handleSubmit(e)}>
         <div className="bp3-control-group">
           <input
@@ -85,22 +86,31 @@ export function ChatLog ({messages}) {
   
 }
 
-const chatSound = new Audio(sound);
-function Messages ({ messages, player }) {
-
-  //console.log("messages", messages);
+function Messages ({ messages, player, game }) {
+  const chatSound = new Audio(sound);
   // get a reference to the messages div, so we can scroll it
   const messagesEl = useRef(null);
 
+  const scrollToBottom = () => {
+    messagesEl.current?.scrollIntoView({ behavior: "smooth" })
+  }
+
   // useEffect seems to be an equivalent of componentDidMount
   useEffect(() => {
-    messagesEl.scrollTop = messagesEl.scrollHeight;
+    // messagesEl.scrollTop = messagesEl.scrollHeight;
+    // messagesEl.current?.scrollIntoView({ behavior: "smooth" })
+    scrollToBottom()
   }, []);
   
   // scroll and play sound when new message is added, detected by change in messages.length
   useEffect(() => {
-    // console.log("here?")
-    messagesEl.scrollTop = messagesEl.scrollHeight;
+    // messagesEl.scrollTop = messagesEl.scrollHeight;
+    // messagesEl.current?.scrollIntoView({ behavior: "smooth" })
+    scrollToBottom()
+    // play sound only if the message is from the same unit
+    if (game.get("treatment").dolMessage && messages.at(-1).subject.get("unit") !== player.get("unit")) {
+      return;
+    }
     chatSound.play();
   }, [messages.length]);
     
@@ -110,11 +120,15 @@ function Messages ({ messages, player }) {
         <div className="empty">No messages yet...</div>
       ) : null}
       {messages.map((message, i) => (
+        // only show messages from players in the same unit
+        game.get("treatment").dolMessage && message.subject.get("unit") !== player.get("unit") ? (
+          null ) : (
         <Message
           key={i}
           message={message}
           self={message.subject ? player.id === message.subject.id : null}
         />
+        )
       ))}
     </div>
   );
