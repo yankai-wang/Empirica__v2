@@ -153,6 +153,7 @@ Empirica.onGameStart(({ game }) => {
       player.set("unit", 1);
     } else {
       player.set("unit", 2);
+      // player.set("unit", 1); // for testing
     }
   });
 });

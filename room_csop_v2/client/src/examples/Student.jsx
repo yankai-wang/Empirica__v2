@@ -28,16 +28,16 @@ export function Student ({ student }) {
     }
 
     // check the unit of the player and the student to see if they match
-    // ADD TREATMENT HERE
-    const playerUnit = player.get("unit");
-    const task = stage.get("task");
-    if (!task.division[playerUnit].includes(student)) {
-      // pop up a message saying that the student is out of scope
-      alert("This student is out of your scope. Please only drag the students assigned to you.");
-      e.preventDefault();
-      return;
+    if (game.get('treatment').dolMove) {
+      const playerUnit = player.get("unit");
+      const task = stage.get("task");
+      if (!task.division[playerUnit].includes(student)) {
+        // pop up a message saying that the student is out of scope
+        alert("This student is out of your scope. Please only drag the students assigned to you.");
+        e.preventDefault();
+        return;
+      }
     }
-    // TREATMENT ENDS HERE
 
     stage.set(`student-${student}-dragger`, player.id);
     // stage.append("log", {
@@ -100,7 +100,7 @@ export function Student ({ student }) {
     const style = {};
     const cursorStyle = { cursor: null };
 
-    // if (game.treatment.nudge) { // ADD TREATMENT HERE
+    if (game.get('treatment').dolHighlight) { // ADD TREATMENT HERE
 
       // in the nudge treatment, the students are colored according to the division of labor
       // get the divisionColor of the student
@@ -115,10 +115,7 @@ export function Student ({ student }) {
       if (task.division[playerUnit].includes(student)) {
         style.fill = game.get("divisionColor")[playerUnit]
       }
-
-
-      // console.log(style)
-    // } // TREATMENT ENDS HERE
+    } // TREATMENT ENDS HERE
 
 
     if (dragger) {

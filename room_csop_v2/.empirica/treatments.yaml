@@ -11,6 +11,31 @@ factors:
     - name: 5min
       values:
         - value: 300
+    - name: dolHighlight
+      desc: 'whether highlight (single color) the students that participants can control based on their division of labor'
+      values:
+        - value: true
+        - value: false
+    - name: dolMove
+      desc: 'division of labor based on the students that participants can move'
+      values:
+        - value: true
+        - value: false
+    - name: dolConstraint
+      desc: 'only show constraints of the students that participants can control based on their division of labor'
+      values:
+        - value: true
+        - value: false
+    - name: dolPayoff
+      desc: 'only show payoff of the students that participants can control based on their division of labor'
+      values:
+        - value: true
+        - value: false
+    - name: dolMessage
+      desc: 'only show message from players that share the same unit'
+      values:
+        - value: true
+        - value: false
     - name: TimelordName
       values:
         - value: James
@@ -63,3 +88,15 @@ treatments:
         playerCount: 2
         shuffleTaskOrder: true
         stageDuration: 300
+    - name: dol_test
+      factors:
+        StageDuration: 10000
+        nRounds: 3
+        playerCount: 3
+        shuffleTaskOrder: true
+        stageDuration: 300
+        dolHighlight: true
+        dolMove: true
+        dolConstraint: true
+        dolPayoff: true
+        dolMessage: true
