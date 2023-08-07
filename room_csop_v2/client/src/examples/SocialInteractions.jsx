@@ -77,14 +77,14 @@ export function SocialInteractions () {
     ...rest
   }));
 
-
+  console.log(otherPlayers)
   //HERE IS WHERE WE MAKE THE CHAT LOOK BETTER
   return (
     <div className="social-interactions">
       <div className="status">
         <div className="players bp3-card">
           {renderPlayer(player, true)}
-          {otherPlayers.map(p => renderPlayer(p))}
+          {otherPlayers.filter(p => p.get("dropcondition")).map(p => renderPlayer(p))}
         </div>
 
         <div className="total-score bp3-card">
