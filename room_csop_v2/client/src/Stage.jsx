@@ -33,7 +33,7 @@ export function Stage() {
   switch (stage.get("task")) {
     case "jellybeans":
       return <JellyBeans />;
-    case "minesweeper":
+    case "minesweeper==":
       return <MineSweeper />;
     case "test":
      return <Round />;
