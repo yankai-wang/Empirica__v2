@@ -17,10 +17,10 @@ import sound from "../experiment/unsure.mp3"
   // filter = new Filter();
 
 export function ChatLog ({messages}) {
-  // const [state, setState] = useState({ comment: "", time: 0 });
-  const [value, setValue] = useState("");
-  const comment = value;
-  // const { comment } = state;
+  const [state, setState] = useState({ comment: "", time: 0 });
+  // const [value, setValue] = useState("");
+  // const comment = value;
+  const { comment } = state;
   const player = usePlayer();
   const stage = useStage();
   const game = useGame();
@@ -49,8 +49,10 @@ export function ChatLog ({messages}) {
 
 
   function handleChange (e) {
-    console.log("handleChange");
-    const el = e.currentTarget;
+    console.log("e", e)
+    console.log("handleChange", e.target, e.target.value);
+    const el = e.target;
+    console.log("el", el, el.name, el.value)
     setState({ [el.name]: el.value });
   };
 
@@ -58,8 +60,8 @@ export function ChatLog ({messages}) {
     console.log("handleSubmit");
     e.preventDefault();
     // const text = filter.clean(state.comment.trim());
-    // const text = state.comment.trim();
-    const text = comment.trim();
+    const text = state.comment.trim();
+    // const text = comment.trim();
 
     // console.log("submitted");
     // console.log(filter.clean("Don't be an ash0le"));
@@ -81,8 +83,8 @@ export function ChatLog ({messages}) {
         // at: moment(TimeSync.serverTime(null, 1000)), TODO: deal with time
         //at: moment(Date.now()),
       }));
-      // setState({ comment: "", time: 0 });
-      setValue("");
+      setState({ comment: "", time: 0 });
+      // setValue("");
     //  console.log("set state", stage.get("chat"))
     }
   };
@@ -100,18 +102,20 @@ export function ChatLog ({messages}) {
             // type="text"
             // className="bp3-input bp3-fill"
             placeholder="Enter chat message"
-            // value={comment}
-            value={value}
-            // onChange={(e) => handleChange(e)}
-            onChange={(e) => setValue(e.target.value)}
+            value={comment}
+            // value={value}
+            onChange={(e) => handleChange(e)}
+            // onChange={(e) => setValue(e.target.value)}
             // autoComplete="off"
-            style={{margin: "1em 0"}}
+            className="min-h-10 w-full"
           >
             <Mention
               data={users}
               markup="@__display__"
               appendSpaceOnAdd={true}
-              style={{color: "blue", position: "relative", z_index: 1, text_decoration: "underline"}}
+              displayTransform={(url) => `@${url}`}
+              // className="text-blue relative z-1 underline"
+              // style={{color: "blue", position: "relative", z_index: 1, text_decoration: "underline"}}
             />
           </MentionsInput>
 
