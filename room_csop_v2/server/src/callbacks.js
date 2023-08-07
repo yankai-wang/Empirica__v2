@@ -70,9 +70,9 @@ Empirica.onGameStart(({ game }) => {
  // console.log(players)
   const names = [
     "Blue",
+    "Yellow",
     "Green",
     "Pink",
-    "Yellow",
     "Purple",
     "Red",
     "Turqoise",
@@ -157,7 +157,7 @@ Empirica.onGameStart(({ game }) => {
 
   players.forEach((player, i) => {
     player.set("name", names[i]);
-    player.set("avatar", `/avatars/jdenticon/${avatarNames[i]}`);
+    player.set("avatar", `https://api.dicebear.com/6.x/identicon/svg?seed=/avatars/jdenticon/${avatarNames[i]}`);
     player.set("nameColor", nameColor[i]);
     player.set("cumulativeScore", 0);
     player.set("bonus", 0);

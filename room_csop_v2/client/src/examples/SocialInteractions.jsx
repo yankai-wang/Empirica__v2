@@ -15,7 +15,7 @@ export function SocialInteractions () {
   const players = usePlayers();
   const game = useGame();
   const stage = useStage();
-
+  console.log(player.get("avatar"))
   function renderPlayer (player, self = false) {
     return (
       <div className="player" key={player.id}>
@@ -51,10 +51,9 @@ export function SocialInteractions () {
               />
             )}
           </span>
-
           <img
             className="h-full w-full rounded-md shadow bg-white p-1"
-            src={`https://api.dicebear.com/6.x/identicon/svg?seed=${player.get("avatar")}`}
+            src={`${player.get("avatar")}`}
             alt="Avatar"
           />
         </span>
@@ -78,6 +77,8 @@ export function SocialInteractions () {
     ...rest
   }));
 
+
+  //HERE IS WHERE WE MAKE THE CHAT LOOK BETTER
   return (
     <div className="social-interactions">
       <div className="status">
@@ -91,8 +92,8 @@ export function SocialInteractions () {
 
           <h2 className='bp3-heading'>{game.get("cumulativeScore") || 0}</h2>
         </div>
+      
       </div>
-
       <EventLog events={events} stage={stage} player={player} />
       <ChatLog messages={messages} stage={stage} player={player} />
     </div>
