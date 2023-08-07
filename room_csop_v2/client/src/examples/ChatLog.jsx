@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Mention, MentionsInput } from "react-mentions";
+import Highlighter from "react-highlight-words";
 import {
   usePlayer,
   usePlayers,
@@ -17,48 +18,23 @@ import sound from "../experiment/unsure.mp3"
   // filter = new Filter();
 
 export function ChatLog ({messages}) {
-  // const [state, setState] = useState({ comment: "", time: 0 });
   const [value, setValue] = useState("");
   const comment = value;
-  // const { comment } = state;
   const player = usePlayer();
   const stage = useStage();
   const game = useGame();
   const players = usePlayers();
-
-  // const users = [
-  //   {
-  //     id: "isaac",
-  //     display: "Isaac Newton",
-  //   },
-  //   {
-  //     id: "sam",
-  //     display: "Sam Victor",
-  //   },
-  //   {
-  //     id: "emma",
-  //     display: "emmanuel@nobody.com",
-  //   },
-  // ];
+  const otherPlayers = players.filter(p => p.id !== player.id);
 
   // generate a list of users, in which the id is the player's id and the display is the player's nameColor
-  const users = players.map((player) => ({
+  const users = otherPlayers.map((player) => ({
     id: player.id,
     display: player.get("name"),
   }));
 
-
-  function handleChange (e) {
-    console.log("handleChange");
-    const el = e.currentTarget;
-    setState({ [el.name]: el.value });
-  };
-
   function handleSubmit (e) {
-    console.log("handleSubmit");
     e.preventDefault();
     // const text = filter.clean(state.comment.trim());
-    // const text = state.comment.trim();
     const text = comment.trim();
 
     // console.log("submitted");
@@ -72,48 +48,56 @@ export function ChatLog ({messages}) {
     // console.log(new Date(Date.now() + TimeSync.serverOffset()));
 
     if (text !== "") {
+      // get the id of the mentioned players by matching '@[__display__](__id__)'
+      const mentionedPlayers = text.match(/@\[.*?\]\(.*?\)/g);
+      // extract the unique ids from the matched string
+      const mentionedIds = mentionedPlayers
+        ? [...new Set(mentionedPlayers.map((s) => s.match(/\(.*?\)/)[0]))]
+        : [];
+      // remove the parentheses
+      const mentionedIdsClean = mentionedIds.map((s) => s.slice(1, -1));
+
       const pre_chat = stage.get("chat")
       // TODO: set to append
       // stage.append("chat", {
       stage.set("chat", pre_chat.concat({
         text,
         playerId: player.id,
+        mentionedIds: mentionedIdsClean,
         // at: moment(TimeSync.serverTime(null, 1000)), TODO: deal with time
         //at: moment(Date.now()),
       }));
-      // setState({ comment: "", time: 0 });
       setValue("");
-    //  console.log("set state", stage.get("chat"))
     }
   };
-
-
-  //console.log("not here?")
 
   return (
     <div className="chat bp3-card">
       <Messages messages={messages} player={player} game={game}/>
       <form onSubmit={(e) => handleSubmit(e)}>
         <div className="bp3-control-group">
-          <MentionsInput
-            // name="comment"
-            // type="text"
-            // className="bp3-input bp3-fill"
-            placeholder="Enter chat message"
-            // value={comment}
-            value={value}
-            // onChange={(e) => handleChange(e)}
-            onChange={(e) => setValue(e.target.value)}
-            // autoComplete="off"
-            style={{margin: "1em 0"}}
-          >
-            <Mention
-              data={users}
-              markup="@__display__"
-              appendSpaceOnAdd={true}
-              style={{color: "blue", position: "relative", z_index: 1, text_decoration: "underline"}}
+          {game.get("treatment").mentionHighlight ? (
+            <MentionsInput
+              placeholder="Enter chat message. Use @ to mention other players."
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              className="min-h-10 w-full"
+            >
+              <Mention
+                data={users}
+                markup='@[__display__](__id__)'
+                appendSpaceOnAdd={true}
+                displayTransform={(id, display) => `@${display}`}
+              />
+            </MentionsInput> ) : (
+            <input  
+              type="text"
+              className="bp3-input"
+              placeholder="Enter chat message"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
             />
-          </MentionsInput>
+          )}
 
           <button type="submit" className="bp3-button bp3-intent-primary">
             Send
@@ -137,7 +121,9 @@ function Messages ({ messages, player, game }) {
   
   // scroll and play sound when new message is added, detected by change in messages.length
   useEffect(() => {
-    console.log(messages)
+    if (messages.length === 0) {
+      return;
+    }
     messagesEl.current.scrollTop = messagesEl.current.scrollHeight;
     // play sound only if the message is from the same unit
     if (game.get("treatment").dolMessage && messages.at(-1).subject.get("unit") !== player.get("unit")) {
@@ -151,28 +137,57 @@ function Messages ({ messages, player, game }) {
       {messages.length === 0 ? (
         <div className="empty">No messages yet...</div>
       ) : null}
+
       {messages.map((message, i) => (
-        // only show messages from players in the same unit
-        game.get("treatment").dolMessage && message.subject.get("unit") !== player.get("unit") ? (
-          null ) : (
-        <Message
-          key={i}
-          message={message}
-          self={message.subject ? player.id === message.subject.id : null}
-        />
+        game.get("treatment").mentionPrivate ? (
+          // if mentionPrivate, only show messages to sender and mentioned players
+          (player.id === message.subject.id || message.mentionedIds.includes(player.id)) ? (
+            <Message
+              key={i}
+              message={message}
+              self={message.subject ? player.id === message.subject.id : null}
+              game={game}
+            />
+          ) : (
+            null
+          )
+        ) : (
+          // if not mentionPrivate, only show messages from players in the same unit, or mentioned information from another unit
+          !game.get("treatment").dolMessage || message.subject.get("unit") === player.get("unit") || (game.get("treatment").mentionCrossUnit && message.mentionedIds.includes(player.id)) ? (
+            <Message
+              key={i}
+              message={message}
+              self={message.subject ? player.id === message.subject.id : null}
+              game={game} 
+              /> ) : (
+            null )
         )
+
       ))}
     </div>
   );
 }
 
-function Message ({message, self}) {
+function Message ({message, self, game}) {
   const { text, subject } = message;
- // console.log("message", message);
+  // replace the '@[__display__](__id__)' format with just @ and the display
+  const displayText = text.replace(/@\[.*?\]\(.*?\)/g, (match) => {
+    const display = match.match(/@\[(.*?)\]/)[1];
+    return `@${display}`;
+  });
+
   return (
     <div className="message">
       <Author player={subject} self={self} />
-      {text}
+      {/* {text} */}
+      {game.get("treatment").mentionHighlight ? (
+        <Highlighter
+          highlightClassName="highlighted" 
+          searchWords={["@[a-z]*"]}
+          textToHighlight={displayText}
+        /> ) : (
+          displayText
+      )}
     </div>
   );
 }
