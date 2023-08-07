@@ -24,15 +24,15 @@ export function ChatLog ({messages}) {
   const stage = useStage();
   const game = useGame();
   const players = usePlayers();
+  const otherPlayers = players.filter(p => p.id !== player.id);
 
   // generate a list of users, in which the id is the player's id and the display is the player's nameColor
-  const users = players.map((player) => ({
+  const users = otherPlayers.map((player) => ({
     id: player.id,
     display: player.get("name"),
   }));
 
   function handleSubmit (e) {
-    console.log("handleSubmit");
     e.preventDefault();
     // const text = filter.clean(state.comment.trim());
     const text = comment.trim();
@@ -48,12 +48,22 @@ export function ChatLog ({messages}) {
     // console.log(new Date(Date.now() + TimeSync.serverOffset()));
 
     if (text !== "") {
+      // get the id of the mentioned players by matching '@[__display__](__id__)'
+      const mentionedPlayers = text.match(/@\[.*?\]\(.*?\)/g);
+      // extract the unique ids from the matched string
+      const mentionedIds = mentionedPlayers
+        ? [...new Set(mentionedPlayers.map((s) => s.match(/\(.*?\)/)[0]))]
+        : [];
+      // remove the parentheses
+      const mentionedIdsClean = mentionedIds.map((s) => s.slice(1, -1));
+
       const pre_chat = stage.get("chat")
       // TODO: set to append
       // stage.append("chat", {
       stage.set("chat", pre_chat.concat({
         text,
         playerId: player.id,
+        mentionedIds: mentionedIdsClean,
         // at: moment(TimeSync.serverTime(null, 1000)), TODO: deal with time
         //at: moment(Date.now()),
       }));
@@ -68,16 +78,16 @@ export function ChatLog ({messages}) {
         <div className="bp3-control-group">
           {game.get("treatment").mentionHighlight ? (
             <MentionsInput
-              placeholder="Enter chat message"
+              placeholder="Enter chat message. Use @ to mention other players."
               value={value}
               onChange={(e) => setValue(e.target.value)}
               className="min-h-10 w-full"
             >
               <Mention
                 data={users}
-                markup="@__display__"
+                markup='@[__display__](__id__)'
                 appendSpaceOnAdd={true}
-                displayTransform={(url) => `@${url}`}
+                displayTransform={(id, display) => `@${display}`}
               />
             </MentionsInput> ) : (
             <input  
@@ -127,17 +137,32 @@ function Messages ({ messages, player, game }) {
       {messages.length === 0 ? (
         <div className="empty">No messages yet...</div>
       ) : null}
+
       {messages.map((message, i) => (
-        // only show messages from players in the same unit
-        game.get("treatment").dolMessage && message.subject.get("unit") !== player.get("unit") ? (
-          null ) : (
-        <Message
-          key={i}
-          message={message}
-          self={message.subject ? player.id === message.subject.id : null}
-          game={game}
-        />
+        game.get("treatment").mentionPrivate ? (
+          // if mentionPrivate, only show messages to sender and mentioned players
+          (player.id === message.subject.id || message.mentionedIds.includes(player.id)) ? (
+            <Message
+              key={i}
+              message={message}
+              self={message.subject ? player.id === message.subject.id : null}
+              game={game}
+            />
+          ) : (
+            null
+          )
+        ) : (
+          // if not mentionPrivate, only show messages from players in the same unit, or mentioned information from another unit
+          !game.get("treatment").dolMessage || message.subject.get("unit") === player.get("unit") || (game.get("treatment").mentionCrossUnit && message.mentionedIds.includes(player.id)) ? (
+            <Message
+              key={i}
+              message={message}
+              self={message.subject ? player.id === message.subject.id : null}
+              game={game} 
+              /> ) : (
+            null )
         )
+
       ))}
     </div>
   );
@@ -145,6 +170,12 @@ function Messages ({ messages, player, game }) {
 
 function Message ({message, self, game}) {
   const { text, subject } = message;
+  // replace the '@[__display__](__id__)' format with just @ and the display
+  const displayText = text.replace(/@\[.*?\]\(.*?\)/g, (match) => {
+    const display = match.match(/@\[(.*?)\]/)[1];
+    return `@${display}`;
+  });
+
   return (
     <div className="message">
       <Author player={subject} self={self} />
@@ -153,10 +184,9 @@ function Message ({message, self, game}) {
         <Highlighter
           highlightClassName="highlighted" 
           searchWords={["@[a-z]*"]}
-          // autoEscape={true}
-          textToHighlight={text}
+          textToHighlight={displayText}
         /> ) : (
-          text
+          displayText
       )}
     </div>
   );

@@ -41,6 +41,17 @@ factors:
       values:
         - value: true
         - value: false
+    - name: mentionCrossUnit
+      desc: 'whether allow mention (@) to send cross-unit messages in chat 
+      (cross-unit messages are visible to everyone in the sender's unit and the receiver)'
+      values:
+        - value: true
+        - value: false
+    - name: mentionPrivate
+      desc: 'whether only the sender and the receiver can see the mentioned message in chat'
+      values:
+        - value: true
+        - value: false
     - name: TimelordName
       values:
         - value: James
@@ -97,7 +108,7 @@ treatments:
       factors:
         StageDuration: 10000
         nRounds: 3
-        playerCount: 3
+        playerCount: 5
         shuffleTaskOrder: true
         stageDuration: 300
         dolHighlight: true
@@ -106,3 +117,5 @@ treatments:
         dolPayoff: true
         dolMessage: true
         mentionHighlight: true
+        mentionCrossUnit: true
+        mentionPrivate: true
