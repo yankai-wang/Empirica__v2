@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Mention, MentionsInput } from "react-mentions";
+import Highlighter from "react-highlight-words";
 import {
   usePlayer,
   usePlayers,
@@ -17,29 +18,12 @@ import sound from "../experiment/unsure.mp3"
   // filter = new Filter();
 
 export function ChatLog ({messages}) {
-  const [state, setState] = useState({ comment: "", time: 0 });
-  // const [value, setValue] = useState("");
-  // const comment = value;
-  const { comment } = state;
+  const [value, setValue] = useState("");
+  const comment = value;
   const player = usePlayer();
   const stage = useStage();
   const game = useGame();
   const players = usePlayers();
-
-  // const users = [
-  //   {
-  //     id: "isaac",
-  //     display: "Isaac Newton",
-  //   },
-  //   {
-  //     id: "sam",
-  //     display: "Sam Victor",
-  //   },
-  //   {
-  //     id: "emma",
-  //     display: "emmanuel@nobody.com",
-  //   },
-  // ];
 
   // generate a list of users, in which the id is the player's id and the display is the player's nameColor
   const users = players.map((player) => ({
@@ -47,21 +31,11 @@ export function ChatLog ({messages}) {
     display: player.get("name"),
   }));
 
-
-  function handleChange (e) {
-    console.log("e", e)
-    console.log("handleChange", e.target, e.target.value);
-    const el = e.target;
-    console.log("el", el, el.name, el.value)
-    setState({ [el.name]: el.value });
-  };
-
   function handleSubmit (e) {
     console.log("handleSubmit");
     e.preventDefault();
     // const text = filter.clean(state.comment.trim());
-    const text = state.comment.trim();
-    // const text = comment.trim();
+    const text = comment.trim();
 
     // console.log("submitted");
     // console.log(filter.clean("Don't be an ash0le"));
@@ -83,41 +57,37 @@ export function ChatLog ({messages}) {
         // at: moment(TimeSync.serverTime(null, 1000)), TODO: deal with time
         //at: moment(Date.now()),
       }));
-      setState({ comment: "", time: 0 });
-      // setValue("");
-    //  console.log("set state", stage.get("chat"))
+      setValue("");
     }
   };
-
-
-  //console.log("not here?")
 
   return (
     <div className="chat bp3-card">
       <Messages messages={messages} player={player} game={game}/>
       <form onSubmit={(e) => handleSubmit(e)}>
         <div className="bp3-control-group">
-          <MentionsInput
-            // name="comment"
-            // type="text"
-            // className="bp3-input bp3-fill"
-            placeholder="Enter chat message"
-            value={comment}
-            // value={value}
-            onChange={(e) => handleChange(e)}
-            // onChange={(e) => setValue(e.target.value)}
-            // autoComplete="off"
-            className="min-h-10 w-full"
-          >
-            <Mention
-              data={users}
-              markup="@__display__"
-              appendSpaceOnAdd={true}
-              displayTransform={(url) => `@${url}`}
-              // className="text-blue relative z-1 underline"
-              // style={{color: "blue", position: "relative", z_index: 1, text_decoration: "underline"}}
+          {game.get("treatment").mentionHighlight ? (
+            <MentionsInput
+              placeholder="Enter chat message"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              className="min-h-10 w-full"
+            >
+              <Mention
+                data={users}
+                markup="@__display__"
+                appendSpaceOnAdd={true}
+                displayTransform={(url) => `@${url}`}
+              />
+            </MentionsInput> ) : (
+            <input  
+              type="text"
+              className="bp3-input"
+              placeholder="Enter chat message"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
             />
-          </MentionsInput>
+          )}
 
           <button type="submit" className="bp3-button bp3-intent-primary">
             Send
@@ -141,7 +111,9 @@ function Messages ({ messages, player, game }) {
   
   // scroll and play sound when new message is added, detected by change in messages.length
   useEffect(() => {
-    console.log(messages)
+    if (messages.length === 0) {
+      return;
+    }
     messagesEl.current.scrollTop = messagesEl.current.scrollHeight;
     // play sound only if the message is from the same unit
     if (game.get("treatment").dolMessage && messages.at(-1).subject.get("unit") !== player.get("unit")) {
@@ -163,6 +135,7 @@ function Messages ({ messages, player, game }) {
           key={i}
           message={message}
           self={message.subject ? player.id === message.subject.id : null}
+          game={game}
         />
         )
       ))}
@@ -170,13 +143,21 @@ function Messages ({ messages, player, game }) {
   );
 }
 
-function Message ({message, self}) {
+function Message ({message, self, game}) {
   const { text, subject } = message;
- // console.log("message", message);
   return (
     <div className="message">
       <Author player={subject} self={self} />
-      {text}
+      {/* {text} */}
+      {game.get("treatment").mentionHighlight ? (
+        <Highlighter
+          highlightClassName="highlighted" 
+          searchWords={["@[a-z]*"]}
+          // autoEscape={true}
+          textToHighlight={text}
+        /> ) : (
+          text
+      )}
     </div>
   );
 }

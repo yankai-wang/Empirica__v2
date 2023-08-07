@@ -36,6 +36,11 @@ factors:
       values:
         - value: true
         - value: false
+    - name: mentionHighlight
+      desc: 'whether allow mention (@) with highlighted name display feature in chat'
+      values:
+        - value: true
+        - value: false
     - name: TimelordName
       values:
         - value: James
@@ -100,3 +105,4 @@ treatments:
         dolConstraint: true
         dolPayoff: true
         dolMessage: true
+        mentionHighlight: true
