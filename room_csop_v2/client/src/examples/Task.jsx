@@ -23,6 +23,8 @@ import { FaCheck, FaTimes } from "react-icons/fa";
 
 //console.log(timed_button)
 
+
+
 export function Task () {
 
   const stage = useStage();
@@ -82,6 +84,7 @@ export function Task () {
 
 
 
+
   
   const [activeButton, setActivateButton] = useState({
     activeButton: false});
@@ -113,7 +116,7 @@ export function Task () {
 
     player.set("satisfied", satisfied);// HERE IS THE WHERE THE EMPIRCIA ON WILL RUN
     // check if everyone is satisfied
-    const allSatisfied = players.every(p => p.get("satisfied"));
+    const allSatisfied = players.every(p => p.get("satisfied") || !p.get("dropcondition"));
     if (allSatisfied) {
       // submit all players
       players.forEach(p => p.stage.set("submit", true));

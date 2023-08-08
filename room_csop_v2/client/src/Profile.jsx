@@ -38,7 +38,7 @@ export function Profile() {
         <div className="h-11 w-11">
           <img
               className="h-full w-full rounded-md shadow bg-white p-1"
-              src={`https://api.dicebear.com/6.x/identicon/svg?seed=${player.get("avatar")}`}
+              src={`${player.get("avatar")}`}
               alt="Avatar"
             />
         </div>

@@ -5,7 +5,9 @@ import { Stage } from "./Stage";
 import { Round } from "./examples/Round";
 import { SocialInteractions } from "./examples/SocialInteractions";
 
+
 export function Game() {
+  const game = useGame();
   return (
     <div className="h-full w-full flex">
       <div className="h-full w-full flex flex-col">
@@ -13,10 +15,6 @@ export function Game() {
         <div className="h-full flex items-center justify-center">
           <Stage />
         </div>
-      </div>
-      <div className="h-full w-128 border-l flex justify-center items-center">
-        {/* <Chat scope={game} attribute="chat" /> */}
-        {/* <SocialInteractions /> */}
       </div>
     </div>
   );
