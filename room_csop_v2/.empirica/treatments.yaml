@@ -42,8 +42,7 @@ factors:
         - value: true
         - value: false
     - name: mentionCrossUnit
-      desc: 'whether allow mention (@) to send cross-unit messages in chat 
-      (cross-unit messages are visible to everyone in the sender's unit and the receiver)'
+      desc: 'whether allow mention (@) to send cross-unit messages in chat (cross-unit messages are visible to everyone in the unit of the sender and the receiver)'
       values:
         - value: true
         - value: false
