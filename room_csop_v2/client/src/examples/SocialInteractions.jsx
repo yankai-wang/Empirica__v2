@@ -1,5 +1,5 @@
 import React from "react";
-import { FaCheck, FaTimes } from "react-icons/fa";
+import { FaCheck, FaTimes, FaStar } from "react-icons/fa";
 import {EventLog} from "./EventLog";
 import {ChatLog} from "./ChatLog";
 import {
@@ -15,11 +15,20 @@ export function SocialInteractions () {
   const players = usePlayers();
   const game = useGame();
   const stage = useStage();
-  console.log(player.get("avatar"))
+  // console.log(player.get("avatar"))
   function renderPlayer (player, self = false) {
     return (
       <div className="player" key={player.id}>
         <span className="image">
+            {player.get("isLeader") && (
+              <FaStar
+                style={{
+                  // set color to dark yellow
+                  color: "#FFD700",
+                  marginLeft: "6px",
+                }}
+              />
+            )}
           <span
             className={`satisfied bp3-tag bp3-round ${
               player.get("satisfied") ? "bp3-intent-success" : "bp3-intent-danger"

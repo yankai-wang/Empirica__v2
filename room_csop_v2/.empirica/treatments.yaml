@@ -51,6 +51,31 @@ factors:
       values:
         - value: true
         - value: false
+    - name: leaderChange
+      desc: 'whether change the leader in each stage'
+      values:
+        - value:
+            - 'random'
+            - 'same'
+            - 'same'
+            - 'same'
+            - 'same'
+            - 'same'
+    - name: leaderAssign
+      desc: 'whether the leader assign players to units in each stage'
+      values:
+        - value:
+            - true
+            - true
+            - true
+            - true
+            - true
+            - true
+    - name: leaderStar
+      desc: 'whether display a small star next to the leaders name in the chat'
+      values:
+        - value: true
+        - value: false
     - name: TimelordName
       values:
         - value: James
@@ -139,7 +164,7 @@ treatments:
       factors:
         StageDuration: 10000
         nRounds: 3
-        playerCount: 5
+        playerCount: 2
         shuffleTaskOrder: true
         stageDuration: 300
         dolHighlight: true
@@ -150,6 +175,21 @@ treatments:
         mentionHighlight: true
         mentionCrossUnit: true
         mentionPrivate: true
+        leaderStar: true
+        leaderAssign:
+            - true
+            - true
+            - true
+            - true
+            - true
+            - true
+        leaderChange:
+            - 'random'
+            - 'same'
+            - 'same'
+            - 'same'
+            - 'same'
+            - 'same'
         AddDropList:
             - 0
             - 0

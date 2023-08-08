@@ -8,6 +8,7 @@ import { Loading } from "@empirica/core/player/react";
 import React, { useState, useEffect } from "react";
 import { JellyBeans } from "./examples/JellyBeans";
 import { MineSweeper } from "./examples/MineSweeper";
+import { UnitAssignment } from "./examples/UnitAssignment";
 import { Round } from "./examples/Round"; //round may be keyword in V2? 
 
 export function Stage() {
@@ -29,7 +30,20 @@ export function Stage() {
       </div>
     );
   }
-  //console.log(stage.get("task"))
+
+  if (stage.get("leaderAssign") && stage.get("unitAssigned") === false) {
+    return (
+      player.get("isLeader") ? (
+        <UnitAssignment />
+      ) : (
+        <div className="text-center text-gray-400 pointer-events-none">
+          Please wait for the leader to assign unit.
+        </div>
+      )
+    );
+  }
+
+
   switch (stage.get("task")) {
     case "jellybeans":
       return <JellyBeans />;

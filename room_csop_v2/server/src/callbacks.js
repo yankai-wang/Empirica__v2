@@ -168,6 +168,9 @@ Empirica.onGameStart(({ game }) => {
     stage.set("task", taskSequence[i]);
     console.log(drop_array[i])
     stage.set('DropList',drop_array[i]);
+    console.log(game.get('treatment').leaderAssign[i], game.get('treatment').leaderChange[i])
+    stage.set('leaderAssign', game.get('treatment').leaderAssign[i])
+    stage.set('leaderChange', game.get('treatment').leaderChange[i])
   });
 
  //const starting_pos=[true,false,true]
@@ -229,11 +232,23 @@ Empirica.onStageStart(({stage}) => {
     player.set("dropcondition",player_drops[i])
   });
 
-
   // Makes sure each player starts in unsatified
   players.forEach((player) => {
     player.set("satisfied", false);
   });
+
+  // record the assignment state
+  if (stage.get('leaderAssign')==="same") {
+    stage.set("unitAssigned", true);
+  } else {
+    stage.set("unitAssigned", false);
+  }
+
+  // randomly assign the leader in players
+  if (stage.get('leaderChange')==="random") {
+    const leader = _.sample(players);
+    leader.set("isLeader", true);
+  }
 
   //there is a case where the optimal is found, but not submitted (i.e., they ruin things)
   stage.set("optimalFound", false); //the optimal answer wasn't found
