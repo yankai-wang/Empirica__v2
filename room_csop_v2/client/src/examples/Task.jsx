@@ -160,6 +160,15 @@ export function Task () {
             <h5 className="font-sans text-2xl text-gray-700 font-semibold underline">Constraints</h5>
             <ul>
               {task.constraints.map((constraint) => {
+                // if game.treatment.dolConstraint is true, then only show constraints whose pair includes students that are in player's unit; 
+                // else show all constraints
+                if (game.get('treatment').dolConstraint) {
+                  const playerUnit = player.get("unit");
+                  const curStudents = task.division[playerUnit]
+                  if (!curStudents.includes(constraint.pair[0]) && !curStudents.includes(constraint.pair[1])) {
+                    return null;
+                  }
+                }
                 const failed = violatedConstraints.includes(constraint._id);
                 return (
                   <li key={constraint._id} className={failed ? "failed" : ""}>
@@ -185,6 +194,7 @@ export function Task () {
                     )}
                   </li>
                 );
+
               })}
             </ul>
           </div>
@@ -203,6 +213,10 @@ export function Task () {
               </thead>
               <tbody>
                 {task.students.map((student) => (
+                  // if game.treatment.dolPayoff is true, then only show payoff for students that are in player's unit;
+                  game.get('treatment').dolPayoff && !task.division[player.get("unit")].includes(student) ? (
+                    null
+                  ) : (
                   <tr key={student}>
                     <th>Student {student}</th>
                     {task.rooms.map((room) => (
@@ -218,6 +232,7 @@ export function Task () {
                       </td>
                     ))}
                   </tr>
+                  ) 
                 ))}
               </tbody>
             </HTMLTable>

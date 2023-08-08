@@ -16,13 +16,13 @@ export function EventLog ({ events }) {
 
   // useEffect seems to be an equivalent of componentDidMount
   useEffect(() => {
-    eventsEl.scrollTop = eventsEl.scrollHeight;
+    eventsEl.current.scrollTop = eventsEl.current.scrollHeight;
     // console.log("time", moment(TimeSync.serverTime(new Date(), 1000)));
   }, []);
 
   useEffect(() => {
     // console.log(moment(TimeSync.serverTime(null, 1000)).format('HH:mm:ss'));
-    eventsEl.scrollTop = eventsEl.scrollHeight;
+    eventsEl.current.scrollTop = eventsEl.current.scrollHeight;
   }, [events.length]);
 
   const player = usePlayer();

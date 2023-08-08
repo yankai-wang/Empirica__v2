@@ -68,9 +68,10 @@ export function SocialInteractions () {
  
   // const otherPlayers = _.reject(players, p => p.id === player.id);
   const otherPlayers = players.filter(p => p.id !== player.id);
-  const messages = stage.get("chat").map(({ text, playerId }) => ({
+  const messages = stage.get("chat").map(({ text, playerId, mentionedIds }) => ({
     text,
-    subject: players.find(p => p.id === playerId)
+    subject: players.find(p => p.id === playerId),
+    mentionedIds
   }));
   const events = stage.get("log").map(({ subjectId, ...rest }) => ({
     subject: subjectId && players.find(p => p.id === subjectId),
