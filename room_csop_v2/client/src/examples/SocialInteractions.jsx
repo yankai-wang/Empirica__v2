@@ -77,7 +77,6 @@ export function SocialInteractions () {
     ...rest
   }));
 
-  console.log(otherPlayers)
   //HERE IS WHERE WE MAKE THE CHAT LOOK BETTER
   return (
     <div className="social-interactions">

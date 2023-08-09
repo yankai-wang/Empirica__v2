@@ -27,6 +27,14 @@ export function UnitAssignment () {
     stage.set("unitAssigned", true);
   }
 
+  function handleAddUnit() {
+    const curdivision = stage.get("division");
+    const newIndex = Object.keys(curdivision).length;
+    
+    const newdivision = { ...curdivision, [newIndex]: []};
+    stage.set("division", newdivision)
+  }
+
     const task = stage.get("task");
     return (
       <div className="task" >
@@ -60,8 +68,8 @@ export function UnitAssignment () {
               <thead>
                 <tr>
                   <th>Rooms</th>
-                  {task.rooms.map((unit) => (
-                    <th key={unit}>{unit}</th>
+                  {task.rooms.map((room) => (
+                    <th key={room}>{room}</th>
                   ))}
                 </tr>
               </thead>
@@ -69,9 +77,9 @@ export function UnitAssignment () {
                 {task.students.map((student) => (
                   <tr key={student}>
                     <th>Student {student}</th>
-                    {task.rooms.map((unit) => (
-                      <td key={unit}>
-                        {task.payoff[student][unit]}
+                    {task.rooms.map((room) => (
+                      <td key={room}>
+                        {task.payoff[student][room]}
                       </td>
                     ))}
                   </tr>
@@ -85,18 +93,24 @@ export function UnitAssignment () {
         <div className="board">
           <div className="all-rooms">
             <Unit
-              unit="deck"
+              unit={"deck"}
               isDeck
             />
 
             <div className="rooms">
-              {task.rooms.map((unit) => (
-                <Unit
+              {Object.keys(stage.get("division")).map((unit) => (
+                unit !== "deck" && <Unit
                   key={unit}
                   unit={unit}
                 />
               ))}
             </div>
+          </div>
+
+          <div className="md:min-w-96 lg:min-w-128 xl:min-w-192 flex flex-col items-center space-y-10">
+            <Button handleClick={handleAddUnit} primary>
+              Add Unit
+            </Button>
           </div>
 
           <div className="md:min-w-96 lg:min-w-128 xl:min-w-192 flex flex-col items-center space-y-10">

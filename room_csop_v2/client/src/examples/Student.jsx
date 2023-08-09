@@ -112,8 +112,11 @@ export function Student ({ student }) {
 
       const playerUnit = player.get("unit");
       const task = stage.get("task");
+      // console.log('playerUnit', playerUnit, stage.get("division"), stage.get("division")[playerUnit], student)
       if (stage.get("division")[playerUnit].includes(student)) {
-        style.fill = game.get("divisionColor")[playerUnit]
+        // style.fill = game.get("divisionColor")[playerUnit]
+        // set color to light grey
+        style.fill = "#d3d3d3";
       }
     } // TREATMENT ENDS HERE
 
