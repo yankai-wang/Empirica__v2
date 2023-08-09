@@ -40,14 +40,6 @@ export function Student ({ student }) {
     }
 
     stage.set(`student-${student}-dragger`, player.id);
-    // stage.append("log", {
-    //   verb: "draggingStudent",
-    //   subjectId: player._id,
-    //   object: student,
-    //   // at: new Date()
-    //  // at: moment(TimeSync.serverTime(null, 1000)),
-      
-    // });
     const prelog = stage.get("log");
     stage.set("log", prelog.concat({
       verb: "draggingStudent",
@@ -77,11 +69,6 @@ export function Student ({ student }) {
 
     //if dropped into non-allowed area
     if (e.dataTransfer.dropEffect === "none") {
-      // stage.append("log", {
-      //   verb: "releasedStudent",
-      //   subjectId: player._id,
-      //   object: student,
-      // });
       const prelog = stage.get("log");
       stage.set("log", prelog.concat({
         verb: "releasedStudent",
@@ -115,8 +102,10 @@ export function Student ({ student }) {
       // console.log('playerUnit', playerUnit, stage.get("division"), stage.get("division")[playerUnit], student)
       if (stage.get("division")[playerUnit].includes(student)) {
         // style.fill = game.get("divisionColor")[playerUnit]
-        // set color to light grey
-        style.fill = "#d3d3d3";
+        // set color to nameColor
+        // style.fill = player.get("nameColor");
+        // set color to dark grey
+        style.fill = "#363636";
       }
     } // TREATMENT ENDS HERE
 

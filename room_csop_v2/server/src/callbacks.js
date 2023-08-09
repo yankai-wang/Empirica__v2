@@ -246,10 +246,13 @@ Empirica.onStageStart(({stage}) => {
   });
 
   // record the assignment state
-  if (stage.get('leaderAssign')==="same") {
-    stage.set("unitAssigned", true);
-  } else {
+  if (stage.get('leaderAssign')) {
     stage.set("unitAssigned", false);
+    players.forEach((player) => {
+      player.set("unit", "deck");
+    });
+  } else {
+    stage.set("unitAssigned", true);
   }
 
   // randomly assign the leader in players
