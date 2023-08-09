@@ -130,7 +130,7 @@ Empirica.onGameStart(({ game }) => {
   );
 
   //initiate the cumulative score for this game (because everyone will have the same score, we can save it at the game object
-  game.set("cumul=ativeScore", 0); // the total score at the end of the game
+  game.set("cumulativeScore", 0); // the total score at the end of the game
   game.set("nOptimalSolutions", 0); // will count how many times they've got the optimal answer
   game.set("justStarted", true); // I use this to play the sound on the UI when the game starts
   game.set("team", game.players.length > 1);

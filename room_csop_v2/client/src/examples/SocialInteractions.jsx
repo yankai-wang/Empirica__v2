@@ -20,19 +20,9 @@ export function SocialInteractions () {
     return (
       <div className="player" key={player.id}>
         <span className="image">
-            {player.get("isLeader") && (
-              <FaStar
-                style={{
-                  // set color to dark yellow
-                  color: "#FFD700",
-                  marginLeft: "6px",
-                }}
-              />
-            )}
           <span
-            className={`satisfied bp3-tag bp3-round ${
-              player.get("satisfied") ? "bp3-intent-success" : "bp3-intent-danger"
-            }`}
+            className={`satisfied`}
+            // className="top--0.6rem right--0.8rem absolute"
           >
             {player.get("satisfied") && (
               <FaCheck
@@ -44,11 +34,6 @@ export function SocialInteractions () {
                 }}
               />
             )}
-            <span
-              className={`bp3-icon-standard ${
-                player.get("satisfied") ? "bp3-icon-tick" : "bp3-icon-cross"
-              }`}
-            />
             {!player.get("satisfied") && (
               <FaTimes
                 style={{
@@ -57,6 +42,11 @@ export function SocialInteractions () {
                   border: "2px solid red",
                   borderRadius: "50%",
                 }}
+              />
+            )}
+            {game.get("treatment").leaderStar && player.get("isLeader") && (
+              <FaStar
+                className="top--0.25rem right-5.2rem absolute text-yellow-500 text-1.25rem"
               />
             )}
           </span>
@@ -92,12 +82,12 @@ export function SocialInteractions () {
   return (
     <div className="social-interactions">
       <div className="status">
-        <div className="players bp3-card">
+        <div className="players">
           {renderPlayer(player, true)}
           {otherPlayers.filter(p => p.get("dropcondition")).map(p => renderPlayer(p))}
         </div>
 
-        <div className="total-score bp3-card">
+        <div className="total-score">
           <h6 className='bp3-heading'>Total Score</h6>
 
           <h2 className='bp3-heading'>{game.get("cumulativeScore") || 0}</h2>

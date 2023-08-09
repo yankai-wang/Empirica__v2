@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { FaStar } from "react-icons/fa";
 import { Mention, MentionsInput } from "react-mentions";
 import Highlighter from "react-highlight-words";
 import {
@@ -178,8 +179,12 @@ function Message ({message, self, game}) {
 
   return (
     <div className="message">
-      <Author player={subject} self={self} />
-      {/* {text} */}
+      {/* {game.get("treatment").leaderStar && subject.get("isLeader") && (
+        <FaStar
+          className="top--0.25rem right-0.2rem absolute text-yellow-500 text-1.25rem"
+        />
+      )} */}
+      <Author player={subject} self={self} game={game}/>
       {game.get("treatment").mentionHighlight ? (
         <Highlighter
           highlightClassName="highlighted" 

@@ -26,6 +26,7 @@ export function EventLog ({ events }) {
   }, [events.length]);
 
   const player = usePlayer();
+  const game = useGame();
 
   //if the one who made the event is the player himself then self will be true
   return (
@@ -36,6 +37,7 @@ export function EventLog ({ events }) {
             key={i}
             event={event}
             self={event.subject ? player.id === event.subject.id : null}
+            game={game}
           />
         ))}
       </div>
@@ -43,7 +45,7 @@ export function EventLog ({ events }) {
   );
 }
 
-function Event ({ event, self }) {
+function Event ({ event, self, game }) {
   const {
     subject,
     roundId,
@@ -56,38 +58,38 @@ function Event ({ event, self }) {
   let content;
   switch (verb) {
     case "roundStarted":
-      content = <div className="content">Round {roundId} started</div>;
+      content = <div className="inline-block">Round {roundId} started</div>;
       break;
     case "movedStudent":
       content = (
-        <div className="content">
-          <Author player={subject} self={self} /> moved{" "}
-          <div className="object">{object}</div> to{" "}
-          <div className="target">Room {target}</div>.
+        <div className="inline-block">
+          <Author player={subject} self={self} game={game}/> moved{" "}
+          <div className="inline-block font-800">{object}</div> to{" "}
+          <div className="inline-block font-800">Room {target}</div>.
         </div>
       );
       break;
     case "draggingStudent":
       content = (
-        <div className="content">
-          <Author player={subject} self={self} /> started moving{" "}
-          <div className="object">{object}</div>.
+        <div className="inline-block">
+          <Author player={subject} self={self} game={game}/> started moving{" "}
+          <div className="inline-block font-800">{object}</div>.
         </div>
       );
       break;
     case "releasedStudent":
       content = (
-        <div className="content">
-          <Author player={subject} self={self} /> released{" "}
-          <div className="object">{object}</div> without moving it.
+        <div className="inline-block">
+          <Author player={subject} self={self} game={game}/> released{" "}
+          <div className="inline-block font-800">{object}</div> without moving it.
         </div>
       );
       break;
     case "playerSatisfaction":
       content = (
-        <div className="content">
-          <Author player={subject} self={self} /> {self ? "are" : "is"}{" "}
-          <div className="object">{state}</div> with the answer
+        <div className="inline-block">
+          <Author player={subject} self={self} game={game}/> {self ? "are" : "is"}{" "}
+          <div className="inline-block font-800">{state}</div> with the answer
         </div>
       );
       break;
