@@ -164,7 +164,7 @@ export function Task () {
                 // else show all constraints
                 if (game.get('treatment').dolConstraint) {
                   const playerUnit = player.get("unit");
-                  const curStudents = task.division[playerUnit]
+                  const curStudents = stage.get("division")[playerUnit]
                   if (!curStudents.includes(constraint.pair[0]) && !curStudents.includes(constraint.pair[1])) {
                     return null;
                   }
@@ -214,7 +214,7 @@ export function Task () {
               <tbody>
                 {task.students.map((student) => (
                   // if game.treatment.dolPayoff is true, then only show payoff for students that are in player's unit;
-                  game.get('treatment').dolPayoff && !task.division[player.get("unit")].includes(student) ? (
+                  game.get('treatment').dolPayoff && !stage.get("division")[player.get("unit")].includes(student) ? (
                     null
                   ) : (
                   <tr key={student}>

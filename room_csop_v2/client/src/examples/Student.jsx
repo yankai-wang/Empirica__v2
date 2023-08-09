@@ -31,7 +31,7 @@ export function Student ({ student }) {
     if (game.get('treatment').dolMove) {
       const playerUnit = player.get("unit");
       const task = stage.get("task");
-      if (!task.division[playerUnit].includes(student)) {
+      if (!stage.get("division")[playerUnit].includes(student)) {
         // pop up a message saying that the student is out of scope
         alert("This student is out of your scope. Please only drag the students assigned to you.");
         e.preventDefault();
@@ -112,7 +112,7 @@ export function Student ({ student }) {
 
       const playerUnit = player.get("unit");
       const task = stage.get("task");
-      if (task.division[playerUnit].includes(student)) {
+      if (stage.get("division")[playerUnit].includes(student)) {
         style.fill = game.get("divisionColor")[playerUnit]
       }
     } // TREATMENT ENDS HERE

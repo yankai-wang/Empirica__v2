@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import {Room} from "./Room.jsx";
+import {Unit} from "./Unit.jsx";
 import {Timer} from "../components/Timer";
 import { HTMLTable } from "@blueprintjs/core";
 import {
@@ -60,8 +60,8 @@ export function UnitAssignment () {
               <thead>
                 <tr>
                   <th>Rooms</th>
-                  {task.rooms.map((room) => (
-                    <th key={room}>{room}</th>
+                  {task.rooms.map((unit) => (
+                    <th key={unit}>{unit}</th>
                   ))}
                 </tr>
               </thead>
@@ -69,9 +69,9 @@ export function UnitAssignment () {
                 {task.students.map((student) => (
                   <tr key={student}>
                     <th>Student {student}</th>
-                    {task.rooms.map((room) => (
-                      <td key={room}>
-                        {task.payoff[student][room]}
+                    {task.rooms.map((unit) => (
+                      <td key={unit}>
+                        {task.payoff[student][unit]}
                       </td>
                     ))}
                   </tr>
@@ -84,16 +84,16 @@ export function UnitAssignment () {
 
         <div className="board">
           <div className="all-rooms">
-            <Room
-              room="deck"
+            <Unit
+              unit="deck"
               isDeck
             />
 
             <div className="rooms">
-              {task.rooms.map((room) => (
-                <Room
-                  key={room}
-                  room={room}
+              {task.rooms.map((unit) => (
+                <Unit
+                  key={unit}
+                  unit={unit}
                 />
               ))}
             </div>

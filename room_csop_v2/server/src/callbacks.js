@@ -166,9 +166,14 @@ Empirica.onGameStart(({ game }) => {
       duration: game.get('treatment').StageDuration
     });
     stage.set("task", taskSequence[i]);
+    // set division to the default if leaderAssign contains true (so the leader will set the dol)
+    if (game.get('treatment').leaderAssign.contains(true)) {
+      stage.set("division", {1: taskSequence[i].students});
+    } else {
+      stage.set("division", taskSequence[i].division);
+    }
     console.log(drop_array[i])
     stage.set('DropList',drop_array[i]);
-    console.log(game.get('treatment').leaderAssign[i], game.get('treatment').leaderChange[i])
     stage.set('leaderAssign', game.get('treatment').leaderAssign[i])
     stage.set('leaderChange', game.get('treatment').leaderChange[i])
   });
@@ -183,7 +188,9 @@ Empirica.onGameStart(({ game }) => {
     player.set("bonus", 0);
 
     // set the unit (the division of labor) of the player
-    if (i % 2 === 0) {
+    if (game.get('treatment').leaderAssign.contains(true)) {
+      player.set("unit", 1);
+    } else if (i % 2 === 0) {
       player.set("unit", 1);
     } else {
       player.set("unit", 2);

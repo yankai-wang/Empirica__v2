@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import {Student} from "./Student";
+import {UnitStudent} from "./UnitStudent";
 import {
   Chat,
   usePlayer,
@@ -13,14 +13,13 @@ import {
 //import { TimeSync } from "meteor/mizzao:timesync";
 //import moment from "moment";
 
-export function Unit ({ room, isDeck })  {
+export function Unit ({ unit, isDeck })  {
  const [state, setState] = useState({
   hovered: false,
 
 });
 
   function handleDragOver(e) {
-    //console.log('timeSync',moment(TimeSync.serverTime(null, 1000)))
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
     setState({ hovered: true });
@@ -31,66 +30,19 @@ export function Unit ({ room, isDeck })  {
   };
 
   function handleDrop (e) {
-    //console.log(stage)
-    
     const student = e.dataTransfer.getData("text/plain");
-    stage.set(`student-${student}-dragger`, null); //maybe this fixes the problem of stucked colors
-    const currentRoom = stage.get(`student-${student}-room`);
 
     setState({ hovered: false });
 
-    // Avoid any unwanted drops!
-    // We're using the native DnD system, which mean people can drag anything
-    // onto these drop zones (e.g. files from their desktop) so we check this
-    // is an existing student first.
-    if (currentRoom === room) {
-      //if they kept the student where it is, log that they stayed in the same place And don't change the answer
-      // stage.append("log", {
-      //   verb: "releasedStudent",
-      //   subjectId: player._id,
-      //   object: student,
-      // });
-      const prelog = stage.get("log");
-      stage.set("log", prelog.concat({
-        verb: "releasedStudent",
-        subjectId: player.id,
-        object: student,
-      }));
+    const curdivision = stage.get("division");
+
+    if (curdivision[unit].includes(student)) {
       return;
     }
-    
-    stage.set(`student-${student}-room`, room); // THIS IS WHERE THE SECOND CALL IS handeled
+    const newdivision = { ...curdivision, unit: curdivision[unit].concat(student)};
+    stage.set("division", newdivision)
 
-    // get data used in the on function here so there's no delay
-    const task = stage.get("task");
-    let assignments = { deck: [] };
-    task.rooms.forEach((room) => {
-      assignments[room] = [];
-    });
-  
-    //find the rooms for each player
-    task.students.forEach((student) => {
-      const room = stage.get(`student-${student}-room`);
-      assignments[room].push(student);
-    });
-
-    const preIS= stage.get('intermediateSolutions')
-
-    stage.set("studentMoved", {task, assignments, preIS}); // then the "On" function in the server side will know the change
-    
-    const prelog = stage.get("log");
-    stage.set("log", prelog.concat({
-      verb: "movedStudent",
-      subjectId: player.id,
-      object: student,
-      target: room,
-      // at: new Date()
-     // at: moment(TimeSync.serverTime(null, 1000))
-    }));
-
-   // console.log('room moment', moment(TimeSync.serverTime(null, 1000)))
   };
-    //console.log('RIGHT BEFORE ITERATOR',props)
     const stage = useStage();
     const player = usePlayer();
     const game = useGame();
@@ -99,7 +51,7 @@ export function Unit ({ room, isDeck })  {
     const students = [];
     const task = stage.get("task");
     task.students.forEach((student) => {
-      if (stage.get(`student-${student}-room`) === room) {
+      if (stage.get("division")[unit].includes(student)) {
         students.push(student);
       }
     });
@@ -113,13 +65,13 @@ export function Unit ({ room, isDeck })  {
         onDragLeave={(e) => handleDragLeave(e)}
         className={`bp3-card ${classNameRoom} ${classNameHovered}`}
       >
-        {isDeck ? null : <h6 className="bp3-heading">Room {room}</h6>}
+        {isDeck ? null : <h6 className="bp3-heading">Room {unit}</h6>}
         {students.map((student) => (
-          <Student
-            onDragStart={(e) => Student.handleDragStart(e)}
+          <UnitStudent
+            onDragStart={(e) => UnitStudent.handleDragStart(e)}
             key={student}
             student={student}
-            room={room}
+            unit={unit}
           />
         ))}
       </div>
