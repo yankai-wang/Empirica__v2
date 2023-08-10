@@ -178,9 +178,9 @@ treatments:
         leaderStar: true
         leaderAssign:
             - true
+            - false
             - true
-            - true
-            - true
+            - false
             - true
             - true
         leaderChange:

@@ -21,6 +21,7 @@ export function UnitAssignment () {
   const player = usePlayer();
   const players=usePlayers()
   const game = useGame();
+  const round = useRound();
   const task = stage.get("task");
 
   function handleSubmit(e) {
@@ -73,6 +74,11 @@ export function UnitAssignment () {
       });
     }
   }
+
+  // function handleRetrieve () {
+  //   console.log("retrieve", round.stages, round.get("stages"), game.get("stages"), game.stages, game);
+
+  // }
 
   return (
     <div className="task" >
@@ -156,6 +162,13 @@ export function UnitAssignment () {
             Remove Unit
           </Button>
         </div>
+
+        {/* maybe later add sth like this */}
+        {/* <div className="md:min-w-96 lg:min-w-128 xl:min-w-192 flex flex-col items-center space-y-10">
+          <Button handleClick={handleRetrieve} primary className="m-0.5rem">
+            Retrieve Arrangement from Previous Round
+          </Button>
+        </div> */}
 
         <div className="md:min-w-96 lg:min-w-128 xl:min-w-192 flex flex-col items-center space-y-10">
           <Button handleClick={(e) => {handleSubmit(e)}} primary className="m-0.5rem">

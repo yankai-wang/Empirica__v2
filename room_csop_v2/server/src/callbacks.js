@@ -166,13 +166,6 @@ Empirica.onGameStart(({ game }) => {
       duration: game.get('treatment').StageDuration
     });
     stage.set("task", taskSequence[i]);
-    // set division to the default if leaderAssign contains true (so the leader will set the dol)
-    console.log(game.get('treatment').leaderAssign)
-    if (game.get('treatment').leaderAssign.includes(true)) {
-      stage.set("division", {"deck": taskSequence[i].students});
-    } else {
-      stage.set("division", taskSequence[i].division);
-    }
     console.log(drop_array[i])
     stage.set('DropList',drop_array[i]);
     stage.set('leaderAssign', game.get('treatment').leaderAssign[i])
@@ -187,16 +180,6 @@ Empirica.onGameStart(({ game }) => {
     player.set("nameColor", nameColor[i]);
     player.set("cumulativeScore", 0);
     player.set("bonus", 0);
-
-    // set the unit (the division of labor) of the player
-    if (game.get('treatment').leaderAssign.includes(true)) {
-      player.set("unit", "deck");
-    } else if (i % 2 === 0) {
-      player.set("unit", 1);
-    } else {
-      player.set("unit", 2);
-      // player.set("unit", 1); // for testing
-    }
    // player.set('jefftestcondition', starting_pos[i]);
   });
 });
@@ -247,11 +230,17 @@ Empirica.onStageStart(({stage}) => {
 
   // record the assignment state
   if (stage.get('leaderAssign')) {
-    stage.set("unitAssigned", false);
+    stage.set("division", {"deck": stage.get('task').students});
     players.forEach((player) => {
       player.set("unit", "deck");
     });
+    stage.set("unitAssigned", false);
   } else {
+    // when not assigned by leader, get the units from task and randomly assign players to units
+    stage.set("division", stage.get('task').division);
+    _.shuffle(players).forEach((player, i) => {
+      player.set("unit", i % Object.keys(stage.get("division")).length + 1);
+    });
     stage.set("unitAssigned", true);
   }
 

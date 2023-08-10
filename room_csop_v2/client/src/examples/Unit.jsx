@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from "react";
+import { FaStar } from "react-icons/fa";
 import {
   Chat,
   usePlayer,
@@ -207,13 +208,24 @@ function UnitPlayer ({ unit, subject }) {
       <div
         draggable={true}
         onDragStart={(e) => handleDragStart(e)}
-        className="player"
+        className="m-1rem text-center"
         style={{ cursor: "move" }}
       >
-        <span className="icon bp3-icon-standard bp3-icon-person" />
-        <span className="icon">
-            <img src={`${subject.get("avatar")}`} 
-            className="h-5rem w-5rem rounded-md shadow bg-white p-0.25rem m-1rem"/>
+        <div className="flex">
+          <span className="icon bp3-icon-standard bp3-icon-person" />
+          {game.get("treatment").leaderStar && subject.get("isLeader") && (
+            <FaStar
+              className=" text-yellow-500 text-1rem"
+            />
+          )}
+          <span className="icon">
+              <img src={`${subject.get("avatar")}`} 
+              className="h-5rem w-5rem rounded-md shadow bg-white p-0.25rem "/>
+          </span>
+        </div>
+        <span className="text-center" style={{ color: subject.get("nameColor") }}>
+          {subject.get("name")}
+          {player.id === subject.id ? " (You)" : ""}
         </span>
       </div>
     );
