@@ -8,9 +8,6 @@ factors:
         - value: 5
         - value: 8
         - value: 13
-    - name: 5min
-      values:
-        - value: 300
     - name: dolHighlight
       desc: 'whether highlight (single color) the students that participants can control based on their division of labor'
       values:
@@ -57,9 +54,9 @@ factors:
         - value:
             - 'random'
             - 'same'
+            - 'remove'
             - 'same'
-            - 'same'
-            - 'same'
+            - 'random'
             - 'same'
     - name: leaderAssign
       desc: 'whether the leader assign players to units in each stage'
@@ -76,34 +73,16 @@ factors:
       values:
         - value: true
         - value: false
-    - name: TimelordName
-      values:
-        - value: James
-        - value: Tim
-        - value: Matt
     - name: StageDuration
       values:
         - value: 300
         - value: 10000
-    - name: nRounds
-      desc: 'This is the amount of rounds you would like to do '
-      values:
-        - value: 1
-        - value: 2
-        - value: 3
-    - name: stageOne
-      values:
-        - value: false
     - name: shuffleTaskOrder
       values:
         - value: true
     - name: stepOne
       values:
         - value: false
-    - name: stageDuration
-      values:
-        - value: 300
-        - value: 3000
     - name: AddDropList
       values:
         - value:
@@ -163,10 +142,8 @@ treatments:
     - name: dol_test
       factors:
         StageDuration: 10000
-        nRounds: 3
         playerCount: 2
         shuffleTaskOrder: true
-        stageDuration: 300
         dolHighlight: true
         dolMove: true
         dolConstraint: true
@@ -186,9 +163,9 @@ treatments:
         leaderChange:
             - 'random'
             - 'same'
+            - 'remove'
             - 'same'
-            - 'same'
-            - 'same'
+            - 'random'
             - 'same'
         AddDropList:
             - 0

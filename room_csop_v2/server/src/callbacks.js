@@ -228,8 +228,20 @@ Empirica.onStageStart(({stage}) => {
     player.set("satisfied", false);
   });
 
-  // record the assignment state
-  if (stage.get('leaderAssign')) {
+  // randomly assign the leader in players
+  if (stage.get('leaderChange')==="random") {
+    const leader = _.sample(players);
+    leader.set("isLeader", true);
+  } else if (stage.get('leaderChange')==="remove") {
+    // find the leader
+    const leader = players.find((player) => player.get("isLeader"));
+    // remove the leader
+    leader.set("isLeader", false);
+  }
+
+  // record the assignment state 
+  // set everyone to deck first if the leader is assigning and there is a leader
+  if (stage.get('leaderAssign') && players.find((player) => player.get("isLeader"))) {
     stage.set("division", {"deck": stage.get('task').students});
     players.forEach((player) => {
       player.set("unit", "deck");
@@ -242,12 +254,6 @@ Empirica.onStageStart(({stage}) => {
       player.set("unit", i % Object.keys(stage.get("division")).length + 1);
     });
     stage.set("unitAssigned", true);
-  }
-
-  // randomly assign the leader in players
-  if (stage.get('leaderChange')==="random") {
-    const leader = _.sample(players);
-    leader.set("isLeader", true);
   }
 
   //there is a case where the optimal is found, but not submitted (i.e., they ruin things)
