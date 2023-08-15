@@ -58,6 +58,28 @@ factors:
             - 'same'
             - 'random'
             - 'same'
+        - value:
+            - 'election'
+            - 'same'
+            - 'remove'
+            - 'same'
+            - 'random'
+            - 'same'
+    - name: electChat
+      desc: 'whether allow participants to chat with each other in the election stage'
+      values:
+        - value: true
+        - value: false
+    - name: electPreResult
+      desc: 'whether show the election result before the player votes'
+      values:
+        - value: true
+        - value: false
+    - name: electWho
+      desc: 'whether show who votes for whom in the election stage. If false, only show number of votes for each candidate'
+      values:
+        - value: true
+        - value: false
     - name: leaderAssign
       desc: 'whether the leader assign players to units in each stage'
       values:
@@ -161,12 +183,15 @@ treatments:
             - true
             - true
         leaderChange:
-            - 'random'
+            - 'election'
             - 'same'
             - 'remove'
             - 'same'
             - 'random'
             - 'same'
+        electChat: true
+        electPreResult: true
+        electWho: true
         AddDropList:
             - 0
             - 0

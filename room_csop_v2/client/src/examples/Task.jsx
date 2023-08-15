@@ -165,7 +165,6 @@ export function Task () {
                 if (game.get('treatment').dolConstraint) {
                   const playerUnit = player.get("unit");
                   const curStudents = stage.get("division")[playerUnit]
-                  console.log(curStudents, playerUnit, stage.get("division"))
                   if (!curStudents.includes(constraint.pair[0]) && !curStudents.includes(constraint.pair[1])) {
                     return null;
                   }

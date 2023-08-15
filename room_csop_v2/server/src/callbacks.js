@@ -237,11 +237,20 @@ Empirica.onStageStart(({stage}) => {
     const leader = players.find((player) => player.get("isLeader"));
     // remove the leader
     leader.set("isLeader", false);
+  } else if (stage.get('leaderChange')==="election") {
+    stage.set("elected", false);
+    players.forEach((player) => {
+      player.set("voted", false);
+      player.set("vote", null);
+      player.set("isLeader", false);
+    });
   }
+
+
 
   // record the assignment state 
   // set everyone to deck first if the leader is assigning and there is a leader
-  if (stage.get('leaderAssign') && players.find((player) => player.get("isLeader"))) {
+  if (stage.get('leaderAssign') && (stage.get('leaderChange')==="election" || players.find((player) => player.get("isLeader"))) ) {
     stage.set("division", {"deck": stage.get('task').students});
     players.forEach((player) => {
       player.set("unit", "deck");

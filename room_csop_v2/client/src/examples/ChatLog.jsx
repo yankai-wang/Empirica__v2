@@ -140,8 +140,8 @@ function Messages ({ messages, player, game }) {
       ) : null}
 
       {messages.map((message, i) => (
-        game.get("treatment").mentionPrivate ? (
-          // if mentionPrivate, only show messages to sender and mentioned players
+        (game.get("treatment").mentionPrivate && message.mentionedIds.length !== 0) ? (
+          // if mentionPrivate and this is a mention message, only show messages to sender and mentioned players
           (player.id === message.subject.id || message.mentionedIds.includes(player.id)) ? (
             <Message
               key={i}

@@ -9,6 +9,7 @@ import React, { useState, useEffect } from "react";
 import { JellyBeans } from "./examples/JellyBeans";
 import { MineSweeper } from "./examples/MineSweeper";
 import { UnitAssignment } from "./examples/UnitAssignment";
+import { LeaderElection } from "./examples/LeaderElection";
 import { Round } from "./examples/Round"; //round may be keyword in V2? 
 
 export function Stage() {
@@ -29,6 +30,13 @@ export function Stage() {
         Please wait for other player(s).
       </div>
     );
+  }
+
+
+  if (stage.get('leaderChange')==="election" && !stage.get("elected")) {
+    return (
+      <LeaderElection />
+    )
   }
 
   if (stage.get("leaderAssign") && stage.get("unitAssigned") === false) {
